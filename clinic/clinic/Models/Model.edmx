@@ -1,0 +1,563 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="clinicModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="account">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="staff_id" Type="int" Nullable="false" />
+          <Property Name="username" Type="varchar" MaxLength="15" Nullable="false" />
+          <Property Name="pass" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="permission_id" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="bill">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="patient_id" Type="int" Nullable="false" />
+          <Property Name="created_at" Type="datetime" />
+          <Property Name="staff_created" Type="int" />
+          <Property Name="total_money" Type="decimal" Precision="10" Scale="2" Nullable="false" />
+          <Property Name="is_paid" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityType Name="clinic_service">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="service_name" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="price" Type="decimal" Precision="10" Scale="2" Nullable="false" />
+        </EntityType>
+        <EntityType Name="medicine">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="medicine_name" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="quantity" Type="int" />
+          <Property Name="unit" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="price_per_unit" Type="decimal" Precision="10" Scale="2" />
+        </EntityType>
+        <EntityType Name="patient">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="patient_name" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="age" Type="int" />
+          <Property Name="gender" Type="nvarchar" MaxLength="10" />
+          <Property Name="phone_number" Type="varchar" MaxLength="15" />
+        </EntityType>
+        <EntityType Name="permission">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="position_name" Type="nvarchar" MaxLength="20" Nullable="false" />
+        </EntityType>
+        <EntityType Name="prescription">
+          <Key>
+            <PropertyRef Name="bill_id" />
+            <PropertyRef Name="medicine_id" />
+          </Key>
+          <Property Name="bill_id" Type="int" Nullable="false" />
+          <Property Name="medicine_id" Type="int" Nullable="false" />
+          <Property Name="quantity_indicated" Type="int" Nullable="false" />
+          <Property Name="description" Type="nvarchar(max)" />
+        </EntityType>
+        <EntityType Name="service_detail">
+          <Key>
+            <PropertyRef Name="bill_id" />
+            <PropertyRef Name="service_id" />
+          </Key>
+          <Property Name="bill_id" Type="int" Nullable="false" />
+          <Property Name="service_id" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="staff">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="full_name" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="date_of_birdth" Type="date" />
+          <Property Name="phone_number" Type="varchar" MaxLength="15" Nullable="false" />
+          <Property Name="salary" Type="real" Nullable="false" />
+          <Property Name="is_still_working" Type="bit" Nullable="false" />
+        </EntityType>
+        <Association Name="FK__prescript__bill___4CA06362">
+          <End Role="bill" Type="Self.bill" Multiplicity="1" />
+          <End Role="prescription" Type="Self.prescription" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="bill">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="prescription">
+              <PropertyRef Name="bill_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__prescript__medic__4D94879B">
+          <End Role="medicine" Type="Self.medicine" Multiplicity="1" />
+          <End Role="prescription" Type="Self.prescription" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="medicine">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="prescription">
+              <PropertyRef Name="medicine_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__service_d__bill___5070F446">
+          <End Role="bill" Type="Self.bill" Multiplicity="1" />
+          <End Role="service_detail" Type="Self.service_detail" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="bill">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="service_detail">
+              <PropertyRef Name="bill_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__service_d__servi__5165187F">
+          <End Role="clinic_service" Type="Self.clinic_service" Multiplicity="1" />
+          <End Role="service_detail" Type="Self.service_detail" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="clinic_service">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="service_detail">
+              <PropertyRef Name="service_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_account_permission">
+          <End Role="permission" Type="Self.permission" Multiplicity="1" />
+          <End Role="account" Type="Self.account" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="permission">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="account">
+              <PropertyRef Name="permission_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_bill_patient">
+          <End Role="patient" Type="Self.patient" Multiplicity="1" />
+          <End Role="bill" Type="Self.bill" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="patient">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="bill">
+              <PropertyRef Name="patient_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_bill_staff">
+          <End Role="staff" Type="Self.staff" Multiplicity="0..1" />
+          <End Role="bill" Type="Self.bill" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="staff">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="bill">
+              <PropertyRef Name="staff_created" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_staff_account">
+          <End Role="staff" Type="Self.staff" Multiplicity="1" />
+          <End Role="account" Type="Self.account" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="staff">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="account">
+              <PropertyRef Name="staff_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="clinicModelStoreContainer">
+          <EntitySet Name="account" EntityType="Self.account" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="bill" EntityType="Self.bill" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="clinic_service" EntityType="Self.clinic_service" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="medicine" EntityType="Self.medicine" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="patient" EntityType="Self.patient" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="permission" EntityType="Self.permission" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="prescription" EntityType="Self.prescription" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="service_detail" EntityType="Self.service_detail" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="staff" EntityType="Self.staff" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK__prescript__bill___4CA06362" Association="Self.FK__prescript__bill___4CA06362">
+            <End Role="bill" EntitySet="bill" />
+            <End Role="prescription" EntitySet="prescription" />
+          </AssociationSet>
+          <AssociationSet Name="FK__prescript__medic__4D94879B" Association="Self.FK__prescript__medic__4D94879B">
+            <End Role="medicine" EntitySet="medicine" />
+            <End Role="prescription" EntitySet="prescription" />
+          </AssociationSet>
+          <AssociationSet Name="FK__service_d__bill___5070F446" Association="Self.FK__service_d__bill___5070F446">
+            <End Role="bill" EntitySet="bill" />
+            <End Role="service_detail" EntitySet="service_detail" />
+          </AssociationSet>
+          <AssociationSet Name="FK__service_d__servi__5165187F" Association="Self.FK__service_d__servi__5165187F">
+            <End Role="clinic_service" EntitySet="clinic_service" />
+            <End Role="service_detail" EntitySet="service_detail" />
+          </AssociationSet>
+          <AssociationSet Name="FK_account_permission" Association="Self.FK_account_permission">
+            <End Role="permission" EntitySet="permission" />
+            <End Role="account" EntitySet="account" />
+          </AssociationSet>
+          <AssociationSet Name="FK_bill_patient" Association="Self.FK_bill_patient">
+            <End Role="patient" EntitySet="patient" />
+            <End Role="bill" EntitySet="bill" />
+          </AssociationSet>
+          <AssociationSet Name="FK_bill_staff" Association="Self.FK_bill_staff">
+            <End Role="staff" EntitySet="staff" />
+            <End Role="bill" EntitySet="bill" />
+          </AssociationSet>
+          <AssociationSet Name="FK_staff_account" Association="Self.FK_staff_account">
+            <End Role="staff" EntitySet="staff" />
+            <End Role="account" EntitySet="account" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="clinicModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="account">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="staff_id" Type="Int32" Nullable="false" />
+          <Property Name="username" Type="String" MaxLength="15" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="pass" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="permission_id" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="permission" Relationship="Self.FK_account_permission" FromRole="account" ToRole="permission" />
+          <NavigationProperty Name="staff" Relationship="Self.FK_staff_account" FromRole="account" ToRole="staff" />
+        </EntityType>
+        <EntityType Name="bill">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="patient_id" Type="Int32" Nullable="false" />
+          <Property Name="created_at" Type="DateTime" Precision="3" />
+          <Property Name="staff_created" Type="Int32" />
+          <Property Name="total_money" Type="Decimal" Precision="10" Scale="2" Nullable="false" />
+          <Property Name="is_paid" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="prescriptions" Relationship="Self.FK__prescript__bill___4CA06362" FromRole="bill" ToRole="prescription" />
+          <NavigationProperty Name="patient" Relationship="Self.FK_bill_patient" FromRole="bill" ToRole="patient" />
+          <NavigationProperty Name="staff" Relationship="Self.FK_bill_staff" FromRole="bill" ToRole="staff" />
+          <NavigationProperty Name="clinic_service" Relationship="Self.service_detail" FromRole="bill" ToRole="clinic_service" />
+        </EntityType>
+        <EntityType Name="clinic_service">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="service_name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="price" Type="Decimal" Precision="10" Scale="2" Nullable="false" />
+          <NavigationProperty Name="bills" Relationship="Self.service_detail" FromRole="clinic_service" ToRole="bill" />
+        </EntityType>
+        <EntityType Name="medicine">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="medicine_name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="quantity" Type="Int32" />
+          <Property Name="unit" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="price_per_unit" Type="Decimal" Precision="10" Scale="2" />
+          <NavigationProperty Name="prescriptions" Relationship="Self.FK__prescript__medic__4D94879B" FromRole="medicine" ToRole="prescription" />
+        </EntityType>
+        <EntityType Name="patient">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="patient_name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="age" Type="Int32" />
+          <Property Name="gender" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="phone_number" Type="String" MaxLength="15" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="bills" Relationship="Self.FK_bill_patient" FromRole="patient" ToRole="bill" />
+        </EntityType>
+        <EntityType Name="permission">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="position_name" Type="String" MaxLength="20" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="accounts" Relationship="Self.FK_account_permission" FromRole="permission" ToRole="account" />
+        </EntityType>
+        <EntityType Name="prescription">
+          <Key>
+            <PropertyRef Name="bill_id" />
+            <PropertyRef Name="medicine_id" />
+          </Key>
+          <Property Name="bill_id" Type="Int32" Nullable="false" />
+          <Property Name="medicine_id" Type="Int32" Nullable="false" />
+          <Property Name="quantity_indicated" Type="Int32" Nullable="false" />
+          <Property Name="description" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="bill" Relationship="Self.FK__prescript__bill___4CA06362" FromRole="prescription" ToRole="bill" />
+          <NavigationProperty Name="medicine" Relationship="Self.FK__prescript__medic__4D94879B" FromRole="prescription" ToRole="medicine" />
+        </EntityType>
+        <EntityType Name="staff">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="full_name" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="date_of_birdth" Type="DateTime" Precision="0" />
+          <Property Name="phone_number" Type="String" MaxLength="15" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="salary" Type="Single" Nullable="false" />
+          <Property Name="is_still_working" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="accounts" Relationship="Self.FK_staff_account" FromRole="staff" ToRole="account" />
+          <NavigationProperty Name="bills" Relationship="Self.FK_bill_staff" FromRole="staff" ToRole="bill" />
+        </EntityType>
+        <Association Name="FK_account_permission">
+          <End Role="permission" Type="Self.permission" Multiplicity="1" />
+          <End Role="account" Type="Self.account" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="permission">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="account">
+              <PropertyRef Name="permission_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_staff_account">
+          <End Role="staff" Type="Self.staff" Multiplicity="1" />
+          <End Role="account" Type="Self.account" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="staff">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="account">
+              <PropertyRef Name="staff_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__prescript__bill___4CA06362">
+          <End Role="bill" Type="Self.bill" Multiplicity="1" />
+          <End Role="prescription" Type="Self.prescription" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="bill">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="prescription">
+              <PropertyRef Name="bill_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_bill_patient">
+          <End Role="patient" Type="Self.patient" Multiplicity="1" />
+          <End Role="bill" Type="Self.bill" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="patient">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="bill">
+              <PropertyRef Name="patient_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_bill_staff">
+          <End Role="staff" Type="Self.staff" Multiplicity="0..1" />
+          <End Role="bill" Type="Self.bill" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="staff">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="bill">
+              <PropertyRef Name="staff_created" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__prescript__medic__4D94879B">
+          <End Role="medicine" Type="Self.medicine" Multiplicity="1" />
+          <End Role="prescription" Type="Self.prescription" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="medicine">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="prescription">
+              <PropertyRef Name="medicine_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="service_detail">
+          <End Role="bill" Type="Self.bill" Multiplicity="*" />
+          <End Role="clinic_service" Type="Self.clinic_service" Multiplicity="*" />
+        </Association>
+        <EntityContainer Name="clinicEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="accounts" EntityType="Self.account" />
+          <EntitySet Name="bills" EntityType="Self.bill" />
+          <EntitySet Name="clinic_service" EntityType="Self.clinic_service" />
+          <EntitySet Name="medicines" EntityType="Self.medicine" />
+          <EntitySet Name="patients" EntityType="Self.patient" />
+          <EntitySet Name="permissions" EntityType="Self.permission" />
+          <EntitySet Name="prescriptions" EntityType="Self.prescription" />
+          <EntitySet Name="staffs" EntityType="Self.staff" />
+          <AssociationSet Name="FK_account_permission" Association="Self.FK_account_permission">
+            <End Role="permission" EntitySet="permissions" />
+            <End Role="account" EntitySet="accounts" />
+          </AssociationSet>
+          <AssociationSet Name="FK_staff_account" Association="Self.FK_staff_account">
+            <End Role="staff" EntitySet="staffs" />
+            <End Role="account" EntitySet="accounts" />
+          </AssociationSet>
+          <AssociationSet Name="FK__prescript__bill___4CA06362" Association="Self.FK__prescript__bill___4CA06362">
+            <End Role="bill" EntitySet="bills" />
+            <End Role="prescription" EntitySet="prescriptions" />
+          </AssociationSet>
+          <AssociationSet Name="FK_bill_patient" Association="Self.FK_bill_patient">
+            <End Role="patient" EntitySet="patients" />
+            <End Role="bill" EntitySet="bills" />
+          </AssociationSet>
+          <AssociationSet Name="FK_bill_staff" Association="Self.FK_bill_staff">
+            <End Role="staff" EntitySet="staffs" />
+            <End Role="bill" EntitySet="bills" />
+          </AssociationSet>
+          <AssociationSet Name="FK__prescript__medic__4D94879B" Association="Self.FK__prescript__medic__4D94879B">
+            <End Role="medicine" EntitySet="medicines" />
+            <End Role="prescription" EntitySet="prescriptions" />
+          </AssociationSet>
+          <AssociationSet Name="service_detail" Association="Self.service_detail">
+            <End Role="bill" EntitySet="bills" />
+            <End Role="clinic_service" EntitySet="clinic_service" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="clinicModelStoreContainer" CdmEntityContainer="clinicEntities">
+          <EntitySetMapping Name="accounts">
+            <EntityTypeMapping TypeName="clinicModel.account">
+              <MappingFragment StoreEntitySet="account">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="staff_id" ColumnName="staff_id" />
+                <ScalarProperty Name="username" ColumnName="username" />
+                <ScalarProperty Name="pass" ColumnName="pass" />
+                <ScalarProperty Name="permission_id" ColumnName="permission_id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="bills">
+            <EntityTypeMapping TypeName="clinicModel.bill">
+              <MappingFragment StoreEntitySet="bill">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="patient_id" ColumnName="patient_id" />
+                <ScalarProperty Name="created_at" ColumnName="created_at" />
+                <ScalarProperty Name="staff_created" ColumnName="staff_created" />
+                <ScalarProperty Name="total_money" ColumnName="total_money" />
+                <ScalarProperty Name="is_paid" ColumnName="is_paid" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="clinic_service">
+            <EntityTypeMapping TypeName="clinicModel.clinic_service">
+              <MappingFragment StoreEntitySet="clinic_service">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="service_name" ColumnName="service_name" />
+                <ScalarProperty Name="price" ColumnName="price" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="medicines">
+            <EntityTypeMapping TypeName="clinicModel.medicine">
+              <MappingFragment StoreEntitySet="medicine">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="medicine_name" ColumnName="medicine_name" />
+                <ScalarProperty Name="quantity" ColumnName="quantity" />
+                <ScalarProperty Name="unit" ColumnName="unit" />
+                <ScalarProperty Name="price_per_unit" ColumnName="price_per_unit" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="patients">
+            <EntityTypeMapping TypeName="clinicModel.patient">
+              <MappingFragment StoreEntitySet="patient">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="patient_name" ColumnName="patient_name" />
+                <ScalarProperty Name="age" ColumnName="age" />
+                <ScalarProperty Name="gender" ColumnName="gender" />
+                <ScalarProperty Name="phone_number" ColumnName="phone_number" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="permissions">
+            <EntityTypeMapping TypeName="clinicModel.permission">
+              <MappingFragment StoreEntitySet="permission">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="position_name" ColumnName="position_name" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="prescriptions">
+            <EntityTypeMapping TypeName="clinicModel.prescription">
+              <MappingFragment StoreEntitySet="prescription">
+                <ScalarProperty Name="bill_id" ColumnName="bill_id" />
+                <ScalarProperty Name="medicine_id" ColumnName="medicine_id" />
+                <ScalarProperty Name="quantity_indicated" ColumnName="quantity_indicated" />
+                <ScalarProperty Name="description" ColumnName="description" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="staffs">
+            <EntityTypeMapping TypeName="clinicModel.staff">
+              <MappingFragment StoreEntitySet="staff">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="full_name" ColumnName="full_name" />
+                <ScalarProperty Name="date_of_birdth" ColumnName="date_of_birdth" />
+                <ScalarProperty Name="phone_number" ColumnName="phone_number" />
+                <ScalarProperty Name="salary" ColumnName="salary" />
+                <ScalarProperty Name="is_still_working" ColumnName="is_still_working" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <AssociationSetMapping Name="service_detail" TypeName="clinicModel.service_detail" StoreEntitySet="service_detail">
+            <EndProperty Name="bill">
+              <ScalarProperty Name="id" ColumnName="bill_id" />
+            </EndProperty>
+            <EndProperty Name="clinic_service">
+              <ScalarProperty Name="id" ColumnName="service_id" />
+            </EndProperty>
+          </AssociationSetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
