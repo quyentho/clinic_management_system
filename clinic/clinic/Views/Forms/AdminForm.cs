@@ -1,5 +1,4 @@
 ﻿using clinic.Models;
-using clinic.Models.Bussiness_Logics;
 using clinic.Presenters;
 using clinic.Views;
 using System;
@@ -11,7 +10,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-
+using clinic.Models.Repositories;
+using clinic.Views.Forms;
 
 namespace clinic
 {
@@ -30,11 +30,15 @@ namespace clinic
 
         #region Properties
      
-        public string TxtTimKiem { get => txtTimKiem.Text; set => txtTimKiem.Text = value; }
+        public string TxtTimKiem { get => txtSearch.Text; set => txtSearch.Text = value; }
         public int IndexSelected { get; set; }
         #endregion
-        private async void btnQuanLyThuoc_Click(object sender, EventArgs e)
+        private async void btnMedicine_Click(object sender, EventArgs e)
         {
+            if (_form != null)
+                _form.Dispose();
+            _form = new FormMedicine(new Models.Repositories.MedicineRepository(_clinicEntities));
+
             dgvAdmin.DataSource = await _adminPresenter.GetMedicineData();
 
             //set display of datagridview
@@ -44,27 +48,27 @@ namespace clinic
             dgvAdmin.Columns[4].HeaderText = "Giá/Đơn vị";
 
             dgvAdmin.Columns[5].Visible = false; // not show navigation property
-
-            if (_form != null)
-                _form.Dispose();
-            _form = new FormMedicine(new Models.Repositories.MedicineRepository(_clinicEntities));
+       
         }
 
 
-        private async void btnTimKiem_Click(object sender, EventArgs e)
+        private async void btnSearch_Click(object sender, EventArgs e)
         {
-            dgvAdmin.DataSource = await _adminPresenter.SearchMedicines(txtTimKiem.Text);
+            dgvAdmin.DataSource = await _adminPresenter.SearchMedicines(txtSearch.Text);
         }
 
-        private void btnThem_Click(object sender, EventArgs e)
+        private void btnAdd_Click(object sender, EventArgs e)
         {
-            ((FormMedicine)_form).UpdateDataGridView += btnQuanLyThuoc_Click;
+            if (_form is FormMedicine medicineForm)
+                ((FormMedicine)_form).UpdateDataGridView += btnMedicine_Click;
+            if (_form is FormService formService)
+                formService.UpdateDataGridView += btnService_Click;
             _form.ShowDialog();
             
 
             //    dgvAdmin.DataSource = await _adminPresenter.GetMedicineData();
         }
-        private async void btnDichVu_Click(object sender, EventArgs e)
+        private async void btnService_Click(object sender, EventArgs e)
         {
             dgvAdmin.DataSource = await _adminPresenter.GetServiceData();
 
@@ -75,17 +79,23 @@ namespace clinic
 
             if (_form != null)
                 _form.Dispose();
-        //    _form = new FormService();
+            _form = new FormService(new ServiceRepository(_clinicEntities));
         }
 
-        private void btnSua_Click(object sender, EventArgs e)
+        private void btnEdit_Click(object sender, EventArgs e)
         {
             //casting to FormMedicine
             if (_form is FormMedicine medicineForm)
             {
                 medicineForm.IsEdit = true;
                 medicineForm.IdSelected = IndexSelected;
-                medicineForm.UpdateDataGridView += btnQuanLyThuoc_Click;
+                medicineForm.UpdateDataGridView += btnMedicine_Click;
+            }
+            else if(_form is FormService formService)
+            {
+                formService.IsEdit = true;
+                formService.IdSelected = IndexSelected;
+                formService.UpdateDataGridView += btnService_Click;
             }
             _form.ShowDialog();
 
@@ -95,18 +105,24 @@ namespace clinic
         private void dgvAdmin_CellEnter(object sender, DataGridViewCellEventArgs e)
         {
             IndexSelected = int.Parse(dgvAdmin.Rows[e.RowIndex].Cells[0].Value.ToString());
-            btnSua.Enabled = true;
-            btnXoa.Enabled = true;
+            btnEdit.Enabled = true;
+            btnDelete.Enabled = true;
         }
 
-        private void btnXoa_Click(object sender, EventArgs e)
+        private void btnDelete_Click(object sender, EventArgs e)
         {
 
             if (_form is FormMedicine medicineForm)
             {
                 medicineForm.IsDelete = true;
                 medicineForm.IdSelected = IndexSelected;
-                medicineForm.UpdateDataGridView += btnQuanLyThuoc_Click;
+                medicineForm.UpdateDataGridView += btnMedicine_Click;
+            }
+            else if (_form is FormService formService)
+            {
+                formService.IsDelete = true;
+                formService.IdSelected = IndexSelected;
+                formService.UpdateDataGridView += btnService_Click;
             }
             _form.ShowDialog();
             
@@ -126,12 +142,21 @@ namespace clinic
         //}
         //#endregion
 
-        private void btnNhanVien_Click(object sender, EventArgs e)
+        private async void btnStaff_Click(object sender, EventArgs e)
         {
+            if (_form != null)
+                _form.Dispose();
+            _form = new FormStaff(new Models.Repositories.StaffRepository(_clinicEntities), new PermissionRepository(_clinicEntities));
 
+            dgvAdmin.DataSource = await _adminPresenter.GetStaffData();
         }
 
+        private void AdminForm_Load(object sender, EventArgs e)
+        {
+            btnStaff.Focus();
 
+            btnStaff.PerformClick();
+        }
     }
 }
 

@@ -18,23 +18,17 @@ namespace clinic.Presenters
             _medicineView = medicineView;
             _medicineRepository = medicineRepository;
         }
-        //public void SetEventArgs(Object obj)
-        //{
-
-        //    _medicineView.MyEventArgs = new Models.Bussiness_Logics.UpdateDataGridViewEventArgs();
-        //    _medicineView.MyEventArgs.Value = obj;
-        //}
-        public async Task<string> AddMedicine()
+        public async Task<string> Add()
         {
             string notification = "";
             try
             {
                 var medicine = new medicine()
                 {
-                    medicine_name = _medicineView.TxtTenThuoc,
-                    quantity = Convert.ToInt32(_medicineView.TxtSoLuong),
-                    unit = _medicineView.TxtDonVi,
-                    price_per_unit = decimal.Parse(_medicineView.TxtGia)
+                    medicine_name = _medicineView.TxtMedicineName,
+                    quantity = Convert.ToInt32(_medicineView.TxtQuantity),
+                    unit = _medicineView.TxtUnit,
+                    price_per_unit = decimal.Parse(_medicineView.TxtPrice)
                 };
                 _medicineRepository.InsertMedicine(medicine);
                 await _medicineRepository.Save();
@@ -46,20 +40,20 @@ namespace clinic.Presenters
             }
             return notification;
         }
-        public void DisplayMedicine(int idSelected)
+        public void Display(int idSelected)
         {
             var medicineFromDB = _medicineRepository.GetMedicineById(idSelected);
             if (medicineFromDB != null)
             {
                //Display from db to view
-                _medicineView.TxtTenThuoc = medicineFromDB.medicine_name;
-                _medicineView.TxtSoLuong = medicineFromDB.quantity.ToString();
-                _medicineView.TxtDonVi = medicineFromDB.unit;
-                _medicineView.TxtGia = medicineFromDB.price_per_unit.ToString();
+                _medicineView.TxtMedicineName = medicineFromDB.medicine_name;
+                _medicineView.TxtQuantity = medicineFromDB.quantity.ToString();
+                _medicineView.TxtUnit = medicineFromDB.unit;
+                _medicineView.TxtPrice = medicineFromDB.price_per_unit.ToString();
             }
 
         }
-        public async Task<string> DeleteMedicine(int idSelected)
+        public async Task<string> Delete(int idSelected)
         {
             string notification = "";
             try
@@ -84,7 +78,7 @@ namespace clinic.Presenters
          
            
         }
-        public async Task<string> EditMedicine(int idSelected)
+        public async Task<string> Edit(int idSelected)
         {
             string notification = "";
             var medicineFromDB = _medicineRepository.GetMedicineById(idSelected);
@@ -92,10 +86,10 @@ namespace clinic.Presenters
             {
                 try
                 {
-                    medicineFromDB.medicine_name = _medicineView.TxtTenThuoc;
-                    medicineFromDB.quantity = int.Parse(_medicineView.TxtSoLuong);
-                    medicineFromDB.unit = _medicineView.TxtDonVi;
-                    medicineFromDB.price_per_unit = decimal.Parse(_medicineView.TxtGia);
+                    medicineFromDB.medicine_name = _medicineView.TxtMedicineName;
+                    medicineFromDB.quantity = int.Parse(_medicineView.TxtQuantity);
+                    medicineFromDB.unit = _medicineView.TxtUnit;
+                    medicineFromDB.price_per_unit = decimal.Parse(_medicineView.TxtPrice);
                     await _medicineRepository.Save();
 
               
@@ -116,7 +110,7 @@ namespace clinic.Presenters
         public bool ValidateName()
         {
             bool isValid = true;
-            if (string.IsNullOrWhiteSpace(_medicineView.TxtTenThuoc))
+            if (string.IsNullOrWhiteSpace(_medicineView.TxtMedicineName))
             {
                 _medicineView.ErrorMessage = "Nhập tên thuốc";
                 isValid = false;
@@ -131,7 +125,7 @@ namespace clinic.Presenters
         public bool ValidateQuantity()
         {
             bool isValid = true;
-            if (string.IsNullOrWhiteSpace(_medicineView.TxtSoLuong))
+            if (string.IsNullOrWhiteSpace(_medicineView.TxtQuantity))
             {
                 _medicineView.ErrorMessage = "Nhập số lượng";
                 isValid = false;
@@ -141,7 +135,7 @@ namespace clinic.Presenters
                 _medicineView.ErrorMessage = "";
                 try
                 {
-                    int number = int.Parse(_medicineView.TxtSoLuong);
+                    int number = int.Parse(_medicineView.TxtQuantity);
                     if (number >= 0)
                     {
                         _medicineView.ErrorMessage = "";
@@ -164,7 +158,7 @@ namespace clinic.Presenters
         public bool ValidateUnit()
         {
             bool isValid = true;
-            if (string.IsNullOrWhiteSpace(_medicineView.TxtDonVi))
+            if (string.IsNullOrWhiteSpace(_medicineView.TxtUnit))
             {
                 _medicineView.ErrorMessage = "Nhập đơn vị";
                 isValid = false;
@@ -178,7 +172,7 @@ namespace clinic.Presenters
         public bool ValidatePrice()
         {
             bool isValid = true;
-            if (string.IsNullOrWhiteSpace(_medicineView.TxtGia))
+            if (string.IsNullOrWhiteSpace(_medicineView.TxtPrice))
             {
                 _medicineView.ErrorMessage = "Nhập giá";
                 isValid = false;
@@ -188,7 +182,7 @@ namespace clinic.Presenters
                 _medicineView.ErrorMessage = "";
                 try
                 {
-                    double price = double.Parse(_medicineView.TxtGia);
+                    double price = double.Parse(_medicineView.TxtPrice);
                     if (price >= 0)
                     {
                         _medicineView.ErrorMessage = "";

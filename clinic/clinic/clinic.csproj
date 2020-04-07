@@ -62,9 +62,15 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Models\Bussiness Logics\UpdateDataGridViewEventArgs.cs" />
     <Compile Include="Models\IMedicineRepository.cs" />
+    <Compile Include="Models\IPermissionRepository.cs" />
+    <Compile Include="Models\IServiceRepository.cs" />
+    <Compile Include="Models\IStaffRepository.cs" />
     <Compile Include="Models\Repositories\MedicineRepository.cs" />
+    <Compile Include="Models\Repositories\PermissionRepository.cs" />
+    <Compile Include="Models\Repositories\ServiceRepository.cs" />
+    <Compile Include="Models\Repositories\StaffRepository.cs" />
+    <Compile Include="Presenters\StaffPresenter.cs" />
     <Compile Include="Views\Forms\AdminForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -127,9 +133,16 @@
     <Compile Include="Presenters\ServicePresenter.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Views\Forms\FormStaff.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Views\Forms\FormStaff.Designer.cs">
+      <DependentUpon>FormStaff.cs</DependentUpon>
+    </Compile>
     <Compile Include="Views\IMedicineView.cs" />
     <Compile Include="Views\IAdminView.cs" />
     <Compile Include="Views\IServiceView.cs" />
+    <Compile Include="Views\IStaffView.cs" />
     <EmbeddedResource Include="Views\Forms\AdminForm.resx">
       <DependentUpon>AdminForm.cs</DependentUpon>
     </EmbeddedResource>
@@ -148,6 +161,9 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <EmbeddedResource Include="Views\Forms\FormStaff.resx">
+      <DependentUpon>FormStaff.cs</DependentUpon>
+    </EmbeddedResource>
     <EntityDeploy Include="Models\Model.edmx">
       <Generator>EntityModelCodeGenerator</Generator>
       <LastGenOutput>Model.Designer.cs</LastGenOutput>

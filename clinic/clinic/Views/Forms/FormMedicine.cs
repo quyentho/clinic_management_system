@@ -18,64 +18,54 @@ namespace clinic
     {
         //private readonly clinicEntities _clinicEntities;
         private MedicinePresenter _medicinePresenter;
-        private readonly MedicineRepository _medicineRepository;
+        private readonly IMedicineRepository _medicineRepository;
 
         public event EventHandler UpdateDataGridView;
         public EventHandler handler;
-        public FormMedicine(MedicineRepository medicineRepository)
+        public FormMedicine(IMedicineRepository medicineRepository)
         {
             _medicineRepository = medicineRepository;
             InitializeComponent();
         }
-        private void FormAddMedicine_Load(object sender, EventArgs e)
+       
+        private void FormMedicine_Load(object sender, EventArgs e)
         {
             _medicinePresenter = new MedicinePresenter(_medicineRepository, this);
             if (IsEdit || IsDelete)
             {
-                _medicinePresenter.DisplayMedicine(IdSelected);
+                _medicinePresenter.Display(IdSelected);
             }
 
             if (IsDelete)
             {
-                this.txtTenThuoc.Enabled = false;
-                this.txtDonVi.Enabled = false;
-                this.txtSoLuong.Enabled = false;
-                this.txtGia.Enabled = false;
+                this.txtMedicineName.Enabled = false;
+                this.txtUnit.Enabled = false;
+                this.txtQuantity.Enabled = false;
+                this.txtPrice.Enabled = false;
 
-                this.btnXong.Text = "Xoá";
+                this.btnOK.Text = "Xoá";
 
-                this.btnXong.ForeColor = Color.Red;           
+                this.btnOK.ForeColor = Color.Red;           
             }
 
         }
-        #region IView Properties
-        public string TxtTenThuoc { get => txtTenThuoc.Text; set => txtTenThuoc.Text = value; }
-        public string TxtSoLuong { get => txtSoLuong.Text; set => txtSoLuong.Text = value; }
-        public string TxtDonVi { get => txtDonVi.Text; set => txtDonVi.Text = value; }
-        public string TxtGia { get => txtGia.Text; set => txtGia.Text = value; }
-        public string ErrorMessage { get; set; }
-        public int IdSelected { get; set; }
-        public bool IsEdit { get; set; } 
-        public bool IsDelete { get; set; }
-
- 
-        #endregion
-        private async void btnXong_Click(object sender, EventArgs e)
+   
+        private async void btnOK_Click(object sender, EventArgs e)
         {
 
             if (_medicinePresenter.ValidateAllInput())
             {
                 string notification = "";
                 if (!IsEdit && !IsDelete) // add medicine
-                    notification = await _medicinePresenter.AddMedicine();
+                    notification = await _medicinePresenter.Add();
                 if (IsEdit) // edit medicine
-                  notification =await _medicinePresenter.EditMedicine(IdSelected);
+                  notification =await _medicinePresenter.Edit(IdSelected);
                 if (IsDelete)
                 {
                     DialogResult result = MessageBox.Show("Có chắc muốn xoá?", "Cảnh báo", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
                     if (result == DialogResult.Yes)
                     {
-                       notification = await _medicinePresenter.DeleteMedicine(IdSelected);
+                       notification = await _medicinePresenter.Delete(IdSelected);
                     }
                 }
                 if (notification == "")
@@ -91,25 +81,25 @@ namespace clinic
             {
                 MessageBox.Show("Nhập sai dữ liệu");
                 #region ReInput textbox if invalid
-                if (errorProvider1.GetError(txtTenThuoc) != "")
+                if (errorProvider1.GetError(txtMedicineName) != "")
                 {
-                    txtTenThuoc.Clear();
-                    txtTenThuoc.Focus();
+                    txtMedicineName.Clear();
+                    txtMedicineName.Focus();
                 }
-                else if (errorProvider2.GetError(txtSoLuong) != "")
+                else if (errorProvider2.GetError(txtQuantity) != "")
                 {
-                    txtSoLuong.Clear();
-                    txtSoLuong.Focus();
+                    txtQuantity.Clear();
+                    txtQuantity.Focus();
                 }
-                else if (errorProvider3.GetError(txtDonVi) != "")
+                else if (errorProvider3.GetError(txtUnit) != "")
                 {
-                    txtDonVi.Clear();
-                    txtDonVi.Focus();
+                    txtUnit.Clear();
+                    txtUnit.Focus();
                 }
-                else if (errorProvider4.GetError(txtGia) != "")
+                else if (errorProvider4.GetError(txtPrice) != "")
                 {
-                    txtGia.Clear();
-                    txtGia.Focus();
+                    txtPrice.Clear();
+                    txtPrice.Focus();
                 }
                 #endregion
             }
@@ -117,36 +107,50 @@ namespace clinic
 
         }
 
-        private void btnHuy_Click(object sender, EventArgs e)
+        private void btnCancel_Click(object sender, EventArgs e)
         {
             handler = UpdateDataGridView;
             handler?.Invoke(this, null);
             this.Close();
         }
-#region Validate Input Events
-        private void txtTenThuoc_Validating(object sender, CancelEventArgs e)
+        
+        #region Validate Input Events
+        private void txtMedicineName_Validating(object sender, CancelEventArgs e)
         {
             _medicinePresenter.ValidateName();
-            errorProvider1.SetError(txtTenThuoc, ErrorMessage);
+            errorProvider1.SetError(txtMedicineName, ErrorMessage);
         }
 
-        private void txtSoLuong_Validating(object sender, CancelEventArgs e)
+        private void txtQuantity_Validating(object sender, CancelEventArgs e)
         {
             _medicinePresenter.ValidateQuantity();
-            errorProvider2.SetError(txtSoLuong, ErrorMessage);
+            errorProvider2.SetError(txtQuantity, ErrorMessage);
         }
 
-        private void txtDonVi_Validating(object sender, CancelEventArgs e)
+        private void txtUnit_Validating(object sender, CancelEventArgs e)
         {
             _medicinePresenter.ValidateUnit();
-            errorProvider3.SetError(txtDonVi, ErrorMessage);
+            errorProvider3.SetError(txtUnit, ErrorMessage);
         }
 
-        private void txtGia_Validating(object sender, CancelEventArgs e)
+        private void txtPrice_Validating(object sender, CancelEventArgs e)
         {
             _medicinePresenter.ValidatePrice();
-            errorProvider4.SetError(txtGia, ErrorMessage);
+            errorProvider4.SetError(txtPrice, ErrorMessage);
         }
+        #endregion
+
+        #region IView Properties
+        public string TxtMedicineName { get => txtMedicineName.Text; set => txtMedicineName.Text = value; }
+        public string TxtQuantity { get => txtQuantity.Text; set => txtQuantity.Text = value; }
+        public string TxtUnit { get => txtUnit.Text; set => txtUnit.Text = value; }
+        public string TxtPrice { get => txtPrice.Text; set => txtPrice.Text = value; }
+        public string ErrorMessage { get; set; }
+        public int IdSelected { get; set; }
+        public bool IsEdit { get; set; }
+        public bool IsDelete { get; set; }
+
+
         #endregion
 
 

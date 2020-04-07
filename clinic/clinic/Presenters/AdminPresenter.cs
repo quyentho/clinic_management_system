@@ -17,6 +17,11 @@ namespace clinic.Presenters
             _adminView = view;
             _clinicEntities = clinicEntities;
         }
+        public async Task<IEnumerable<staff>> GetStaffData()
+        {
+            var staffs = Task.Run(() => _clinicEntities.staffs.Where(s => s.is_still_working == true).ToList());
+            return await staffs;
+        }
         public async Task<IEnumerable<medicine>> GetMedicineData()
         {
             var medicines = Task.Run(() => _clinicEntities.medicines.ToList());

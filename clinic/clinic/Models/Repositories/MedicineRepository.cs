@@ -43,7 +43,6 @@ namespace clinic.Models.Repositories
         public void UpdateMedicine(medicine medicine)
         {
             _clinicEntities.Entry(medicine).State = System.Data.Entity.EntityState.Modified;
-
         }
     }
 }

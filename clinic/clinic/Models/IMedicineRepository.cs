@@ -11,7 +11,7 @@ namespace clinic.Models
         Task<IEnumerable<medicine>> GetMedicines();
         medicine GetMedicineById(int id);
         void InsertMedicine(medicine medicine);
-        void DeleteMedicine(medicine id);
+        void DeleteMedicine(medicine medicine);
         void UpdateMedicine(medicine medicine);
         Task Save();
     }

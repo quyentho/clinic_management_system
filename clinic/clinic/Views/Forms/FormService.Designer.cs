@@ -28,21 +28,26 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.panel2 = new System.Windows.Forms.Panel();
-            this.txtGia = new System.Windows.Forms.TextBox();
+            this.txtPrice = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
             this.panel1 = new System.Windows.Forms.Panel();
-            this.txtTenDichVu = new System.Windows.Forms.TextBox();
+            this.txtServiceName = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
-            this.btnHuy = new System.Windows.Forms.Button();
-            this.btnXong = new System.Windows.Forms.Button();
+            this.btnCancel = new System.Windows.Forms.Button();
+            this.btnOK = new System.Windows.Forms.Button();
+            this.errorProvider1 = new System.Windows.Forms.ErrorProvider(this.components);
+            this.errorProvider2 = new System.Windows.Forms.ErrorProvider(this.components);
             this.panel2.SuspendLayout();
             this.panel1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.errorProvider1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.errorProvider2)).BeginInit();
             this.SuspendLayout();
             // 
             // panel2
             // 
-            this.panel2.Controls.Add(this.txtGia);
+            this.panel2.Controls.Add(this.txtPrice);
             this.panel2.Controls.Add(this.label2);
             this.panel2.Location = new System.Drawing.Point(12, 72);
             this.panel2.Name = "panel2";
@@ -50,12 +55,12 @@
             this.panel2.TabIndex = 7;
             this.panel2.TabStop = true;
             // 
-            // txtGia
+            // txtPrice
             // 
-            this.txtGia.Location = new System.Drawing.Point(105, 13);
-            this.txtGia.Name = "txtGia";
-            this.txtGia.Size = new System.Drawing.Size(214, 20);
-            this.txtGia.TabIndex = 1;
+            this.txtPrice.Location = new System.Drawing.Point(105, 13);
+            this.txtPrice.Name = "txtPrice";
+            this.txtPrice.Size = new System.Drawing.Size(214, 20);
+            this.txtPrice.TabIndex = 1;
             // 
             // label2
             // 
@@ -68,19 +73,19 @@
             // 
             // panel1
             // 
-            this.panel1.Controls.Add(this.txtTenDichVu);
+            this.panel1.Controls.Add(this.txtServiceName);
             this.panel1.Controls.Add(this.label1);
             this.panel1.Location = new System.Drawing.Point(12, 12);
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(342, 45);
             this.panel1.TabIndex = 6;
             // 
-            // txtTenDichVu
+            // txtServiceName
             // 
-            this.txtTenDichVu.Location = new System.Drawing.Point(105, 13);
-            this.txtTenDichVu.Name = "txtTenDichVu";
-            this.txtTenDichVu.Size = new System.Drawing.Size(214, 20);
-            this.txtTenDichVu.TabIndex = 1;
+            this.txtServiceName.Location = new System.Drawing.Point(105, 13);
+            this.txtServiceName.Name = "txtServiceName";
+            this.txtServiceName.Size = new System.Drawing.Size(214, 20);
+            this.txtServiceName.TabIndex = 1;
             // 
             // label1
             // 
@@ -91,32 +96,42 @@
             this.label1.TabIndex = 0;
             this.label1.Text = "Tên dịch vụ";
             // 
-            // btnHuy
+            // btnCancel
             // 
-            this.btnHuy.Location = new System.Drawing.Point(228, 148);
-            this.btnHuy.Name = "btnHuy";
-            this.btnHuy.Size = new System.Drawing.Size(94, 38);
-            this.btnHuy.TabIndex = 9;
-            this.btnHuy.Text = "Huỷ";
-            this.btnHuy.UseVisualStyleBackColor = true;
+            this.btnCancel.Location = new System.Drawing.Point(228, 148);
+            this.btnCancel.Name = "btnCancel";
+            this.btnCancel.Size = new System.Drawing.Size(94, 38);
+            this.btnCancel.TabIndex = 9;
+            this.btnCancel.Text = "Huỷ";
+            this.btnCancel.UseVisualStyleBackColor = true;
+            this.btnCancel.Click += new System.EventHandler(this.btnCancel_Click);
             // 
-            // btnXong
+            // btnOK
             // 
-            this.btnXong.DialogResult = System.Windows.Forms.DialogResult.OK;
-            this.btnXong.Location = new System.Drawing.Point(55, 148);
-            this.btnXong.Name = "btnXong";
-            this.btnXong.Size = new System.Drawing.Size(94, 38);
-            this.btnXong.TabIndex = 8;
-            this.btnXong.Text = "Xong";
-            this.btnXong.UseVisualStyleBackColor = true;
+            this.btnOK.DialogResult = System.Windows.Forms.DialogResult.OK;
+            this.btnOK.Location = new System.Drawing.Point(55, 148);
+            this.btnOK.Name = "btnOK";
+            this.btnOK.Size = new System.Drawing.Size(94, 38);
+            this.btnOK.TabIndex = 8;
+            this.btnOK.Text = "Xong";
+            this.btnOK.UseVisualStyleBackColor = true;
+            this.btnOK.Click += new System.EventHandler(this.btnOK_Click);
+            // 
+            // errorProvider1
+            // 
+            this.errorProvider1.ContainerControl = this;
+            // 
+            // errorProvider2
+            // 
+            this.errorProvider2.ContainerControl = this;
             // 
             // FormService
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(380, 211);
-            this.Controls.Add(this.btnHuy);
-            this.Controls.Add(this.btnXong);
+            this.Controls.Add(this.btnCancel);
+            this.Controls.Add(this.btnOK);
             this.Controls.Add(this.panel2);
             this.Controls.Add(this.panel1);
             this.Name = "FormService";
@@ -126,6 +141,8 @@
             this.panel2.PerformLayout();
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.errorProvider1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.errorProvider2)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -133,12 +150,14 @@
         #endregion
 
         private System.Windows.Forms.Panel panel2;
-        private System.Windows.Forms.TextBox txtGia;
+        private System.Windows.Forms.TextBox txtPrice;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Panel panel1;
-        private System.Windows.Forms.TextBox txtTenDichVu;
+        private System.Windows.Forms.TextBox txtServiceName;
         private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.Button btnHuy;
-        private System.Windows.Forms.Button btnXong;
+        private System.Windows.Forms.Button btnCancel;
+        private System.Windows.Forms.Button btnOK;
+        private System.Windows.Forms.ErrorProvider errorProvider1;
+        private System.Windows.Forms.ErrorProvider errorProvider2;
     }
 }

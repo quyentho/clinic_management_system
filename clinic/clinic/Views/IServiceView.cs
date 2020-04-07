@@ -8,10 +8,11 @@ namespace clinic.Views
 {
     interface IServiceView
     {
+        int IdSelected { get; set; }
         bool IsEdit { get; set; }
         bool IsDelete { get; set; }
-        string TxtTenDichVu { get; set; }
-        string TxtGia { get; set; }
+        string TxtServiceName { get; set; }
+        string TxtPrice { get; set; }
         string ErrorMessage { get; set; }
     }
 }
