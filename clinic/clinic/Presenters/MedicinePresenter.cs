@@ -9,211 +9,64 @@ using clinic.Models.Repositories;
 
 namespace clinic.Presenters
 {
-    class MedicinePresenter
+    class MedicinePresenter : Presenter
     {
-        private IMedicineView _medicineView;
-        private readonly IMedicineRepository _medicineRepository;
+        private IMedicineView _view;
+        private readonly IMedicineRepository _repository;
         public MedicinePresenter(IMedicineRepository medicineRepository, IMedicineView medicineView)
         {
-            _medicineView = medicineView;
-            _medicineRepository = medicineRepository;
+            _view = medicineView;
+            _repository = medicineRepository;
         }
-        public async Task<string> Add()
+        public  void Add()
         {
-            string notification = "";
-            try
+            var medicine = new medicine()
             {
-                var medicine = new medicine()
-                {
-                    medicine_name = _medicineView.TxtMedicineName,
-                    quantity = Convert.ToInt32(_medicineView.TxtQuantity),
-                    unit = _medicineView.TxtUnit,
-                    price_per_unit = decimal.Parse(_medicineView.TxtPrice)
-                };
-                _medicineRepository.InsertMedicine(medicine);
-                await _medicineRepository.Save();
-
-            }
-            catch (Exception ex)
-            {
-                notification = ex.ToString();
-            }
-            return notification;
+               
+            };
+            _repository.InsertMedicine(medicine);
+             _repository.Save();
         }
         public void Display(int idSelected)
         {
-            var medicineFromDB = _medicineRepository.GetMedicineById(idSelected);
+            var medicineFromDB = _repository.GetMedicineById(idSelected);
             if (medicineFromDB != null)
             {
-               //Display from db to view
-                _medicineView.TxtMedicineName = medicineFromDB.medicine_name;
-                _medicineView.TxtQuantity = medicineFromDB.quantity.ToString();
-                _medicineView.TxtUnit = medicineFromDB.unit;
-                _medicineView.TxtPrice = medicineFromDB.price_per_unit.ToString();
+                _view.TxtMedicineName = medicineFromDB.medicine_name;
+                _view.TxtQuantity = medicineFromDB.quantity.ToString();
+                _view.TxtEntryUnit = medicineFromDB.entry_unit;
+                _view.TxtEntryPrice = medicineFromDB.entry_price.ToString();
+                _view.TxtExpiryDay = medicineFromDB.expiry_day.ToString();
+                _view.TxtSaleUnit = medicineFromDB.sale_unit;
+                _view.TxtSalePrice = medicineFromDB.sale_price_per_unit.ToString();
             }
-
         }
-        public async Task<string> Delete(int idSelected)
+        public  void Delete(int idSelected)
         {
-            string notification = "";
-            try
+            var medicineFromDb = _repository.GetMedicineById(idSelected);
+            if (medicineFromDb != null)
             {
-                var medicineFromDb = _medicineRepository.GetMedicineById(idSelected);
-                if (medicineFromDb != null)
-                {
-                    _medicineRepository.DeleteMedicine(medicineFromDb);
-                   await _medicineRepository.Save();
-                }
-                else
-                {
-                    notification = "Thuốc không tồn tại";
-                }
+                _repository.DeleteMedicine(medicineFromDb);
+                _repository.Save();
             }
-            catch (Exception ex)
-            {
-
-                notification = ex.ToString();
-            }
-            return notification;
-         
-           
         }
-        public async Task<string> Edit(int idSelected)
+        public  void Edit(int idSelected)
         {
-            string notification = "";
-            var medicineFromDB = _medicineRepository.GetMedicineById(idSelected);
-            if (medicineFromDB != null)
+            var medicineUpdated = new medicine()
             {
-                try
-                {
-                    medicineFromDB.medicine_name = _medicineView.TxtMedicineName;
-                    medicineFromDB.quantity = int.Parse(_medicineView.TxtQuantity);
-                    medicineFromDB.unit = _medicineView.TxtUnit;
-                    medicineFromDB.price_per_unit = decimal.Parse(_medicineView.TxtPrice);
-                    await _medicineRepository.Save();
-
-              
-
-                }
-                catch (Exception ex)
-                {
-                    notification = ex.ToString();
-                }
-            }
-            else
-            {
-                notification = "Thuốc không tồn tại";
-            }
-            return notification;
+                medicine_name = _view.TxtMedicineName,
+                quantity = Convert.ToInt32(_view.TxtQuantity),
+                entry_unit = _view.TxtEntryUnit,
+                entry_price = Int64.Parse(_view.TxtEntryPrice),
+                sale_unit = _view.TxtSaleUnit,
+                sale_price_per_unit = Int64.Parse(_view.TxtSalePrice),
+                entry_day = DateTime.Now,
+                expiry_day = DateTime.Parse(_view.TxtExpiryDay),
+                is_active = true
+            };
+            _repository.UpdateMedicine(medicineUpdated);
+            _repository.Save();
         }
-        #region validating Method
-        public bool ValidateName()
-        {
-            bool isValid = true;
-            if (string.IsNullOrWhiteSpace(_medicineView.TxtMedicineName))
-            {
-                _medicineView.ErrorMessage = "Nhập tên thuốc";
-                isValid = false;
-            }
-            else
-            {
-                _medicineView.ErrorMessage = "";
-
-            }
-            return isValid;
-        }
-        public bool ValidateQuantity()
-        {
-            bool isValid = true;
-            if (string.IsNullOrWhiteSpace(_medicineView.TxtQuantity))
-            {
-                _medicineView.ErrorMessage = "Nhập số lượng";
-                isValid = false;
-            }
-            else
-            {
-                _medicineView.ErrorMessage = "";
-                try
-                {
-                    int number = int.Parse(_medicineView.TxtQuantity);
-                    if (number >= 0)
-                    {
-                        _medicineView.ErrorMessage = "";
-                    }
-                    else
-                    {
-                        _medicineView.ErrorMessage = "Số lượng phải lớn hơn 0";
-                        isValid = false;
-                    }
-                }
-                catch
-                {
-                    _medicineView.ErrorMessage = "Vui lòng nhập đúng số";
-                    isValid = false;
-                }
-            }
-            return isValid;
-        }
-
-        public bool ValidateUnit()
-        {
-            bool isValid = true;
-            if (string.IsNullOrWhiteSpace(_medicineView.TxtUnit))
-            {
-                _medicineView.ErrorMessage = "Nhập đơn vị";
-                isValid = false;
-            }
-            else
-            {
-                _medicineView.ErrorMessage = "";
-            }
-            return isValid;
-        }
-        public bool ValidatePrice()
-        {
-            bool isValid = true;
-            if (string.IsNullOrWhiteSpace(_medicineView.TxtPrice))
-            {
-                _medicineView.ErrorMessage = "Nhập giá";
-                isValid = false;
-            }
-            else
-            {
-                _medicineView.ErrorMessage = "";
-                try
-                {
-                    double price = double.Parse(_medicineView.TxtPrice);
-                    if (price >= 0)
-                    {
-                        _medicineView.ErrorMessage = "";
-                    }
-                    else
-                    {
-                        _medicineView.ErrorMessage = "Giá phải lớn hơn 0";
-                        isValid = false;
-                    }
-                }
-                catch
-                {
-                    _medicineView.ErrorMessage = "Vui lòng nhập đúng số";
-                    isValid = false;
-                }
-            }
-            return isValid;
-        }
-        public bool ValidateAllInput()
-        {
-            bool isValidName = ValidateName();
-            bool isValidPrice = ValidatePrice();
-            bool isValidQuan = ValidateQuantity();
-            bool isValidUnit = ValidateUnit();
-            if (isValidName && isValidPrice && isValidQuan && isValidUnit)
-            {
-                return true;
-            }
-            else
-                return false;
-        }
-        #endregion
     }
 }
+

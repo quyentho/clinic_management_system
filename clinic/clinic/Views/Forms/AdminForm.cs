@@ -1,107 +1,112 @@
 ﻿using clinic.Models;
+using clinic.Models.Repositories;
 using clinic.Presenters;
 using clinic.Views;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
-using clinic.Models.Repositories;
 using clinic.Views.Forms;
+using System;
+using System.Windows.Forms;
 
 namespace clinic
 {
     public partial class AdminForm : Form, IAdminView
     {
+        //FIXME: Inject serviceRepo, staffRepo, medicineRepo from program.cs
+        //FIXME: Remove _clinicEntities
         private readonly clinicEntities _clinicEntities;
-        private AdminPresenter _adminPresenter;
-        private Form _form;
+        private AdminPresenter _presenter;
+        private OperationForm _form;
+        private  IMedicineRepository _medicineRepository;
+        private  IStaffRepository _staffRepository;
+        private  IServiceRepository _serviceRepository;
+        private  IPermissionRepository _permissionRepository;
 
+        
         public AdminForm()
         {
+            //HACK: temporarily create instance of all repository, will be moved to program.cs
             _clinicEntities = new clinicEntities();
-            _adminPresenter = new AdminPresenter(this, _clinicEntities);
+            _medicineRepository = new MedicineRepository(_clinicEntities);
+            _serviceRepository = new ServiceRepository(_clinicEntities);
+            _permissionRepository = new PermissionRepository(_clinicEntities);
+            _staffRepository = new StaffRepository(_clinicEntities, _permissionRepository);
+            _presenter = new AdminPresenter(this, _clinicEntities,_medicineRepository,_staffRepository,_serviceRepository);
             InitializeComponent();
         }
-
         #region Properties
-     
+
         public string TxtTimKiem { get => txtSearch.Text; set => txtSearch.Text = value; }
         public int IndexSelected { get; set; }
+        public DataGridView AdminDataGridView { get => dgvAdmin; set => dgvAdmin = value; }
         #endregion
-        private async void btnMedicine_Click(object sender, EventArgs e)
+
+        private void AdminForm_Load(object sender, EventArgs e)
         {
-            if (_form != null)
-                _form.Dispose();
-            _form = new FormMedicine(new Models.Repositories.MedicineRepository(_clinicEntities));
+            btnStaff.Focus();
 
-            dgvAdmin.DataSource = await _adminPresenter.GetMedicineData();
-
-            //set display of datagridview
-            dgvAdmin.Columns[1].HeaderText = "Tên thuốc";
-            dgvAdmin.Columns[2].HeaderText = "Tồn kho";
-            dgvAdmin.Columns[3].HeaderText = "Đơn vị thuốc";
-            dgvAdmin.Columns[4].HeaderText = "Giá/Đơn vị";
-
-            dgvAdmin.Columns[5].Visible = false; // not show navigation property
-       
+            btnStaff.PerformClick();
         }
 
 
-        private async void btnSearch_Click(object sender, EventArgs e)
-        {
-            dgvAdmin.DataSource = await _adminPresenter.SearchMedicines(txtSearch.Text);
-        }
 
+        #region Add, Edit, Delete button_click
+        //TODO: Update for staff & service
         private void btnAdd_Click(object sender, EventArgs e)
         {
-            if (_form is FormMedicine medicineForm)
-                ((FormMedicine)_form).UpdateDataGridView += btnMedicine_Click;
-            if (_form is FormService formService)
-                formService.UpdateDataGridView += btnService_Click;
+            _form.Operation = Operation.Insert;
+            _form.UpdateDataGridViewEventHandler += UpdateDataGridView;
             _form.ShowDialog();
-            
-
-            //    dgvAdmin.DataSource = await _adminPresenter.GetMedicineData();
-        }
-        private async void btnService_Click(object sender, EventArgs e)
-        {
-            dgvAdmin.DataSource = await _adminPresenter.GetServiceData();
-
-            dgvAdmin.Columns[1].HeaderText = "Tên dịch vụ";
-            dgvAdmin.Columns[2].HeaderText = "Giá dịch vụ";
-
-            dgvAdmin.Columns[3].Visible = false;
-
-            if (_form != null)
-                _form.Dispose();
-            _form = new FormService(new ServiceRepository(_clinicEntities));
         }
 
         private void btnEdit_Click(object sender, EventArgs e)
         {
-            //casting to FormMedicine
-            if (_form is FormMedicine medicineForm)
-            {
-                medicineForm.IsEdit = true;
-                medicineForm.IdSelected = IndexSelected;
-                medicineForm.UpdateDataGridView += btnMedicine_Click;
-            }
-            else if(_form is FormService formService)
-            {
-                formService.IsEdit = true;
-                formService.IdSelected = IndexSelected;
-                formService.UpdateDataGridView += btnService_Click;
-            }
+            _form.Operation = Operation.Edit;
+            _form.IdSelected = IndexSelected;
+            _form.UpdateDataGridViewEventHandler += UpdateDataGridView;
             _form.ShowDialog();
-
-            //   dgvAdmin.DataSource = await _adminPresenter.GetMedicineData();
         }
 
+        private void btnDelete_Click(object sender, EventArgs e)
+        {
+            _form.Operation = Operation.Delete;
+            _form.IdSelected = IndexSelected;
+            _form.UpdateDataGridViewEventHandler += UpdateDataGridView; 
+            _form.ShowDialog();
+        }
+        #endregion
+        private void UpdateDataGridView(object sender, EventArgs e)
+        {
+            if (_form is FormMedicine) btnMedicine.PerformClick();
+            else if (_form is FormService) btnService.PerformClick();
+            else if (_form is FormStaff) btnStaff.PerformClick();
+        }
+
+        #region functionality button_click
+
+        private void btnService_Click(object sender, EventArgs e)
+        {
+            if (_form != null)
+                _form.Dispose();
+            _form = new FormService(_serviceRepository);
+            _presenter.DisplayServices();
+        }
+
+        private void btnStaff_Click(object sender, EventArgs e)
+        {
+            if (_form != null)
+                _form.Dispose();
+            _form = new FormStaff(_staffRepository,_permissionRepository);
+            _presenter.DisplayStaffs();
+        }
+
+        private  void btnMedicine_Click(object sender, EventArgs e)
+        {
+            if (_form != null)
+                _form.Dispose();
+            _form = new FormMedicine(_medicineRepository);
+            _presenter.DisplayMedicines();
+        }
+
+        #endregion
         private void dgvAdmin_CellEnter(object sender, DataGridViewCellEventArgs e)
         {
             IndexSelected = int.Parse(dgvAdmin.Rows[e.RowIndex].Cells[0].Value.ToString());
@@ -109,53 +114,10 @@ namespace clinic
             btnDelete.Enabled = true;
         }
 
-        private void btnDelete_Click(object sender, EventArgs e)
+        private void btnSearch_Click(object sender, EventArgs e)
         {
-
-            if (_form is FormMedicine medicineForm)
-            {
-                medicineForm.IsDelete = true;
-                medicineForm.IdSelected = IndexSelected;
-                medicineForm.UpdateDataGridView += btnMedicine_Click;
-            }
-            else if (_form is FormService formService)
-            {
-                formService.IsDelete = true;
-                formService.IdSelected = IndexSelected;
-                formService.UpdateDataGridView += btnService_Click;
-            }
-            _form.ShowDialog();
-            
-        }
-        //#region Update DataGridView Display When Changed Db Value
-        //private void Add_Row_DataGridView(object sender, UpdateDataGridViewEventArgs e)
-        //{
-        //    dgvAdmin.Rows.Add(e.Value.ToString().Clone());
-        //}
-        //private void Edit_Row_DataGridView(object sender, UpdateDataGridViewEventArgs e)
-        //{
-        //    throw new NotImplementedException();
-        //}
-        //private void Delete_Row_DataGridView(object sender, EventArgs e)
-        //{
-        //    throw new NotImplementedException();
-        //}
-        //#endregion
-
-        private async void btnStaff_Click(object sender, EventArgs e)
-        {
-            if (_form != null)
-                _form.Dispose();
-            _form = new FormStaff(new Models.Repositories.StaffRepository(_clinicEntities), new PermissionRepository(_clinicEntities));
-
-            dgvAdmin.DataSource = await _adminPresenter.GetStaffData();
-        }
-
-        private void AdminForm_Load(object sender, EventArgs e)
-        {
-            btnStaff.Focus();
-
-            btnStaff.PerformClick();
+            //TODO: Search Staff & service
+           _presenter.SearchMedicines();
         }
     }
 }

@@ -23,9 +23,9 @@ namespace clinic.Models
     
         public int id { get; set; }
         public int patient_id { get; set; }
-        public Nullable<System.DateTime> created_at { get; set; }
-        public Nullable<int> staff_created { get; set; }
-        public decimal total_money { get; set; }
+        public System.DateTime created_at { get; set; }
+        public int staff_created { get; set; }
+        public long total_money { get; set; }
         public bool is_paid { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

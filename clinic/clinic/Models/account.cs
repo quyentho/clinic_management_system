@@ -19,6 +19,7 @@ namespace clinic.Models
         public string username { get; set; }
         public string pass { get; set; }
         public int permission_id { get; set; }
+        public bool is_active { get; set; }
     
         public virtual permission permission { get; set; }
         public virtual staff staff { get; set; }

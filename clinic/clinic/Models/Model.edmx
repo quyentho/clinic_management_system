@@ -14,6 +14,7 @@
           <Property Name="username" Type="varchar" MaxLength="15" Nullable="false" />
           <Property Name="pass" Type="varchar" MaxLength="50" Nullable="false" />
           <Property Name="permission_id" Type="int" Nullable="false" />
+          <Property Name="is_active" Type="bit" Nullable="false" />
         </EntityType>
         <EntityType Name="bill">
           <Key>
@@ -21,9 +22,9 @@
           </Key>
           <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="patient_id" Type="int" Nullable="false" />
-          <Property Name="created_at" Type="datetime" />
-          <Property Name="staff_created" Type="int" />
-          <Property Name="total_money" Type="decimal" Precision="10" Scale="2" Nullable="false" />
+          <Property Name="created_at" Type="datetime" Nullable="false" />
+          <Property Name="staff_created" Type="int" Nullable="false" />
+          <Property Name="total_money" Type="bigint" Nullable="false" />
           <Property Name="is_paid" Type="bit" Nullable="false" />
         </EntityType>
         <EntityType Name="clinic_service">
@@ -33,6 +34,7 @@
           <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="service_name" Type="nvarchar" MaxLength="50" Nullable="false" />
           <Property Name="price" Type="decimal" Precision="10" Scale="2" Nullable="false" />
+          <Property Name="is_active" Type="bit" />
         </EntityType>
         <EntityType Name="medicine">
           <Key>
@@ -40,9 +42,14 @@
           </Key>
           <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="medicine_name" Type="nvarchar" MaxLength="50" Nullable="false" />
-          <Property Name="quantity" Type="int" />
-          <Property Name="unit" Type="nvarchar" MaxLength="50" Nullable="false" />
-          <Property Name="price_per_unit" Type="decimal" Precision="10" Scale="2" />
+          <Property Name="quantity" Type="int" Nullable="false" />
+          <Property Name="sale_unit" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="sale_price_per_unit" Type="bigint" Nullable="false" />
+          <Property Name="is_active" Type="bit" />
+          <Property Name="expiry_day" Type="date" />
+          <Property Name="entry_unit" Type="nchar" MaxLength="10" />
+          <Property Name="entry_price" Type="bigint" />
+          <Property Name="entry_day" Type="datetime" />
         </EntityType>
         <EntityType Name="patient">
           <Key>
@@ -71,7 +78,7 @@
           <Property Name="quantity_indicated" Type="int" Nullable="false" />
           <Property Name="description" Type="nvarchar(max)" />
         </EntityType>
-        <EntityType Name="service_detail">
+        <EntityType Name="services_in_bill">
           <Key>
             <PropertyRef Name="bill_id" />
             <PropertyRef Name="service_id" />
@@ -84,11 +91,12 @@
             <PropertyRef Name="id" />
           </Key>
           <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="full_name" Type="nvarchar(max)" Nullable="false" />
-          <Property Name="date_of_birdth" Type="date" />
+          <Property Name="full_name" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="date_of_birdth" Type="varchar" MaxLength="50" />
           <Property Name="phone_number" Type="varchar" MaxLength="15" Nullable="false" />
-          <Property Name="salary" Type="real" Nullable="false" />
+          <Property Name="salary" Type="bigint" Nullable="false" />
           <Property Name="is_still_working" Type="bit" Nullable="false" />
+          <Property Name="permission_id" Type="int" Nullable="false" />
         </EntityType>
         <Association Name="FK__prescript__bill___4CA06362">
           <End Role="bill" Type="Self.bill" Multiplicity="1" />
@@ -116,24 +124,24 @@
         </Association>
         <Association Name="FK__service_d__bill___5070F446">
           <End Role="bill" Type="Self.bill" Multiplicity="1" />
-          <End Role="service_detail" Type="Self.service_detail" Multiplicity="*" />
+          <End Role="services_in_bill" Type="Self.services_in_bill" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="bill">
               <PropertyRef Name="id" />
             </Principal>
-            <Dependent Role="service_detail">
+            <Dependent Role="services_in_bill">
               <PropertyRef Name="bill_id" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
         <Association Name="FK__service_d__servi__5165187F">
           <End Role="clinic_service" Type="Self.clinic_service" Multiplicity="1" />
-          <End Role="service_detail" Type="Self.service_detail" Multiplicity="*" />
+          <End Role="services_in_bill" Type="Self.services_in_bill" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="clinic_service">
               <PropertyRef Name="id" />
             </Principal>
-            <Dependent Role="service_detail">
+            <Dependent Role="services_in_bill">
               <PropertyRef Name="service_id" />
             </Dependent>
           </ReferentialConstraint>
@@ -163,7 +171,7 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_bill_staff">
-          <End Role="staff" Type="Self.staff" Multiplicity="0..1" />
+          <End Role="staff" Type="Self.staff" Multiplicity="1" />
           <End Role="bill" Type="Self.bill" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="staff">
@@ -186,6 +194,18 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_staff_permission">
+          <End Role="permission" Type="Self.permission" Multiplicity="1" />
+          <End Role="staff" Type="Self.staff" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="permission">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="staff">
+              <PropertyRef Name="permission_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <EntityContainer Name="clinicModelStoreContainer">
           <EntitySet Name="account" EntityType="Self.account" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="bill" EntityType="Self.bill" Schema="dbo" store:Type="Tables" />
@@ -194,7 +214,7 @@
           <EntitySet Name="patient" EntityType="Self.patient" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="permission" EntityType="Self.permission" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="prescription" EntityType="Self.prescription" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="service_detail" EntityType="Self.service_detail" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="services_in_bill" EntityType="Self.services_in_bill" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="staff" EntityType="Self.staff" Schema="dbo" store:Type="Tables" />
           <AssociationSet Name="FK__prescript__bill___4CA06362" Association="Self.FK__prescript__bill___4CA06362">
             <End Role="bill" EntitySet="bill" />
@@ -206,11 +226,11 @@
           </AssociationSet>
           <AssociationSet Name="FK__service_d__bill___5070F446" Association="Self.FK__service_d__bill___5070F446">
             <End Role="bill" EntitySet="bill" />
-            <End Role="service_detail" EntitySet="service_detail" />
+            <End Role="services_in_bill" EntitySet="services_in_bill" />
           </AssociationSet>
           <AssociationSet Name="FK__service_d__servi__5165187F" Association="Self.FK__service_d__servi__5165187F">
             <End Role="clinic_service" EntitySet="clinic_service" />
-            <End Role="service_detail" EntitySet="service_detail" />
+            <End Role="services_in_bill" EntitySet="services_in_bill" />
           </AssociationSet>
           <AssociationSet Name="FK_account_permission" Association="Self.FK_account_permission">
             <End Role="permission" EntitySet="permission" />
@@ -228,6 +248,10 @@
             <End Role="staff" EntitySet="staff" />
             <End Role="account" EntitySet="account" />
           </AssociationSet>
+          <AssociationSet Name="FK_staff_permission" Association="Self.FK_staff_permission">
+            <End Role="permission" EntitySet="permission" />
+            <End Role="staff" EntitySet="staff" />
+          </AssociationSet>
         </EntityContainer>
       </Schema>
     </edmx:StorageModels>
@@ -243,6 +267,7 @@
           <Property Name="username" Type="String" MaxLength="15" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="pass" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="permission_id" Type="Int32" Nullable="false" />
+          <Property Name="is_active" Type="Boolean" Nullable="false" />
           <NavigationProperty Name="permission" Relationship="Self.FK_account_permission" FromRole="account" ToRole="permission" />
           <NavigationProperty Name="staff" Relationship="Self.FK_staff_account" FromRole="account" ToRole="staff" />
         </EntityType>
@@ -252,14 +277,14 @@
           </Key>
           <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="patient_id" Type="Int32" Nullable="false" />
-          <Property Name="created_at" Type="DateTime" Precision="3" />
-          <Property Name="staff_created" Type="Int32" />
-          <Property Name="total_money" Type="Decimal" Precision="10" Scale="2" Nullable="false" />
+          <Property Name="created_at" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="staff_created" Type="Int32" Nullable="false" />
+          <Property Name="total_money" Type="Int64" Nullable="false" />
           <Property Name="is_paid" Type="Boolean" Nullable="false" />
           <NavigationProperty Name="prescriptions" Relationship="Self.FK__prescript__bill___4CA06362" FromRole="bill" ToRole="prescription" />
           <NavigationProperty Name="patient" Relationship="Self.FK_bill_patient" FromRole="bill" ToRole="patient" />
           <NavigationProperty Name="staff" Relationship="Self.FK_bill_staff" FromRole="bill" ToRole="staff" />
-          <NavigationProperty Name="clinic_service" Relationship="Self.service_detail" FromRole="bill" ToRole="clinic_service" />
+          <NavigationProperty Name="clinic_service" Relationship="Self.services_in_bill" FromRole="bill" ToRole="clinic_service" />
         </EntityType>
         <EntityType Name="clinic_service">
           <Key>
@@ -268,7 +293,8 @@
           <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="service_name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="price" Type="Decimal" Precision="10" Scale="2" Nullable="false" />
-          <NavigationProperty Name="bills" Relationship="Self.service_detail" FromRole="clinic_service" ToRole="bill" />
+          <Property Name="is_active" Type="Boolean" />
+          <NavigationProperty Name="bills" Relationship="Self.services_in_bill" FromRole="clinic_service" ToRole="bill" />
         </EntityType>
         <EntityType Name="medicine">
           <Key>
@@ -276,9 +302,14 @@
           </Key>
           <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="medicine_name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="quantity" Type="Int32" />
-          <Property Name="unit" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="price_per_unit" Type="Decimal" Precision="10" Scale="2" />
+          <Property Name="quantity" Type="Int32" Nullable="false" />
+          <Property Name="sale_unit" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="sale_price_per_unit" Type="Int64" Nullable="false" />
+          <Property Name="is_active" Type="Boolean" />
+          <Property Name="expiry_day" Type="DateTime" Precision="0" />
+          <Property Name="entry_unit" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
+          <Property Name="entry_price" Type="Int64" />
+          <Property Name="entry_day" Type="DateTime" Precision="3" />
           <NavigationProperty Name="prescriptions" Relationship="Self.FK__prescript__medic__4D94879B" FromRole="medicine" ToRole="prescription" />
         </EntityType>
         <EntityType Name="patient">
@@ -299,6 +330,7 @@
           <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="position_name" Type="String" MaxLength="20" FixedLength="false" Unicode="true" Nullable="false" />
           <NavigationProperty Name="accounts" Relationship="Self.FK_account_permission" FromRole="permission" ToRole="account" />
+          <NavigationProperty Name="staffs" Relationship="Self.FK_staff_permission" FromRole="permission" ToRole="staff" />
         </EntityType>
         <EntityType Name="prescription">
           <Key>
@@ -317,13 +349,15 @@
             <PropertyRef Name="id" />
           </Key>
           <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="full_name" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="date_of_birdth" Type="DateTime" Precision="0" />
+          <Property Name="full_name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="date_of_birdth" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="phone_number" Type="String" MaxLength="15" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="salary" Type="Single" Nullable="false" />
+          <Property Name="salary" Type="Int64" Nullable="false" />
           <Property Name="is_still_working" Type="Boolean" Nullable="false" />
+          <Property Name="permission_id" Type="Int32" Nullable="false" />
           <NavigationProperty Name="accounts" Relationship="Self.FK_staff_account" FromRole="staff" ToRole="account" />
           <NavigationProperty Name="bills" Relationship="Self.FK_bill_staff" FromRole="staff" ToRole="bill" />
+          <NavigationProperty Name="permission" Relationship="Self.FK_staff_permission" FromRole="staff" ToRole="permission" />
         </EntityType>
         <Association Name="FK_account_permission">
           <End Role="permission" Type="Self.permission" Multiplicity="1" />
@@ -374,7 +408,7 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_bill_staff">
-          <End Role="staff" Type="Self.staff" Multiplicity="0..1" />
+          <End Role="staff" Type="Self.staff" Multiplicity="1" />
           <End Role="bill" Type="Self.bill" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="staff">
@@ -397,7 +431,19 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="service_detail">
+        <Association Name="FK_staff_permission">
+          <End Role="permission" Type="Self.permission" Multiplicity="1" />
+          <End Role="staff" Type="Self.staff" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="permission">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="staff">
+              <PropertyRef Name="permission_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="services_in_bill">
           <End Role="bill" Type="Self.bill" Multiplicity="*" />
           <End Role="clinic_service" Type="Self.clinic_service" Multiplicity="*" />
         </Association>
@@ -434,7 +480,11 @@
             <End Role="medicine" EntitySet="medicines" />
             <End Role="prescription" EntitySet="prescriptions" />
           </AssociationSet>
-          <AssociationSet Name="service_detail" Association="Self.service_detail">
+          <AssociationSet Name="FK_staff_permission" Association="Self.FK_staff_permission">
+            <End Role="permission" EntitySet="permissions" />
+            <End Role="staff" EntitySet="staffs" />
+          </AssociationSet>
+          <AssociationSet Name="services_in_bill" Association="Self.services_in_bill">
             <End Role="bill" EntitySet="bills" />
             <End Role="clinic_service" EntitySet="clinic_service" />
           </AssociationSet>
@@ -453,6 +503,7 @@
                 <ScalarProperty Name="username" ColumnName="username" />
                 <ScalarProperty Name="pass" ColumnName="pass" />
                 <ScalarProperty Name="permission_id" ColumnName="permission_id" />
+                <ScalarProperty Name="is_active" ColumnName="is_active" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -474,6 +525,7 @@
                 <ScalarProperty Name="id" ColumnName="id" />
                 <ScalarProperty Name="service_name" ColumnName="service_name" />
                 <ScalarProperty Name="price" ColumnName="price" />
+                <ScalarProperty Name="is_active" ColumnName="is_active" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -483,8 +535,13 @@
                 <ScalarProperty Name="id" ColumnName="id" />
                 <ScalarProperty Name="medicine_name" ColumnName="medicine_name" />
                 <ScalarProperty Name="quantity" ColumnName="quantity" />
-                <ScalarProperty Name="unit" ColumnName="unit" />
-                <ScalarProperty Name="price_per_unit" ColumnName="price_per_unit" />
+                <ScalarProperty Name="sale_unit" ColumnName="sale_unit" />
+                <ScalarProperty Name="sale_price_per_unit" ColumnName="sale_price_per_unit" />
+                <ScalarProperty Name="is_active" ColumnName="is_active" />
+                <ScalarProperty Name="expiry_day" ColumnName="expiry_day" />
+                <ScalarProperty Name="entry_unit" ColumnName="entry_unit" />
+                <ScalarProperty Name="entry_price" ColumnName="entry_price" />
+                <ScalarProperty Name="entry_day" ColumnName="entry_day" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -526,10 +583,11 @@
                 <ScalarProperty Name="phone_number" ColumnName="phone_number" />
                 <ScalarProperty Name="salary" ColumnName="salary" />
                 <ScalarProperty Name="is_still_working" ColumnName="is_still_working" />
+                <ScalarProperty Name="permission_id" ColumnName="permission_id" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <AssociationSetMapping Name="service_detail" TypeName="clinicModel.service_detail" StoreEntitySet="service_detail">
+          <AssociationSetMapping Name="services_in_bill" TypeName="clinicModel.services_in_bill" StoreEntitySet="services_in_bill">
             <EndProperty Name="bill">
               <ScalarProperty Name="id" ColumnName="bill_id" />
             </EndProperty>

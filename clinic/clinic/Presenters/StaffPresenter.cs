@@ -8,178 +8,80 @@ using System.Threading.Tasks;
 using clinic.Models;
 namespace clinic.Presenters
 {
-    class StaffPresenter
+    class StaffPresenter : Presenter
     {
-        private IStaffView _staffView;
-        private readonly IStaffRepository _staffRepository;
-        public StaffPresenter(IStaffRepository staffRepository, IStaffView staffView)
+        private IStaffView _view;
+        private readonly IStaffRepository _repository;
+        private readonly IPermissionRepository _permissionRepository;
+        public StaffPresenter(IStaffRepository staffRepository, IPermissionRepository permissionRepository,IStaffView staffView)
         {
-            _staffView = staffView;
-            _staffRepository = staffRepository;
-        }
-        public async Task<string> Add()
-        {
-            string notification = "";
-            try
-            {
-                var staff = new staff()
-                {
-                    full_name = _staffView.TxtStaffName,
-                    date_of_birdth =  _staffView.DtpDayOfBirth,
-                    phone_number = _staffView.TxtPhone,
-                    salary = float.Parse(_staffView.TxtSalary)
-                };
-                _staffRepository.InsertStaff(staff);
-                await _staffRepository.Save();
+            _view = staffView;
+            _permissionRepository = permissionRepository;
+            _repository = staffRepository;
 
-            }
-            catch (Exception ex)
-            {
-                notification = ex.ToString();
-            }
-            return notification;
+            SetPermissionComboBox();
         }
+        public void Add()
+        {
+            var staff = new staff()
+            {
+                full_name = _view.TxtStaffName,
+                date_of_birdth = _view.TxtDoB,
+                phone_number = _view.TxtPhone,
+                salary = Int64.Parse(_view.TxtSalary),
+                permission_id = _view.CbPermission_id,
+                is_still_working = true
+            };
+            _repository.InsertStaff(staff);
+            _repository.Save();
+        }
+        private void SetPermissionComboBox()
+        {
+            _view.CbPermission.DataSource = _permissionRepository.GetPermissionList();
+            _view.CbPermission.DisplayMember = "position_name";
+            _view.CbPermission.ValueMember = "id";
+            _view.CbPermission.Invalidate();
+        }
+        //HACK: fix later
         public void Display(int idSelected)
         {
-            var staffFromDB = _staffRepository.GetStaffById(idSelected);
-            if (staffFromDB != null)
-            {
-                //Display from db to view
-                _staffView.TxtStaffName = staffFromDB.full_name;
-                _staffView.DtpDayOfBirth = staffFromDB.date_of_birdth.GetValueOrDefault();
-                _staffView.TxtPhone = staffFromDB.phone_number;
-                _staffView.TxtSalary = staffFromDB.salary.ToString();
-            }
+            //var staffFromDB = _repository.GetStaffById(idSelected);
+            //if (staffFromDB != null)
+            //{
+            //    //Display from db to view
+            //    _view.TxtStaffName = staffFromDB.full_name;
+            //    _view.TxtDoB = staffFromDB.date_of_birdth;
+            //    _view.TxtPhone = staffFromDB.phone_number;
+            //    _view.TxtSalary = staffFromDB.salary.ToString();
+            //    _view.CbPermission_id = staffFromDB.permission_id;
+            //}
 
         }
-        public async Task<string> Delete(int idSelected)
+        //HACK: fix later
+        public void Delete(int idSelected)
         {
-            string notification = "";
-            try
-            {
-                var staffFromDb = _staffRepository.GetStaffById(idSelected);
-                if (staffFromDb != null)
-                {
-                    _staffRepository.DeleteStaff(staffFromDb);
-                    await _staffRepository.Save();
-                }
-                else
-                {
-                    notification = "Thuốc không tồn tại";
-                }
-            }
-            catch (Exception ex)
-            {
+ 
+            //var staffFromDb = _repository.GetStaffById(idSelected);
+            //if (staffFromDb != null)
+            //{
+            //    _repository.DeleteStaff(staffFromDb);
+            //    _repository.Save();
+            //}
+         }
+        //HACK: fix later
+        public void Edit(int idSelected)
+        {
 
-                notification = ex.ToString();
-            }
-            return notification;
-
-
+            //var staffFromDB = _repository.GetStaffById(idSelected);
+            //if (staffFromDB != null)
+            //{
+            //    staffFromDB.full_name = _view.TxtStaffName;
+            //    staffFromDB.date_of_birdth = _view.TxtDoB;
+            //    staffFromDB.phone_number = _view.TxtPhone;
+            //    staffFromDB.salary = float.Parse(_view.TxtSalary);
+            //    staffFromDB.permission_id = _view.CbPermission_id;
+            //    _repository.Save();
+            //}
         }
-        public async Task<string> Edit(int idSelected)
-        {
-            string notification = "";
-            var staffFromDB = _staffRepository.GetStaffById(idSelected);
-            if (staffFromDB != null)
-            {
-                try
-                {
-                    _staffView.TxtStaffName = staffFromDB.full_name;
-                    _staffView.DtpDayOfBirth = staffFromDB.date_of_birdth.GetValueOrDefault();
-                    _staffView.TxtPhone = staffFromDB.phone_number;
-                    _staffView.TxtSalary = staffFromDB.salary.ToString();
-                    await _staffRepository.Save();
-
-
-
-                }
-                catch (Exception ex)
-                {
-                    notification = ex.ToString();
-                }
-            }
-            else
-            {
-                notification = "Thuốc không tồn tại";
-            }
-            return notification;
-        }
-        #region validating Method
-        public bool ValidateName()
-        {
-            bool isValid = true;
-            if (string.IsNullOrWhiteSpace(_staffView.TxtStaffName))
-            {
-                _staffView.ErrorMessage = "Nhập tên nhân viên";
-                isValid = false;
-            }
-            else
-            {
-                _staffView.ErrorMessage = "";
-
-            }
-            return isValid;
-        }      
-        public bool ValidatePhone()
-        {
-            bool isValid = true;
-            if (string.IsNullOrWhiteSpace(_staffView.TxtPhone))
-            {
-                _staffView.ErrorMessage = "Nhập SDT";
-                isValid = false;
-            }
-            else
-            {
-                _staffView.ErrorMessage = "";
-            }
-            return isValid;
-        }
-        public bool ValidateSalary()
-        {
-            bool isValid = true;
-            if (string.IsNullOrWhiteSpace(_staffView.TxtSalary))
-            {
-                _staffView.ErrorMessage = "Nhập lương";
-                isValid = false;
-            }
-            else
-            {
-                _staffView.ErrorMessage = "";
-                try
-                {
-                    double price = double.Parse(_staffView.TxtSalary);
-                    if (price >= 0)
-                    {
-                        _staffView.ErrorMessage = "";
-                    }
-                    else
-                    {
-                        _staffView.ErrorMessage = "Lương phải lớn hơn 0";
-                        isValid = false;
-                    }
-                }
-                catch
-                {
-                    _staffView.ErrorMessage = "Vui lòng nhập đúng số";
-                    isValid = false;
-                }
-            }
-            return isValid;
-        }
-        public bool ValidateAllInput()
-        {
-            bool isValidName = ValidateName();
-            bool isValidPhoneNumber = ValidatePhone();
-            bool isValidSalary = ValidateSalary();
-
-            if (isValidName && isValidPhoneNumber && isValidSalary)
-            {
-                return true;
-            }
-            else
-                return false;
-        }
-        #endregion
     }
 }

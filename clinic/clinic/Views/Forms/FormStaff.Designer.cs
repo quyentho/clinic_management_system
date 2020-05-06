@@ -33,7 +33,7 @@
             this.txtStaffName = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
             this.panel1 = new System.Windows.Forms.Panel();
-            this.dtpDoB = new System.Windows.Forms.DateTimePicker();
+            this.txtDoB = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
             this.panel3 = new System.Windows.Forms.Panel();
             this.txtPhone = new System.Windows.Forms.TextBox();
@@ -43,22 +43,16 @@
             this.label4 = new System.Windows.Forms.Label();
             this.btnCancel = new System.Windows.Forms.Button();
             this.btnOK = new System.Windows.Forms.Button();
-            this.errorProvider1 = new System.Windows.Forms.ErrorProvider(this.components);
-            this.errorProvider2 = new System.Windows.Forms.ErrorProvider(this.components);
-            this.errorProvider3 = new System.Windows.Forms.ErrorProvider(this.components);
+            this.errorProvider = new System.Windows.Forms.ErrorProvider(this.components);
             this.panel5 = new System.Windows.Forms.Panel();
             this.cbPermission = new System.Windows.Forms.ComboBox();
-            this.permissionBindingSource = new System.Windows.Forms.BindingSource(this.components);
             this.label5 = new System.Windows.Forms.Label();
             this.panel2.SuspendLayout();
             this.panel1.SuspendLayout();
             this.panel3.SuspendLayout();
             this.panel4.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.errorProvider1)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.errorProvider2)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.errorProvider3)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.errorProvider)).BeginInit();
             this.panel5.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.permissionBindingSource)).BeginInit();
             this.SuspendLayout();
             // 
             // panel2
@@ -90,7 +84,7 @@
             // 
             // panel1
             // 
-            this.panel1.Controls.Add(this.dtpDoB);
+            this.panel1.Controls.Add(this.txtDoB);
             this.panel1.Controls.Add(this.label1);
             this.panel1.Location = new System.Drawing.Point(12, 63);
             this.panel1.Name = "panel1";
@@ -98,12 +92,12 @@
             this.panel1.TabIndex = 2;
             this.panel1.TabStop = true;
             // 
-            // dtpDoB
+            // txtDoB
             // 
-            this.dtpDoB.Location = new System.Drawing.Point(104, 10);
-            this.dtpDoB.Name = "dtpDoB";
-            this.dtpDoB.Size = new System.Drawing.Size(215, 20);
-            this.dtpDoB.TabIndex = 1;
+            this.txtDoB.Location = new System.Drawing.Point(104, 16);
+            this.txtDoB.Name = "txtDoB";
+            this.txtDoB.Size = new System.Drawing.Size(214, 20);
+            this.txtDoB.TabIndex = 1;
             // 
             // label1
             // 
@@ -170,6 +164,7 @@
             // 
             // btnCancel
             // 
+            this.btnCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
             this.btnCancel.Location = new System.Drawing.Point(221, 291);
             this.btnCancel.Name = "btnCancel";
             this.btnCancel.Size = new System.Drawing.Size(94, 38);
@@ -188,17 +183,9 @@
             this.btnOK.UseVisualStyleBackColor = true;
             this.btnOK.Click += new System.EventHandler(this.btnOK_Click);
             // 
-            // errorProvider1
+            // errorProvider
             // 
-            this.errorProvider1.ContainerControl = this;
-            // 
-            // errorProvider2
-            // 
-            this.errorProvider2.ContainerControl = this;
-            // 
-            // errorProvider3
-            // 
-            this.errorProvider3.ContainerControl = this;
+            this.errorProvider.ContainerControl = this;
             // 
             // panel5
             // 
@@ -219,10 +206,6 @@
             this.cbPermission.Size = new System.Drawing.Size(215, 21);
             this.cbPermission.TabIndex = 1;
             // 
-            // permissionBindingSource
-            // 
-            this.permissionBindingSource.DataSource = typeof(clinic.Models.permission);
-            // 
             // label5
             // 
             this.label5.AutoSize = true;
@@ -234,8 +217,11 @@
             // 
             // FormStaff
             // 
+            this.AcceptButton = this.btnOK;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.AutoValidate = System.Windows.Forms.AutoValidate.EnableAllowFocusChange;
+            this.CancelButton = this.btnCancel;
             this.ClientSize = new System.Drawing.Size(378, 352);
             this.Controls.Add(this.panel5);
             this.Controls.Add(this.btnCancel);
@@ -244,8 +230,12 @@
             this.Controls.Add(this.panel3);
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.panel2);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
+            this.MaximizeBox = false;
             this.Name = "FormStaff";
-            this.Text = "FormStaff";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
+            this.Text = "Nhân Viên";
+            this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.FormStaff_FormClosed);
             this.Load += new System.EventHandler(this.FormStaff_Load);
             this.panel2.ResumeLayout(false);
             this.panel2.PerformLayout();
@@ -255,12 +245,9 @@
             this.panel3.PerformLayout();
             this.panel4.ResumeLayout(false);
             this.panel4.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.errorProvider1)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.errorProvider2)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.errorProvider3)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.errorProvider)).EndInit();
             this.panel5.ResumeLayout(false);
             this.panel5.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.permissionBindingSource)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -280,13 +267,10 @@
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Button btnCancel;
         private System.Windows.Forms.Button btnOK;
-        private System.Windows.Forms.DateTimePicker dtpDoB;
-        private System.Windows.Forms.ErrorProvider errorProvider1;
-        private System.Windows.Forms.ErrorProvider errorProvider2;
-        private System.Windows.Forms.ErrorProvider errorProvider3;
+        private System.Windows.Forms.ErrorProvider errorProvider;
         private System.Windows.Forms.Panel panel5;
         private System.Windows.Forms.ComboBox cbPermission;
         private System.Windows.Forms.Label label5;
-        private System.Windows.Forms.BindingSource permissionBindingSource;
+        private System.Windows.Forms.TextBox txtDoB;
     }
 }

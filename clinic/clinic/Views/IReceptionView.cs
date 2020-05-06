@@ -4,10 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace clinic.Models
+namespace clinic.Views
 {
-    public interface IPermissionRepository
+    public interface IReceptionView
     {
-        IList<permission> GetPermissionList();
+        string TxtSearch { get; set; }
+        int IdSelected { get; set; }
     }
 }

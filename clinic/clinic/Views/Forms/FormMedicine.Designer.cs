@@ -36,25 +36,31 @@
             this.txtQuantity = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
             this.panel3 = new System.Windows.Forms.Panel();
-            this.txtUnit = new System.Windows.Forms.TextBox();
+            this.txtEntryUnit = new System.Windows.Forms.TextBox();
             this.label3 = new System.Windows.Forms.Label();
             this.panel4 = new System.Windows.Forms.Panel();
-            this.txtPrice = new System.Windows.Forms.TextBox();
+            this.txtEntryPrice = new System.Windows.Forms.TextBox();
             this.label4 = new System.Windows.Forms.Label();
             this.btnCancel = new System.Windows.Forms.Button();
             this.btnOK = new System.Windows.Forms.Button();
-            this.errorProvider1 = new System.Windows.Forms.ErrorProvider(this.components);
-            this.errorProvider2 = new System.Windows.Forms.ErrorProvider(this.components);
-            this.errorProvider3 = new System.Windows.Forms.ErrorProvider(this.components);
-            this.errorProvider4 = new System.Windows.Forms.ErrorProvider(this.components);
+            this.errorProvider = new System.Windows.Forms.ErrorProvider(this.components);
+            this.panel5 = new System.Windows.Forms.Panel();
+            this.txtSaleUnit = new System.Windows.Forms.TextBox();
+            this.label5 = new System.Windows.Forms.Label();
+            this.panel6 = new System.Windows.Forms.Panel();
+            this.txtSalePrice = new System.Windows.Forms.TextBox();
+            this.label6 = new System.Windows.Forms.Label();
+            this.panel7 = new System.Windows.Forms.Panel();
+            this.txtExpiryDay = new System.Windows.Forms.TextBox();
+            this.label7 = new System.Windows.Forms.Label();
             this.panel2.SuspendLayout();
             this.panel1.SuspendLayout();
             this.panel3.SuspendLayout();
             this.panel4.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.errorProvider1)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.errorProvider2)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.errorProvider3)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.errorProvider4)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.errorProvider)).BeginInit();
+            this.panel5.SuspendLayout();
+            this.panel6.SuspendLayout();
+            this.panel7.SuspendLayout();
             this.SuspendLayout();
             // 
             // panel2
@@ -113,7 +119,7 @@
             // 
             // panel3
             // 
-            this.panel3.Controls.Add(this.txtUnit);
+            this.panel3.Controls.Add(this.txtEntryUnit);
             this.panel3.Controls.Add(this.label3);
             this.panel3.Location = new System.Drawing.Point(12, 114);
             this.panel3.Name = "panel3";
@@ -121,26 +127,26 @@
             this.panel3.TabIndex = 2;
             this.panel3.TabStop = true;
             // 
-            // txtUnit
+            // txtEntryUnit
             // 
-            this.txtUnit.Location = new System.Drawing.Point(105, 13);
-            this.txtUnit.Name = "txtUnit";
-            this.txtUnit.Size = new System.Drawing.Size(214, 20);
-            this.txtUnit.TabIndex = 0;
-            this.txtUnit.Validating += new System.ComponentModel.CancelEventHandler(this.txtUnit_Validating);
+            this.txtEntryUnit.Location = new System.Drawing.Point(105, 13);
+            this.txtEntryUnit.Name = "txtEntryUnit";
+            this.txtEntryUnit.Size = new System.Drawing.Size(214, 20);
+            this.txtEntryUnit.TabIndex = 0;
+            this.txtEntryUnit.Validating += new System.ComponentModel.CancelEventHandler(this.txtEntryUnit_Validating);
             // 
             // label3
             // 
             this.label3.AutoSize = true;
             this.label3.Location = new System.Drawing.Point(20, 16);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(38, 13);
+            this.label3.Size = new System.Drawing.Size(65, 13);
             this.label3.TabIndex = 0;
-            this.label3.Text = "Đơn vị";
+            this.label3.Text = "Đơn vị nhập";
             // 
             // panel4
             // 
-            this.panel4.Controls.Add(this.txtPrice);
+            this.panel4.Controls.Add(this.txtEntryPrice);
             this.panel4.Controls.Add(this.label4);
             this.panel4.Location = new System.Drawing.Point(12, 165);
             this.panel4.Name = "panel4";
@@ -148,28 +154,29 @@
             this.panel4.TabIndex = 3;
             this.panel4.TabStop = true;
             // 
-            // txtPrice
+            // txtEntryPrice
             // 
-            this.txtPrice.Location = new System.Drawing.Point(105, 13);
-            this.txtPrice.Name = "txtPrice";
-            this.txtPrice.Size = new System.Drawing.Size(214, 20);
-            this.txtPrice.TabIndex = 0;
-            this.txtPrice.Validating += new System.ComponentModel.CancelEventHandler(this.txtPrice_Validating);
+            this.txtEntryPrice.Location = new System.Drawing.Point(105, 13);
+            this.txtEntryPrice.Name = "txtEntryPrice";
+            this.txtEntryPrice.Size = new System.Drawing.Size(214, 20);
+            this.txtEntryPrice.TabIndex = 0;
+            this.txtEntryPrice.Validating += new System.ComponentModel.CancelEventHandler(this.txtEntryPrice_Validating);
             // 
             // label4
             // 
             this.label4.AutoSize = true;
             this.label4.Location = new System.Drawing.Point(20, 16);
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(75, 13);
+            this.label4.Size = new System.Drawing.Size(50, 13);
             this.label4.TabIndex = 0;
-            this.label4.Text = "Giá mỗi đơn vị";
+            this.label4.Text = "Giá nhập";
             // 
             // btnCancel
             // 
-            this.btnCancel.Location = new System.Drawing.Point(223, 234);
+            this.btnCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+            this.btnCancel.Location = new System.Drawing.Point(227, 381);
             this.btnCancel.Name = "btnCancel";
-            this.btnCancel.Size = new System.Drawing.Size(94, 38);
+            this.btnCancel.Size = new System.Drawing.Size(94, 42);
             this.btnCancel.TabIndex = 5;
             this.btnCancel.Text = "Huỷ";
             this.btnCancel.UseVisualStyleBackColor = true;
@@ -177,45 +184,123 @@
             // 
             // btnOK
             // 
-            this.btnOK.Location = new System.Drawing.Point(50, 234);
+            this.btnOK.Location = new System.Drawing.Point(57, 381);
             this.btnOK.Name = "btnOK";
-            this.btnOK.Size = new System.Drawing.Size(94, 38);
+            this.btnOK.Size = new System.Drawing.Size(94, 42);
             this.btnOK.TabIndex = 4;
             this.btnOK.Text = "Xong";
             this.btnOK.UseVisualStyleBackColor = true;
             this.btnOK.Click += new System.EventHandler(this.btnOK_Click);
             // 
-            // errorProvider1
+            // errorProvider
             // 
-            this.errorProvider1.ContainerControl = this;
+            this.errorProvider.ContainerControl = this;
             // 
-            // errorProvider2
+            // panel5
             // 
-            this.errorProvider2.ContainerControl = this;
+            this.panel5.Controls.Add(this.txtSaleUnit);
+            this.panel5.Controls.Add(this.label5);
+            this.panel5.Location = new System.Drawing.Point(12, 216);
+            this.panel5.Name = "panel5";
+            this.panel5.Size = new System.Drawing.Size(350, 45);
+            this.panel5.TabIndex = 3;
+            this.panel5.TabStop = true;
             // 
-            // errorProvider3
+            // txtSaleUnit
             // 
-            this.errorProvider3.ContainerControl = this;
+            this.txtSaleUnit.Location = new System.Drawing.Point(105, 13);
+            this.txtSaleUnit.Name = "txtSaleUnit";
+            this.txtSaleUnit.Size = new System.Drawing.Size(214, 20);
+            this.txtSaleUnit.TabIndex = 0;
+            this.txtSaleUnit.Validating += new System.ComponentModel.CancelEventHandler(this.txtSaleUnit_Validating);
             // 
-            // errorProvider4
+            // label5
             // 
-            this.errorProvider4.ContainerControl = this;
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(20, 16);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(59, 13);
+            this.label5.TabIndex = 0;
+            this.label5.Text = "Đơn vị bán";
+            // 
+            // panel6
+            // 
+            this.panel6.Controls.Add(this.txtSalePrice);
+            this.panel6.Controls.Add(this.label6);
+            this.panel6.Location = new System.Drawing.Point(12, 267);
+            this.panel6.Name = "panel6";
+            this.panel6.Size = new System.Drawing.Size(350, 45);
+            this.panel6.TabIndex = 4;
+            this.panel6.TabStop = true;
+            // 
+            // txtSalePrice
+            // 
+            this.txtSalePrice.Location = new System.Drawing.Point(105, 13);
+            this.txtSalePrice.Name = "txtSalePrice";
+            this.txtSalePrice.Size = new System.Drawing.Size(214, 20);
+            this.txtSalePrice.TabIndex = 0;
+            this.txtSalePrice.Validating += new System.ComponentModel.CancelEventHandler(this.txtSalePrice_Validating);
+            // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.Location = new System.Drawing.Point(20, 16);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(44, 13);
+            this.label6.TabIndex = 0;
+            this.label6.Text = "Giá bán";
+            // 
+            // panel7
+            // 
+            this.panel7.Controls.Add(this.txtExpiryDay);
+            this.panel7.Controls.Add(this.label7);
+            this.panel7.Location = new System.Drawing.Point(12, 318);
+            this.panel7.Name = "panel7";
+            this.panel7.Size = new System.Drawing.Size(350, 45);
+            this.panel7.TabIndex = 5;
+            this.panel7.TabStop = true;
+            // 
+            // txtExpiryDay
+            // 
+            this.txtExpiryDay.Location = new System.Drawing.Point(105, 13);
+            this.txtExpiryDay.Name = "txtExpiryDay";
+            this.txtExpiryDay.Size = new System.Drawing.Size(214, 20);
+            this.txtExpiryDay.TabIndex = 0;
+            this.txtExpiryDay.Validating += new System.ComponentModel.CancelEventHandler(this.txtExpiryDay_Validating);
+            // 
+            // label7
+            // 
+            this.label7.AutoSize = true;
+            this.label7.Location = new System.Drawing.Point(20, 16);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(72, 13);
+            this.label7.TabIndex = 0;
+            this.label7.Text = "Hạn Sử Dụng";
             // 
             // FormMedicine
             // 
+            this.AcceptButton = this.btnOK;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(382, 293);
+            this.AutoValidate = System.Windows.Forms.AutoValidate.EnableAllowFocusChange;
+            this.CancelButton = this.btnCancel;
+            this.ClientSize = new System.Drawing.Size(383, 431);
+            this.Controls.Add(this.panel7);
+            this.Controls.Add(this.panel6);
+            this.Controls.Add(this.panel5);
             this.Controls.Add(this.btnCancel);
             this.Controls.Add(this.btnOK);
             this.Controls.Add(this.panel2);
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.panel3);
             this.Controls.Add(this.panel4);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "FormMedicine";
-            this.Text = "Medicine";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
+            this.Text = "Thuốc";
+            this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.FormMedicine_FormClosed);
             this.Load += new System.EventHandler(this.FormMedicine_Load);
             this.panel2.ResumeLayout(false);
             this.panel2.PerformLayout();
@@ -225,10 +310,13 @@
             this.panel3.PerformLayout();
             this.panel4.ResumeLayout(false);
             this.panel4.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.errorProvider1)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.errorProvider2)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.errorProvider3)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.errorProvider4)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.errorProvider)).EndInit();
+            this.panel5.ResumeLayout(false);
+            this.panel5.PerformLayout();
+            this.panel6.ResumeLayout(false);
+            this.panel6.PerformLayout();
+            this.panel7.ResumeLayout(false);
+            this.panel7.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -242,16 +330,22 @@
         private System.Windows.Forms.TextBox txtQuantity;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Panel panel3;
-        private System.Windows.Forms.TextBox txtUnit;
+        private System.Windows.Forms.TextBox txtEntryUnit;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Panel panel4;
-        private System.Windows.Forms.TextBox txtPrice;
+        private System.Windows.Forms.TextBox txtEntryPrice;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Button btnCancel;
         private System.Windows.Forms.Button btnOK;
-        private System.Windows.Forms.ErrorProvider errorProvider1;
-        private System.Windows.Forms.ErrorProvider errorProvider2;
-        private System.Windows.Forms.ErrorProvider errorProvider3;
-        private System.Windows.Forms.ErrorProvider errorProvider4;
+        private System.Windows.Forms.ErrorProvider errorProvider;
+        private System.Windows.Forms.Panel panel6;
+        private System.Windows.Forms.TextBox txtSalePrice;
+        private System.Windows.Forms.Label label6;
+        private System.Windows.Forms.Panel panel5;
+        private System.Windows.Forms.TextBox txtSaleUnit;
+        private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.Panel panel7;
+        private System.Windows.Forms.TextBox txtExpiryDay;
+        private System.Windows.Forms.Label label7;
     }
 }

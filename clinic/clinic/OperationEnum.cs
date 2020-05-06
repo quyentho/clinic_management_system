@@ -4,10 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace clinic.Models
+namespace clinic
 {
-    public interface IPermissionRepository
+    public enum Operation
     {
-        IList<permission> GetPermissionList();
+        Insert,
+        Edit,
+        Delete
     }
 }

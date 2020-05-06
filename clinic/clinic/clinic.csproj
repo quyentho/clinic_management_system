@@ -36,6 +36,9 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject />
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.dll</HintPath>
@@ -62,33 +65,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Models\IMedicineRepository.cs" />
-    <Compile Include="Models\IPermissionRepository.cs" />
-    <Compile Include="Models\IServiceRepository.cs" />
-    <Compile Include="Models\IStaffRepository.cs" />
-    <Compile Include="Models\Repositories\MedicineRepository.cs" />
-    <Compile Include="Models\Repositories\PermissionRepository.cs" />
-    <Compile Include="Models\Repositories\ServiceRepository.cs" />
-    <Compile Include="Models\Repositories\StaffRepository.cs" />
-    <Compile Include="Presenters\StaffPresenter.cs" />
-    <Compile Include="Views\Forms\AdminForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Views\Forms\AdminForm.Designer.cs">
-      <DependentUpon>AdminForm.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Views\Forms\FormMedicine.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Views\Forms\FormMedicine.Designer.cs">
-      <DependentUpon>FormMedicine.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Views\Forms\FormService.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Views\Forms\FormService.Designer.cs">
-      <DependentUpon>FormService.cs</DependentUpon>
-    </Compile>
     <Compile Include="Models\account.cs">
       <DependentUpon>Model.tt</DependentUpon>
     </Compile>
@@ -128,6 +104,59 @@
     <Compile Include="Models\staff.cs">
       <DependentUpon>Model.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\StaffViewModel.cs" />
+    <Compile Include="OperationEnum.cs" />
+    <Compile Include="Models\IMedicineRepository.cs" />
+    <Compile Include="Models\IPatientRepository.cs" />
+    <Compile Include="Models\IPermissionRepository.cs" />
+    <Compile Include="Models\IServiceRepository.cs" />
+    <Compile Include="Models\IStaffRepository.cs" />
+    <Compile Include="Models\Repositories\MedicineRepository.cs" />
+    <Compile Include="Models\Repositories\PatientRepository.cs" />
+    <Compile Include="Models\Repositories\PermissionRepository.cs" />
+    <Compile Include="Models\Repositories\ServiceRepository.cs" />
+    <Compile Include="Models\Repositories\StaffRepository.cs" />
+    <Compile Include="OperationForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="OperationForm.Designer.cs">
+      <DependentUpon>OperationForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Presenters\AssignServicePresenter.cs" />
+    <Compile Include="Presenters\PatientPresenter.cs" />
+    <Compile Include="Presenters\Presenter.cs" />
+    <Compile Include="Presenters\ReceptionPresenter.cs" />
+    <Compile Include="Presenters\StaffPresenter.cs" />
+    <Compile Include="Views\Forms\AdminForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Views\Forms\AdminForm.Designer.cs">
+      <DependentUpon>AdminForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Forms\FormAssignService.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Views\Forms\FormAssignService.Designer.cs">
+      <DependentUpon>FormAssignService.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Forms\FormMedicine.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Views\Forms\FormMedicine.Designer.cs">
+      <DependentUpon>FormMedicine.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Forms\FormPatient.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Views\Forms\FormPatient.Designer.cs">
+      <DependentUpon>FormPatient.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Forms\FormService.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Views\Forms\FormService.Designer.cs">
+      <DependentUpon>FormService.cs</DependentUpon>
+    </Compile>
     <Compile Include="Presenters\MedicinePresenter.cs" />
     <Compile Include="Presenters\AdminPresenter.cs" />
     <Compile Include="Presenters\ServicePresenter.cs" />
@@ -139,15 +168,30 @@
     <Compile Include="Views\Forms\FormStaff.Designer.cs">
       <DependentUpon>FormStaff.cs</DependentUpon>
     </Compile>
+    <Compile Include="Views\Forms\ReceptionForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Views\Forms\ReceptionForm.Designer.cs">
+      <DependentUpon>ReceptionForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Views\IAssignServiceView.cs" />
     <Compile Include="Views\IMedicineView.cs" />
     <Compile Include="Views\IAdminView.cs" />
+    <Compile Include="Views\IPatientView.cs" />
+    <Compile Include="Views\IReceptionView.cs" />
     <Compile Include="Views\IServiceView.cs" />
     <Compile Include="Views\IStaffView.cs" />
     <EmbeddedResource Include="Views\Forms\AdminForm.resx">
       <DependentUpon>AdminForm.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Views\Forms\FormAssignService.resx">
+      <DependentUpon>FormAssignService.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Views\Forms\FormMedicine.resx">
       <DependentUpon>FormMedicine.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\Forms\FormPatient.resx">
+      <DependentUpon>FormPatient.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Views\Forms\FormService.resx">
       <DependentUpon>FormService.cs</DependentUpon>
@@ -163,6 +207,9 @@
     </Compile>
     <EmbeddedResource Include="Views\Forms\FormStaff.resx">
       <DependentUpon>FormStaff.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\Forms\ReceptionForm.resx">
+      <DependentUpon>ReceptionForm.cs</DependentUpon>
     </EmbeddedResource>
     <EntityDeploy Include="Models\Model.edmx">
       <Generator>EntityModelCodeGenerator</Generator>
@@ -188,7 +235,6 @@
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
-  <ItemGroup />
   <ItemGroup>
     <Content Include="Models\Model.Context.tt">
       <Generator>TextTemplatingFileGenerator</Generator>

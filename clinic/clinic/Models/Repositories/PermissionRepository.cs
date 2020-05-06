@@ -8,16 +8,20 @@ namespace clinic.Models.Repositories
 {
     public class PermissionRepository : IPermissionRepository
     {
-        clinicEntities _clinicEntities;
+        private readonly clinicEntities _clinicEntities;
+        private IList<permission> _permissions;
         public PermissionRepository(clinicEntities clinicEntities)
         {
             _clinicEntities = clinicEntities;
+            _permissions = GetPermissionsFromDatabase();
         }
-        public async Task<IList<permission>> GetPermissions()
+        public IList<permission> GetPermissionList()
         {
-            return await Task.Run(() => _clinicEntities.permissions.ToList());
+           return _permissions;
         }
-
-
+        private IList<permission> GetPermissionsFromDatabase()
+        {
+            return  _clinicEntities.permissions.AsNoTracking().ToList();
+        }
     }
 }

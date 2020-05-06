@@ -11,7 +11,8 @@ namespace clinic.Models
 {
     using System;
     using System.Collections.Generic;
-    
+    using System.ComponentModel;
+
     public partial class staff
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
@@ -23,14 +24,16 @@ namespace clinic.Models
     
         public int id { get; set; }
         public string full_name { get; set; }
-        public Nullable<System.DateTime> date_of_birdth { get; set; }
+        public string date_of_birdth { get; set; }
         public string phone_number { get; set; }
-        public float salary { get; set; }
+        public long salary { get; set; }
         public bool is_still_working { get; set; }
+        public int permission_id { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<account> accounts { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<bill> bills { get; set; }
+        public virtual permission permission { get; set; }
     }
 }

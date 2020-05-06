@@ -9,12 +9,10 @@ namespace clinic.Views
     {
         string TxtMedicineName { get; set; }
         string TxtQuantity { get; set; }
-        string TxtUnit { get; set; }
-        string TxtPrice { get; set; }
-        string ErrorMessage { get; set; }
-        bool IsEdit { get; set; }
-        int IdSelected { get; set; }
-        bool IsDelete { get; set; }
-     
+        string TxtEntryUnit { get; set; }
+        string TxtEntryPrice { get; set; }
+        string TxtSaleUnit { get; set; }
+        string TxtSalePrice { get; set; }
+        string TxtExpiryDay { get; set; }
     }
 }

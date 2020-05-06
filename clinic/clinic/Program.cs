@@ -5,6 +5,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.ComponentModel;
+using clinic.Views.Forms;
+using clinic.Models.Repositories;
 
 namespace clinic
 {

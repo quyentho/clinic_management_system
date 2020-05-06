@@ -8,11 +8,12 @@ namespace clinic.Models.Repositories
 {
     public interface IStaffRepository
     {
-         Task<IEnumerable<staff>> GetStaffs();
-        staff GetStaffById(int id);
+        IList<StaffViewModel> GetStaffList();
+        IList<staff> GetStaffsByName(string name);
+        StaffViewModel GetStaffById(int id);
         void InsertStaff(staff staff);
         void DeleteStaff(staff staff);
         void UpdateStaff(staff staff);
-        Task Save();
+        void Save();
     }
 }

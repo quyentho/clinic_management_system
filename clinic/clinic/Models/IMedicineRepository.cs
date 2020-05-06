@@ -8,11 +8,12 @@ namespace clinic.Models
 {
     public interface IMedicineRepository
     {
-        Task<IEnumerable<medicine>> GetMedicines();
+        IList<medicine> GetMedicineList();
+        IList<medicine> GetMedicinesByName(string name);
         medicine GetMedicineById(int id);
         void InsertMedicine(medicine medicine);
         void DeleteMedicine(medicine medicine);
         void UpdateMedicine(medicine medicine);
-        Task Save();
+        void Save();
     }
 }

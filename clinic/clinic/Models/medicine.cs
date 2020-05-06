@@ -11,7 +11,7 @@ namespace clinic.Models
 {
     using System;
     using System.Collections.Generic;
-    using System.ComponentModel.DataAnnotations;
+    using System.ComponentModel;
 
     public partial class medicine
     {
@@ -22,20 +22,27 @@ namespace clinic.Models
         }
     
         public int id { get; set; }
-        
+        [DisplayName("Tên Thuốc")]
         public string medicine_name { get; set; }
-
-
-        public Nullable<int> quantity { get; set; }
-
-
-        public string unit { get; set; }
-
-
-
-        public Nullable<decimal> price_per_unit { get; set; }
+        [DisplayName("Số Lượng")]
+        public int quantity { get; set; }
+        [DisplayName("Đơn Vị Bán")]
+        public string sale_unit { get; set; }
+        [DisplayName("Giá Bán")]
+        public long sale_price_per_unit { get; set; }
+        [Browsable(false)]
+        public Nullable<bool> is_active { get; set; }
+        [DisplayName("Hạn Sử Dụng")]
+        public Nullable<System.DateTime> expiry_day { get; set; }
+        [DisplayName("Đơn Vị Nhập")]
+        public string entry_unit { get; set; }
+        [DisplayName("Giá Nhập")]
+        public Nullable<long> entry_price { get; set; }
+        [DisplayName("Ngày Nhập")]
+        public Nullable<System.DateTime> entry_day { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        [Browsable(false)]
         public virtual ICollection<prescription> prescriptions { get; set; }
     }
 }

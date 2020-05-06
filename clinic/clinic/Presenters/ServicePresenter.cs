@@ -9,157 +9,91 @@ namespace clinic.Presenters
 {
     class ServicePresenter
     {
-        private readonly IServiceRepository _serviceRepository;
-        private readonly IServiceView _serviceView;
+        private readonly IServiceRepository _repository;
+        private readonly IServiceView _view;
         public ServicePresenter(IServiceRepository serviceRepository, IServiceView view)
         {
-            _serviceRepository = serviceRepository;
-            _serviceView = view;
+            _repository = serviceRepository;
+            _view = view;
         }
-        public async Task<string> Add()
+        public void Add()
         {
-            string notification = "";
-            try
-            {
-                var service = new clinic_service()
-                {
-                    service_name = _serviceView.TxtServiceName,                   
-                    price = decimal.Parse(_serviceView.TxtPrice)
-                };
-                _serviceRepository.InsertService(service);
-                await _serviceRepository.Save();
 
-            }
-            catch (Exception ex)
+            var service = new clinic_service()
             {
-                notification = ex.ToString();
-            }
-            return notification;
+                service_name = _view.TxtServiceName,
+                price = decimal.Parse(_view.TxtPrice),
+                is_active = true
+            };
+            _repository.InsertService(service);
+            _repository.Save();
         }
         public void Display(int idSelected)
         {
-            var serviceFromDB = _serviceRepository.GetServiceById(idSelected);
+            var serviceFromDB = _repository.GetServiceById(idSelected);
             if (serviceFromDB != null)
             {
-                //Display from db to view
-                _serviceView.TxtServiceName = serviceFromDB.service_name;
-                
-                _serviceView.TxtPrice = serviceFromDB.price.ToString();
+                _view.TxtServiceName = serviceFromDB.service_name;
+                _view.TxtPrice = serviceFromDB.price.ToString();
             }
-
         }
-        public async Task<string> Delete(int idSelected)
+        public void Delete(int idSelected)
         {
-            string notification = "";
-            try
+
+            var serviceFromDb = _repository.GetServiceById(idSelected);
+            if (serviceFromDb != null)
             {
-                var serviceFromDb = _serviceRepository.GetServiceById(idSelected);
-                if (serviceFromDb != null)
-                {
-                    _serviceRepository.DeleteService(serviceFromDb);
-                    await _serviceRepository.Save();
-                }
-                else
-                {
-                    notification = "Thuốc không tồn tại";
-                }
+                _repository.DeleteService(serviceFromDb);
+                _repository.Save();
             }
-            catch (Exception ex)
-            {
-
-                notification = ex.ToString();
-            }
-            return notification;
-
-
         }
-        public async Task<string> Edit(int idSelected)
+        public void Edit(int idSelected)
         {
-            string notification = "";
-            var serviceFromDB = _serviceRepository.GetServiceById(idSelected);
+            var serviceFromDB = _repository.GetServiceById(idSelected);
             if (serviceFromDB != null)
             {
-                try
-                {
-                    serviceFromDB.service_name = _serviceView.TxtServiceName;
-                   
-                    serviceFromDB.price = decimal.Parse(_serviceView.TxtPrice);
-                    await _serviceRepository.Save();
 
-
-
-                }
-                catch (Exception ex)
-                {
-                    notification = ex.ToString();
-                }
+                serviceFromDB.service_name = _view.TxtServiceName;
+                serviceFromDB.price = decimal.Parse(_view.TxtPrice);
+                _repository.Save();
             }
-            else
-            {
-                notification = "Thuốc không tồn tại";
-            }
-            return notification;
         }
         #region validating Method
         public bool ValidateName()
         {
-            bool isValid = true;
-            if (string.IsNullOrWhiteSpace(_serviceView.TxtServiceName))
+            if (string.IsNullOrWhiteSpace(_view.TxtServiceName))
             {
-                _serviceView.ErrorMessage = "Nhập tên thuốc";
-                isValid = false;
+                _view.ErrorMessage = "Nhập tên dịch vụ";
+                return false;
             }
-            else
-            {
-                _serviceView.ErrorMessage = "";
-
-            }
-            return isValid;
+            _view.ErrorMessage = "";
+            return true;
         }
         public bool ValidatePrice()
         {
-            bool isValid = true;
-            if (string.IsNullOrWhiteSpace(_serviceView.TxtPrice))
+            if (string.IsNullOrWhiteSpace(_view.TxtPrice))
             {
-                _serviceView.ErrorMessage = "Nhập giá";
-                isValid = false;
-            }
-            else
-            {
-                _serviceView.ErrorMessage = "";
-                try
-                {
-                    double price = double.Parse(_serviceView.TxtPrice);
-                    if (price >= 0)
-                    {
-                        _serviceView.ErrorMessage = "";
-                    }
-                    else
-                    {
-                        _serviceView.ErrorMessage = "Giá phải lớn hơn 0";
-                        isValid = false;
-                    }
-                }
-                catch
-                {
-                    _serviceView.ErrorMessage = "Vui lòng nhập đúng số";
-                    isValid = false;
-                }
-            }
-            return isValid;
-        }
-        public bool ValidateAllInput()
-        {
-            bool isValidName = ValidateName();
-            bool isValidPrice = ValidatePrice();
-
-            if (isValidName && isValidPrice)
-            {
-                return true;
-            }
-            else
+                _view.ErrorMessage = "Nhập giá";
                 return false;
-        }
+            }
+            try
+            {
+                int quantity = int.Parse(_view.TxtPrice);
+                if (quantity <= 0)
+                {
+                    _view.ErrorMessage = "giá phải lớn hơn 0";
+                    return false;
+                }
+            }
+            catch
+            {
+                _view.ErrorMessage = "Vui lòng nhập số";
+                return false;
+            }
+            _view.ErrorMessage = "";
+            return true;
+        }       
         #endregion
     }
 }
+
