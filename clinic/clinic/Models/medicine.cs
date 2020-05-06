@@ -12,6 +12,7 @@ namespace clinic.Models
     using System;
     using System.Collections.Generic;
     using System.ComponentModel;
+    using System.ComponentModel.DataAnnotations;
 
     public partial class medicine
     {
@@ -20,19 +21,19 @@ namespace clinic.Models
         {
             this.prescriptions = new HashSet<prescription>();
         }
-    
+
         public int id { get; set; }
         [DisplayName("Tên Thuốc")]
         public string medicine_name { get; set; }
-        [DisplayName("Số Lượng")]
-        public int quantity { get; set; }
+        [DisplayName("Số lượng /dv Bán")]
+        public int quantity_in_sale_unit { get; set; }
         [DisplayName("Đơn Vị Bán")]
         public string sale_unit { get; set; }
         [DisplayName("Giá Bán")]
         public long sale_price_per_unit { get; set; }
         [Browsable(false)]
         public Nullable<bool> is_active { get; set; }
-        [DisplayName("Hạn Sử Dụng")]
+        [DisplayName("Ngày Hết Hạn")]
         public Nullable<System.DateTime> expiry_day { get; set; }
         [DisplayName("Đơn Vị Nhập")]
         public string entry_unit { get; set; }
@@ -40,9 +41,12 @@ namespace clinic.Models
         public Nullable<long> entry_price { get; set; }
         [DisplayName("Ngày Nhập")]
         public Nullable<System.DateTime> entry_day { get; set; }
-    
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         [Browsable(false)]
+        public Nullable<int> unit_exchange_ratio { get; set; }
+        [DisplayName("Số lượng/dv Nhập")]
+        public Nullable<int> quantity_in_entry_unit { get; set; }
+        [Browsable(false)]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<prescription> prescriptions { get; set; }
     }
 }

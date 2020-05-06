@@ -28,9 +28,9 @@ namespace clinic.Models
         public decimal price { get; set; }
         [Browsable(false)]
         public Nullable<bool> is_active { get; set; }
+        [Browsable(false)]
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        [Browsable(false)]
         public virtual ICollection<bill> bills { get; set; }
     }
 }

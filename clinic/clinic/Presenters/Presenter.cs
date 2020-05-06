@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -8,6 +9,8 @@ namespace clinic.Presenters
 {
     public abstract class Presenter
     {
+        protected string[] dateTimeFormats = {"d/M/yyyy","dd/M/yyyy","d/MM/yyyy","dd/MM/yyyy", "d-M-yyyy", "dd-M-yyyy"
+                                            , "d-MM-yyyy","dd/MM/yyyy" };
         public bool ValidateStringInput(string input, out string errorMessage)
         {
             if (string.IsNullOrWhiteSpace(input))
@@ -23,7 +26,7 @@ namespace clinic.Presenters
             if (ValidateStringInput(input, out errorMessage) == false) return false;
             try
             {
-                DateTime dateTime = DateTime.Parse(input);
+                DateTime dateTime = DateTime.ParseExact(input,dateTimeFormats,CultureInfo.InvariantCulture,DateTimeStyles.None);
             }
             catch 
             {

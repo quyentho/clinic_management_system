@@ -19,7 +19,7 @@ namespace clinic.Presenters
         private readonly IMedicineRepository _medicineRepository;
         private readonly IStaffRepository _staffRepository;
         private readonly IServiceRepository _serviceRepository;
-        public AdminPresenter(IAdminView view, clinicEntities clinicEntities,IMedicineRepository medicineRepository,IStaffRepository staffRepository,IServiceRepository serviceRepository)
+        public AdminPresenter(IAdminView view,IMedicineRepository medicineRepository,IStaffRepository staffRepository,IServiceRepository serviceRepository)
         {
             _view = view;
             _medicineRepository = medicineRepository;

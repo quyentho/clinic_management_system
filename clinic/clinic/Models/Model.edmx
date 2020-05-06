@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema Namespace="clinicModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+    <Schema Namespace="clinicModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="account">
           <Key>
             <PropertyRef Name="id" />
@@ -42,14 +42,16 @@
           </Key>
           <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="medicine_name" Type="nvarchar" MaxLength="50" Nullable="false" />
-          <Property Name="quantity" Type="int" Nullable="false" />
+          <Property Name="quantity_in_sale_unit" Type="int" Nullable="false" />
           <Property Name="sale_unit" Type="nvarchar" MaxLength="50" Nullable="false" />
           <Property Name="sale_price_per_unit" Type="bigint" Nullable="false" />
           <Property Name="is_active" Type="bit" />
           <Property Name="expiry_day" Type="date" />
-          <Property Name="entry_unit" Type="nchar" MaxLength="10" />
+          <Property Name="entry_unit" Type="nvarchar" MaxLength="50" />
           <Property Name="entry_price" Type="bigint" />
           <Property Name="entry_day" Type="datetime" />
+          <Property Name="unit_exchange_ratio" Type="int" />
+          <Property Name="quantity_in_entry_unit" Type="int" />
         </EntityType>
         <EntityType Name="patient">
           <Key>
@@ -253,8 +255,7 @@
             <End Role="staff" EntitySet="staff" />
           </AssociationSet>
         </EntityContainer>
-      </Schema>
-    </edmx:StorageModels>
+      </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="clinicModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
@@ -296,22 +297,6 @@
           <Property Name="is_active" Type="Boolean" />
           <NavigationProperty Name="bills" Relationship="Self.services_in_bill" FromRole="clinic_service" ToRole="bill" />
         </EntityType>
-        <EntityType Name="medicine">
-          <Key>
-            <PropertyRef Name="id" />
-          </Key>
-          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="medicine_name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="quantity" Type="Int32" Nullable="false" />
-          <Property Name="sale_unit" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="sale_price_per_unit" Type="Int64" Nullable="false" />
-          <Property Name="is_active" Type="Boolean" />
-          <Property Name="expiry_day" Type="DateTime" Precision="0" />
-          <Property Name="entry_unit" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
-          <Property Name="entry_price" Type="Int64" />
-          <Property Name="entry_day" Type="DateTime" Precision="3" />
-          <NavigationProperty Name="prescriptions" Relationship="Self.FK__prescript__medic__4D94879B" FromRole="medicine" ToRole="prescription" />
-        </EntityType>
         <EntityType Name="patient">
           <Key>
             <PropertyRef Name="id" />
@@ -342,7 +327,7 @@
           <Property Name="quantity_indicated" Type="Int32" Nullable="false" />
           <Property Name="description" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="bill" Relationship="Self.FK__prescript__bill___4CA06362" FromRole="prescription" ToRole="bill" />
-          <NavigationProperty Name="medicine" Relationship="Self.FK__prescript__medic__4D94879B" FromRole="prescription" ToRole="medicine" />
+          <NavigationProperty Name="medicine" Relationship="clinicModel.FK__prescript__medic__4D94879B" FromRole="prescription" ToRole="medicine" />
         </EntityType>
         <EntityType Name="staff">
           <Key>
@@ -419,18 +404,6 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__prescript__medic__4D94879B">
-          <End Role="medicine" Type="Self.medicine" Multiplicity="1" />
-          <End Role="prescription" Type="Self.prescription" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="medicine">
-              <PropertyRef Name="id" />
-            </Principal>
-            <Dependent Role="prescription">
-              <PropertyRef Name="medicine_id" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="FK_staff_permission">
           <End Role="permission" Type="Self.permission" Multiplicity="1" />
           <End Role="staff" Type="Self.staff" Multiplicity="*" />
@@ -451,7 +424,6 @@
           <EntitySet Name="accounts" EntityType="Self.account" />
           <EntitySet Name="bills" EntityType="Self.bill" />
           <EntitySet Name="clinic_service" EntityType="Self.clinic_service" />
-          <EntitySet Name="medicines" EntityType="Self.medicine" />
           <EntitySet Name="patients" EntityType="Self.patient" />
           <EntitySet Name="permissions" EntityType="Self.permission" />
           <EntitySet Name="prescriptions" EntityType="Self.prescription" />
@@ -476,10 +448,6 @@
             <End Role="staff" EntitySet="staffs" />
             <End Role="bill" EntitySet="bills" />
           </AssociationSet>
-          <AssociationSet Name="FK__prescript__medic__4D94879B" Association="Self.FK__prescript__medic__4D94879B">
-            <End Role="medicine" EntitySet="medicines" />
-            <End Role="prescription" EntitySet="prescriptions" />
-          </AssociationSet>
           <AssociationSet Name="FK_staff_permission" Association="Self.FK_staff_permission">
             <End Role="permission" EntitySet="permissions" />
             <End Role="staff" EntitySet="staffs" />
@@ -488,7 +456,42 @@
             <End Role="bill" EntitySet="bills" />
             <End Role="clinic_service" EntitySet="clinic_service" />
           </AssociationSet>
+          <EntitySet Name="medicines" EntityType="clinicModel.medicine" />
+          <AssociationSet Name="FK__prescript__medic__4D94879B" Association="clinicModel.FK__prescript__medic__4D94879B">
+            <End Role="medicine" EntitySet="medicines" />
+            <End Role="prescription" EntitySet="prescriptions" />
+          </AssociationSet>
         </EntityContainer>
+        <EntityType Name="medicine">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="medicine_name" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="quantity_in_sale_unit" Type="Int32" Nullable="false" />
+          <Property Name="sale_unit" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="sale_price_per_unit" Type="Int64" Nullable="false" />
+          <Property Name="is_active" Type="Boolean" />
+          <Property Name="expiry_day" Type="DateTime" Precision="0" />
+          <Property Name="entry_unit" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="entry_price" Type="Int64" />
+          <Property Name="entry_day" Type="DateTime" Precision="3" />
+          <Property Name="unit_exchange_ratio" Type="Int32" />
+          <Property Name="quantity_in_entry_unit" Type="Int32" />
+          <NavigationProperty Name="prescriptions" Relationship="clinicModel.FK__prescript__medic__4D94879B" FromRole="medicine" ToRole="prescription" />
+        </EntityType>
+        <Association Name="FK__prescript__medic__4D94879B">
+          <End Type="clinicModel.medicine" Role="medicine" Multiplicity="1" />
+          <End Type="clinicModel.prescription" Role="prescription" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="medicine">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="prescription">
+              <PropertyRef Name="medicine_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -526,22 +529,6 @@
                 <ScalarProperty Name="service_name" ColumnName="service_name" />
                 <ScalarProperty Name="price" ColumnName="price" />
                 <ScalarProperty Name="is_active" ColumnName="is_active" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="medicines">
-            <EntityTypeMapping TypeName="clinicModel.medicine">
-              <MappingFragment StoreEntitySet="medicine">
-                <ScalarProperty Name="id" ColumnName="id" />
-                <ScalarProperty Name="medicine_name" ColumnName="medicine_name" />
-                <ScalarProperty Name="quantity" ColumnName="quantity" />
-                <ScalarProperty Name="sale_unit" ColumnName="sale_unit" />
-                <ScalarProperty Name="sale_price_per_unit" ColumnName="sale_price_per_unit" />
-                <ScalarProperty Name="is_active" ColumnName="is_active" />
-                <ScalarProperty Name="expiry_day" ColumnName="expiry_day" />
-                <ScalarProperty Name="entry_unit" ColumnName="entry_unit" />
-                <ScalarProperty Name="entry_price" ColumnName="entry_price" />
-                <ScalarProperty Name="entry_day" ColumnName="entry_day" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -595,6 +582,24 @@
               <ScalarProperty Name="id" ColumnName="service_id" />
             </EndProperty>
           </AssociationSetMapping>
+          <EntitySetMapping Name="medicines">
+            <EntityTypeMapping TypeName="clinicModel.medicine">
+              <MappingFragment StoreEntitySet="medicine">
+                <ScalarProperty Name="quantity_in_entry_unit" ColumnName="quantity_in_entry_unit" />
+                <ScalarProperty Name="unit_exchange_ratio" ColumnName="unit_exchange_ratio" />
+                <ScalarProperty Name="entry_day" ColumnName="entry_day" />
+                <ScalarProperty Name="entry_price" ColumnName="entry_price" />
+                <ScalarProperty Name="entry_unit" ColumnName="entry_unit" />
+                <ScalarProperty Name="expiry_day" ColumnName="expiry_day" />
+                <ScalarProperty Name="is_active" ColumnName="is_active" />
+                <ScalarProperty Name="sale_price_per_unit" ColumnName="sale_price_per_unit" />
+                <ScalarProperty Name="sale_unit" ColumnName="sale_unit" />
+                <ScalarProperty Name="quantity_in_sale_unit" ColumnName="quantity_in_sale_unit" />
+                <ScalarProperty Name="medicine_name" ColumnName="medicine_name" />
+                <ScalarProperty Name="id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

@@ -17,13 +17,14 @@ namespace clinic
        
         #region IView Properties
         public string TxtMedicineName { get => txtMedicineName.Text; set => txtMedicineName.Text = value; }
-        public string TxtQuantity { get => txtQuantity.Text; set => txtQuantity.Text = value; }
         public string TxtEntryUnit { get => txtEntryUnit.Text; set => txtEntryUnit.Text = value; }
         public string TxtEntryPrice { get => txtEntryPrice.Text; set => txtEntryPrice.Text = value; }
    
         public string TxtSaleUnit { get => txtSaleUnit.Text; set => txtSaleUnit.Text = value; }
         public string TxtSalePrice { get => txtSalePrice.Text; set => txtSalePrice.Text = value; }
         public string TxtExpiryDay { get => txtExpiryDay.Text; set => txtExpiryDay.Text = value; }
+        public string TxtEntryQuantity { get => txtEntryQuantity.Text; set => txtEntryQuantity.Text = value; }
+        public string TxtExchangeRatio { get => txtExchangeRatio.Text; set => txtExchangeRatio.Text = value; }
         #endregion
         public FormMedicine(IMedicineRepository medicineRepository)
         {
@@ -49,7 +50,7 @@ namespace clinic
                 this.panel5.Enabled = false;
                 this.panel6.Enabled = false;
                 this.panel7.Enabled = false;
-
+                this.panel8.Enabled = false;
                 this.btnOK.Text = "Xoá";
                 this.btnOK.ForeColor = Color.Red;
             
@@ -94,9 +95,9 @@ namespace clinic
             else e.Cancel = true;
             errorProvider.SetError(txtMedicineName, _errMessage);
         }
-        private void txtQuantity_Validating(object sender, CancelEventArgs e)
+        private void txtEntryQuantity_Validating(object sender, CancelEventArgs e)
         {
-            if (_presenter.ValidateNumberInput(txtQuantity.Text,out _errMessage))
+            if (_presenter.ValidateNumberInput(txtEntryQuantity.Text,out _errMessage))
             {
                 e.Cancel = false;
             }
@@ -104,10 +105,8 @@ namespace clinic
             {
                 e.Cancel = true;
             }
-            errorProvider.SetError(txtQuantity, _errMessage);
+            errorProvider.SetError(txtEntryQuantity, _errMessage);
         }
-
-
         private void txtEntryPrice_Validating(object sender, CancelEventArgs e)
         {
             if (_presenter.ValidateNumberInput(txtEntryPrice.Text,out _errMessage))
@@ -135,7 +134,6 @@ namespace clinic
 
         private void txtExpiryDay_Validating(object sender, CancelEventArgs e)
         {
-            //TODO Validate DateTime
             if (_presenter.ValidateDateTimeInput(txtExpiryDay.Text, out _errMessage))
             {
                 e.Cancel = false;
@@ -170,6 +168,19 @@ namespace clinic
             }
             errorProvider.SetError(txtSaleUnit, _errMessage);
         }
+        private void txtExchangeRatio_Validating(object sender, CancelEventArgs e)
+        {
+            if (_presenter.ValidateNumberInput(txtExchangeRatio.Text, out _errMessage))
+            {
+                e.Cancel = false;
+            }
+            else
+            {
+                e.Cancel = true;
+            }
+            errorProvider.SetError(txtSalePrice, _errMessage);
+        }
+
         #endregion
 
         private void FormMedicine_FormClosed(object sender, FormClosedEventArgs e)
@@ -178,6 +189,5 @@ namespace clinic
             UpdateDataGridViewEventHandler?.Invoke(this, null);
         }
 
-      
     }
 }

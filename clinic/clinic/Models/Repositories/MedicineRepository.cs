@@ -1,12 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data.Entity;
 using System.Data.Entity.Migrations;
-using System.Diagnostics;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
 
 namespace clinic.Models.Repositories
 {
@@ -23,11 +18,12 @@ namespace clinic.Models.Repositories
         public void DeleteMedicine(medicine medicine)
         {
             _medicines.Remove(medicine);
-            if (!_clinicEntities.medicines.Local.Contains(medicine))
-            {
-                _clinicEntities.medicines.Attach(medicine);
-            }
-            _clinicEntities.medicines.Remove(medicine);
+            //BUG When Delete after update
+            //if (!_clinicEntities.medicines.Local.Contains(medicine))
+            //{
+            //    _clinicEntities.medicines.Attach(medicine);
+            //}
+            _clinicEntities.Entry(medicine).State = System.Data.Entity.EntityState.Deleted;
         }
 
         public medicine GetMedicineById(int id)
@@ -42,9 +38,9 @@ namespace clinic.Models.Repositories
             return medicines;
         }
 
-        private  IList<medicine> GetMedicinesFromDatabase()
+        private IList<medicine> GetMedicinesFromDatabase()
         {
-             return _clinicEntities.medicines.Where(m => m.is_active == true).AsNoTracking().ToList();
+            return _clinicEntities.medicines.Where(m => m.is_active == true).ToList();
         }
         public IList<medicine> GetMedicineList()
         {
@@ -59,18 +55,20 @@ namespace clinic.Models.Repositories
 
         public void Save()
         {
-             _clinicEntities.SaveChanges();
+            _clinicEntities.SaveChanges();
         }
 
         public void UpdateMedicine(medicine medicine)
         {
-            
-                var medicineFromList = _medicines.FirstOrDefault(m => m.id == medicine.id);
-                medicineFromList = medicine;
 
-                //update medicine in database
-                _clinicEntities.Set<medicine>().AddOrUpdate(medicine);
-            
+            int indexToReplace = (_medicines as List<medicine>).FindIndex(m => m.id == medicine.id);
+
+            _medicines[indexToReplace] = medicine;
+            Console.WriteLine($" From Update Method before update: {_clinicEntities.Entry(medicine).State}");
+
+            //update medicine in database
+            _clinicEntities.Set<medicine>().AddOrUpdate(medicine);
+            Console.WriteLine($" From Update Method after update: {_clinicEntities.Entry(medicine).State}");
         }
     }
 }

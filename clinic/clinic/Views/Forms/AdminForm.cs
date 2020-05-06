@@ -4,6 +4,7 @@ using clinic.Presenters;
 using clinic.Views;
 using clinic.Views.Forms;
 using System;
+using System.Collections.Specialized;
 using System.Windows.Forms;
 
 namespace clinic
@@ -20,7 +21,8 @@ namespace clinic
         private  IServiceRepository _serviceRepository;
         private  IPermissionRepository _permissionRepository;
 
-        
+
+     
         public AdminForm()
         {
             //HACK: temporarily create instance of all repository, will be moved to program.cs
@@ -29,9 +31,10 @@ namespace clinic
             _serviceRepository = new ServiceRepository(_clinicEntities);
             _permissionRepository = new PermissionRepository(_clinicEntities);
             _staffRepository = new StaffRepository(_clinicEntities, _permissionRepository);
-            _presenter = new AdminPresenter(this, _clinicEntities,_medicineRepository,_staffRepository,_serviceRepository);
+            _presenter = new AdminPresenter(this,_medicineRepository,_staffRepository,_serviceRepository);
             InitializeComponent();
         }
+ 
         #region Properties
 
         public string TxtTimKiem { get => txtSearch.Text; set => txtSearch.Text = value; }

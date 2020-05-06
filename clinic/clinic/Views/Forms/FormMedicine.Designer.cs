@@ -33,7 +33,7 @@
             this.txtMedicineName = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
             this.panel1 = new System.Windows.Forms.Panel();
-            this.txtQuantity = new System.Windows.Forms.TextBox();
+            this.txtEntryQuantity = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
             this.panel3 = new System.Windows.Forms.Panel();
             this.txtEntryUnit = new System.Windows.Forms.TextBox();
@@ -53,6 +53,9 @@
             this.panel7 = new System.Windows.Forms.Panel();
             this.txtExpiryDay = new System.Windows.Forms.TextBox();
             this.label7 = new System.Windows.Forms.Label();
+            this.panel8 = new System.Windows.Forms.Panel();
+            this.txtExchangeRatio = new System.Windows.Forms.TextBox();
+            this.label8 = new System.Windows.Forms.Label();
             this.panel2.SuspendLayout();
             this.panel1.SuspendLayout();
             this.panel3.SuspendLayout();
@@ -61,6 +64,7 @@
             this.panel5.SuspendLayout();
             this.panel6.SuspendLayout();
             this.panel7.SuspendLayout();
+            this.panel8.SuspendLayout();
             this.SuspendLayout();
             // 
             // panel2
@@ -92,36 +96,36 @@
             // 
             // panel1
             // 
-            this.panel1.Controls.Add(this.txtQuantity);
+            this.panel1.Controls.Add(this.txtEntryQuantity);
             this.panel1.Controls.Add(this.label1);
-            this.panel1.Location = new System.Drawing.Point(12, 63);
+            this.panel1.Location = new System.Drawing.Point(394, 12);
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(350, 45);
             this.panel1.TabIndex = 1;
             this.panel1.TabStop = true;
             // 
-            // txtQuantity
+            // txtEntryQuantity
             // 
-            this.txtQuantity.Location = new System.Drawing.Point(105, 13);
-            this.txtQuantity.Name = "txtQuantity";
-            this.txtQuantity.Size = new System.Drawing.Size(214, 20);
-            this.txtQuantity.TabIndex = 0;
-            this.txtQuantity.Validating += new System.ComponentModel.CancelEventHandler(this.txtQuantity_Validating);
+            this.txtEntryQuantity.Location = new System.Drawing.Point(105, 13);
+            this.txtEntryQuantity.Name = "txtEntryQuantity";
+            this.txtEntryQuantity.Size = new System.Drawing.Size(214, 20);
+            this.txtEntryQuantity.TabIndex = 0;
+            this.txtEntryQuantity.Validating += new System.ComponentModel.CancelEventHandler(this.txtEntryQuantity_Validating);
             // 
             // label1
             // 
             this.label1.AutoSize = true;
             this.label1.Location = new System.Drawing.Point(20, 16);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(49, 13);
+            this.label1.Size = new System.Drawing.Size(76, 13);
             this.label1.TabIndex = 0;
-            this.label1.Text = "Số lượng";
+            this.label1.Text = "Số lượng nhập";
             // 
             // panel3
             // 
             this.panel3.Controls.Add(this.txtEntryUnit);
             this.panel3.Controls.Add(this.label3);
-            this.panel3.Location = new System.Drawing.Point(12, 114);
+            this.panel3.Location = new System.Drawing.Point(12, 63);
             this.panel3.Name = "panel3";
             this.panel3.Size = new System.Drawing.Size(350, 45);
             this.panel3.TabIndex = 2;
@@ -148,10 +152,10 @@
             // 
             this.panel4.Controls.Add(this.txtEntryPrice);
             this.panel4.Controls.Add(this.label4);
-            this.panel4.Location = new System.Drawing.Point(12, 165);
+            this.panel4.Location = new System.Drawing.Point(12, 114);
             this.panel4.Name = "panel4";
             this.panel4.Size = new System.Drawing.Size(350, 45);
-            this.panel4.TabIndex = 3;
+            this.panel4.TabIndex = 4;
             this.panel4.TabStop = true;
             // 
             // txtEntryPrice
@@ -174,20 +178,20 @@
             // btnCancel
             // 
             this.btnCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.btnCancel.Location = new System.Drawing.Point(227, 381);
+            this.btnCancel.Location = new System.Drawing.Point(417, 216);
             this.btnCancel.Name = "btnCancel";
             this.btnCancel.Size = new System.Drawing.Size(94, 42);
-            this.btnCancel.TabIndex = 5;
+            this.btnCancel.TabIndex = 9;
             this.btnCancel.Text = "Huỷ";
             this.btnCancel.UseVisualStyleBackColor = true;
             this.btnCancel.Click += new System.EventHandler(this.btnCancel_Click);
             // 
             // btnOK
             // 
-            this.btnOK.Location = new System.Drawing.Point(57, 381);
+            this.btnOK.Location = new System.Drawing.Point(237, 216);
             this.btnOK.Name = "btnOK";
             this.btnOK.Size = new System.Drawing.Size(94, 42);
-            this.btnOK.TabIndex = 4;
+            this.btnOK.TabIndex = 8;
             this.btnOK.Text = "Xong";
             this.btnOK.UseVisualStyleBackColor = true;
             this.btnOK.Click += new System.EventHandler(this.btnOK_Click);
@@ -200,7 +204,7 @@
             // 
             this.panel5.Controls.Add(this.txtSaleUnit);
             this.panel5.Controls.Add(this.label5);
-            this.panel5.Location = new System.Drawing.Point(12, 216);
+            this.panel5.Location = new System.Drawing.Point(394, 63);
             this.panel5.Name = "panel5";
             this.panel5.Size = new System.Drawing.Size(350, 45);
             this.panel5.TabIndex = 3;
@@ -227,10 +231,10 @@
             // 
             this.panel6.Controls.Add(this.txtSalePrice);
             this.panel6.Controls.Add(this.label6);
-            this.panel6.Location = new System.Drawing.Point(12, 267);
+            this.panel6.Location = new System.Drawing.Point(394, 114);
             this.panel6.Name = "panel6";
             this.panel6.Size = new System.Drawing.Size(350, 45);
-            this.panel6.TabIndex = 4;
+            this.panel6.TabIndex = 5;
             this.panel6.TabStop = true;
             // 
             // txtSalePrice
@@ -254,10 +258,10 @@
             // 
             this.panel7.Controls.Add(this.txtExpiryDay);
             this.panel7.Controls.Add(this.label7);
-            this.panel7.Location = new System.Drawing.Point(12, 318);
+            this.panel7.Location = new System.Drawing.Point(12, 165);
             this.panel7.Name = "panel7";
             this.panel7.Size = new System.Drawing.Size(350, 45);
-            this.panel7.TabIndex = 5;
+            this.panel7.TabIndex = 6;
             this.panel7.TabStop = true;
             // 
             // txtExpiryDay
@@ -277,6 +281,33 @@
             this.label7.TabIndex = 0;
             this.label7.Text = "Hạn Sử Dụng";
             // 
+            // panel8
+            // 
+            this.panel8.Controls.Add(this.txtExchangeRatio);
+            this.panel8.Controls.Add(this.label8);
+            this.panel8.Location = new System.Drawing.Point(394, 165);
+            this.panel8.Name = "panel8";
+            this.panel8.Size = new System.Drawing.Size(350, 45);
+            this.panel8.TabIndex = 7;
+            this.panel8.TabStop = true;
+            // 
+            // txtExchangeRatio
+            // 
+            this.txtExchangeRatio.Location = new System.Drawing.Point(106, 13);
+            this.txtExchangeRatio.Name = "txtExchangeRatio";
+            this.txtExchangeRatio.Size = new System.Drawing.Size(214, 20);
+            this.txtExchangeRatio.TabIndex = 0;
+            this.txtExchangeRatio.Validating += new System.ComponentModel.CancelEventHandler(this.txtExchangeRatio_Validating);
+            // 
+            // label8
+            // 
+            this.label8.AutoSize = true;
+            this.label8.Location = new System.Drawing.Point(16, 16);
+            this.label8.Name = "label8";
+            this.label8.Size = new System.Drawing.Size(80, 13);
+            this.label8.TabIndex = 0;
+            this.label8.Text = "Tỷ lệ nhập/bán";
+            // 
             // FormMedicine
             // 
             this.AcceptButton = this.btnOK;
@@ -284,14 +315,15 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoValidate = System.Windows.Forms.AutoValidate.EnableAllowFocusChange;
             this.CancelButton = this.btnCancel;
-            this.ClientSize = new System.Drawing.Size(383, 431);
+            this.ClientSize = new System.Drawing.Size(766, 269);
+            this.Controls.Add(this.panel8);
             this.Controls.Add(this.panel7);
             this.Controls.Add(this.panel6);
+            this.Controls.Add(this.panel1);
             this.Controls.Add(this.panel5);
             this.Controls.Add(this.btnCancel);
             this.Controls.Add(this.btnOK);
             this.Controls.Add(this.panel2);
-            this.Controls.Add(this.panel1);
             this.Controls.Add(this.panel3);
             this.Controls.Add(this.panel4);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
@@ -317,6 +349,8 @@
             this.panel6.PerformLayout();
             this.panel7.ResumeLayout(false);
             this.panel7.PerformLayout();
+            this.panel8.ResumeLayout(false);
+            this.panel8.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -327,7 +361,7 @@
         private System.Windows.Forms.TextBox txtMedicineName;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Panel panel1;
-        private System.Windows.Forms.TextBox txtQuantity;
+        private System.Windows.Forms.TextBox txtEntryQuantity;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Panel panel3;
         private System.Windows.Forms.TextBox txtEntryUnit;
@@ -347,5 +381,8 @@
         private System.Windows.Forms.Panel panel7;
         private System.Windows.Forms.TextBox txtExpiryDay;
         private System.Windows.Forms.Label label7;
+        private System.Windows.Forms.Panel panel8;
+        private System.Windows.Forms.TextBox txtExchangeRatio;
+        private System.Windows.Forms.Label label8;
     }
 }
