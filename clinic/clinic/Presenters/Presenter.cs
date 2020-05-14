@@ -10,7 +10,7 @@ namespace clinic.Presenters
     public abstract class Presenter
     {
         protected string[] dateTimeFormats = {"d/M/yyyy","dd/M/yyyy","d/MM/yyyy","dd/MM/yyyy", "d-M-yyyy", "dd-M-yyyy"
-                                            , "d-MM-yyyy","dd/MM/yyyy" };
+                                            , "d-MM-yyyy","dd-MM-yyyy" };
         public bool ValidateStringInput(string input, out string errorMessage)
         {
             if (string.IsNullOrWhiteSpace(input))

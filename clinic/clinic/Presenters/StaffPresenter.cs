@@ -6,6 +6,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using clinic.Models;
+using System.Globalization;
+
 namespace clinic.Presenters
 {
     class StaffPresenter : Presenter
@@ -26,14 +28,15 @@ namespace clinic.Presenters
             var staff = new staff()
             {
                 full_name = _view.TxtStaffName,
-                date_of_birdth = _view.TxtDoB,
+                date_of_birth = DateTime.ParseExact(_view.TxtDoB, dateTimeFormats,
+                                                   CultureInfo.InvariantCulture, DateTimeStyles.None),
                 phone_number = _view.TxtPhone,
                 salary = Int64.Parse(_view.TxtSalary),
                 permission_id = _view.CbPermission_id,
                 is_still_working = true
             };
             _repository.InsertStaff(staff);
-            _repository.Save();
+        //    _repository.Save();
         }
         private void SetPermissionComboBox()
         {
@@ -55,7 +58,6 @@ namespace clinic.Presenters
             //    _view.TxtSalary = staffFromDB.salary.ToString();
             //    _view.CbPermission_id = staffFromDB.permission_id;
             //}
-
         }
         //HACK: fix later
         public void Delete(int idSelected)

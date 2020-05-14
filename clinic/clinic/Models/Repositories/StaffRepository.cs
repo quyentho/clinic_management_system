@@ -12,14 +12,13 @@ namespace clinic.Models.Repositories
     {
         private readonly clinicEntities _clinicEntities;
         private readonly IPermissionRepository _permission;
-       // private IList<staff> _staffs;
-        //private IList<string> _permissionOfStaffs;
-        private IList<StaffViewModel> _staffViewModels;
+        private List<StaffViewModel> _staffViewModels;
         
         public StaffRepository(clinicEntities entities, IPermissionRepository permission)
         {
             _clinicEntities = entities;
             _permission = permission;
+
             _staffViewModels = GetStaffsFromDatabase();
 
        //     GetPermissionForEachStaff();
@@ -27,7 +26,7 @@ namespace clinic.Models.Repositories
 
 
       //  HACK: Comment this function for running
-        public void DeleteStaff(staff staff)
+        public void DeleteStaff(int id)
         {
             //_staffViewModels.Remove(staff);
             //if (!_clinicEntities.staffs.Local.Contains(staff))
@@ -45,14 +44,14 @@ namespace clinic.Models.Repositories
         }
 
         //HACK: comment this function for runnning, fix later
-        public IList<staff> GetStaffsByName(string staffName)
+        public List<staff> GetStaffsByName(string staffName)
         {
             //var staffs = _staffs.Where(m => m.full_name.Contains(staffName)).ToList();
             //return staffs;
             throw new NotImplementedException();
         }
 
-        private IList<StaffViewModel> GetStaffsFromDatabase()
+        private List<StaffViewModel> GetStaffsFromDatabase()
         {
             return _clinicEntities.staffs
                 .Include(s => s.permission)
@@ -60,14 +59,14 @@ namespace clinic.Models.Repositories
                 .Select(s => new StaffViewModel(){
                     Id = s.id,
                     FullName = s.full_name,
-                    DateOfBirth = s.date_of_birdth,
+                    DateOfBirth = s.date_of_birth,
                     PhoneNumber = s.phone_number,
                     Salary = s.salary,
                     PositionName = s.permission.position_name
                 })
                 .ToList();
         }
-        public IList<StaffViewModel> GetStaffList()
+        public List<StaffViewModel> GetStaffList()
         {
             return _staffViewModels;
         }
@@ -80,7 +79,7 @@ namespace clinic.Models.Repositories
             throw new NotImplementedException();
         }
 
-        public void Save()
+        private void Save()
         {
             _clinicEntities.SaveChanges();
         }

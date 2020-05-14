@@ -18,8 +18,11 @@ namespace clinic.Models
         public int medicine_id { get; set; }
         public int quantity_indicated { get; set; }
         public string description { get; set; }
+        public int staff_id { get; set; }
+        public System.DateTime date_created { get; set; }
     
         public virtual bill bill { get; set; }
         public virtual medicine medicine { get; set; }
+        public virtual staff staff { get; set; }
     }
 }

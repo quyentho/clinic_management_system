@@ -11,7 +11,7 @@ namespace clinic.Models.Repositories
     public class ServiceRepository : IServiceRepository
     {
         private readonly clinicEntities _clinicEntities;
-        private IList<clinic_service> _clinic_service;
+        private List<clinic_service> _clinic_service;
         public ServiceRepository(clinicEntities entities)
         {
             _clinicEntities = entities;
@@ -33,17 +33,17 @@ namespace clinic.Models.Repositories
             return clinic_service;
         }
 
-        public IList<clinic_service> GetServicesByName(string clinic_serviceName)
+        public List<clinic_service> GetServicesByName(string clinic_serviceName)
         {
             var clinic_service = _clinic_service.Where(m => m.service_name.Contains(clinic_serviceName)).ToList();
             return clinic_service;
         }
 
-        private IList<clinic_service> GetServicesFromDatabase()
+        private List<clinic_service> GetServicesFromDatabase()
         {
             return _clinicEntities.clinic_service.Where(m => m.is_active == true).AsNoTracking().ToList();
         }
-        public IList<clinic_service> GetServiceList()
+        public List<clinic_service> GetServiceList()
         {
             return _clinic_service;
         }

@@ -12,26 +12,32 @@ namespace clinic.Models
     using System;
     using System.Data.Entity;
     using System.Data.Entity.Infrastructure;
-    
+    using System.Data.Entity.Migrations;
+
     public partial class clinicEntities : DbContext
     {
         public clinicEntities()
             : base("name=clinicEntities")
         {
         }
-    
+
+        public virtual void AddOrUpdateEntity<TEntity>(clinicEntities db,
+     TEntity entities) where TEntity : class
+        {
+            db.Set<TEntity>().AddOrUpdate(entities);
+        }
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             throw new UnintentionalCodeFirstException();
         }
-    
+
         public virtual DbSet<account> accounts { get; set; }
         public virtual DbSet<bill> bills { get; set; }
         public virtual DbSet<clinic_service> clinic_service { get; set; }
+        public virtual DbSet<medicine> medicines { get; set; }
         public virtual DbSet<patient> patients { get; set; }
         public virtual DbSet<permission> permissions { get; set; }
         public virtual DbSet<prescription> prescriptions { get; set; }
         public virtual DbSet<staff> staffs { get; set; }
-        public virtual DbSet<medicine> medicines { get; set; }
     }
 }

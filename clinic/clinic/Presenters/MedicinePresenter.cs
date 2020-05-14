@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using clinic.Models.Repositories;
 using System.Globalization;
+using System.Data.Entity.Infrastructure;
 
 namespace clinic.Presenters
 {
@@ -46,7 +47,7 @@ namespace clinic.Presenters
         public  void Add()
         {
             _repository.InsertMedicine(GetMedicineFromView());
-            _repository.Save();
+            
         }
         public void Display(int idSelected)
         {
@@ -63,14 +64,10 @@ namespace clinic.Presenters
                 _view.TxtExchangeRatio = medicineFromDB.unit_exchange_ratio.ToString();
             }
         }
-        public  void Delete(int idSelected)
+        public void Delete(int idSelected)
         {
-            var medicineFromDb = _repository.GetMedicineById(idSelected);
-            if (medicineFromDb != null)
-            {
-                _repository.DeleteMedicine(medicineFromDb);
-                _repository.Save();
-            }
+            _repository.DeleteMedicine(idSelected);
+      
         }
         public  void Edit(int idSelected)
         {
@@ -78,7 +75,7 @@ namespace clinic.Presenters
             medicineForUpdate.id = idSelected;
 
             _repository.UpdateMedicine(medicineForUpdate);
-            _repository.Save();
+     
         }
     }
 }

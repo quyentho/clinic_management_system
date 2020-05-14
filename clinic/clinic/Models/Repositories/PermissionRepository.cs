@@ -9,17 +9,17 @@ namespace clinic.Models.Repositories
     public class PermissionRepository : IPermissionRepository
     {
         private readonly clinicEntities _clinicEntities;
-        private IList<permission> _permissions;
+        private List<permission> _permissions;
         public PermissionRepository(clinicEntities clinicEntities)
         {
             _clinicEntities = clinicEntities;
             _permissions = GetPermissionsFromDatabase();
         }
-        public IList<permission> GetPermissionList()
+        public List<permission> GetPermissionList()
         {
            return _permissions;
         }
-        private IList<permission> GetPermissionsFromDatabase()
+        private List<permission> GetPermissionsFromDatabase()
         {
             return  _clinicEntities.permissions.AsNoTracking().ToList();
         }

@@ -29,12 +29,13 @@ namespace clinic
         public FormMedicine(IMedicineRepository medicineRepository)
         {
             _repository = medicineRepository;
+            _presenter = new MedicinePresenter(_repository, this);
             InitializeComponent();
         }
 
         private void FormMedicine_Load(object sender, EventArgs e)
         {
-            _presenter = new MedicinePresenter(_repository, this);
+           
             if (Operation != Operation.Insert)
             {
                 _presenter.Display(IdSelected);
@@ -42,7 +43,6 @@ namespace clinic
 
             if (Operation == Operation.Delete)
             {
-    
                 this.panel1.Enabled = false;
                 this.panel2.Enabled = false;
                 this.panel3.Enabled = false;
@@ -53,7 +53,6 @@ namespace clinic
                 this.panel8.Enabled = false;
                 this.btnOK.Text = "Xoá";
                 this.btnOK.ForeColor = Color.Red;
-            
             }
 
         }
@@ -185,7 +184,6 @@ namespace clinic
 
         private void FormMedicine_FormClosed(object sender, FormClosedEventArgs e)
         {
-            this.Dispose();
             UpdateDataGridViewEventHandler?.Invoke(this, null);
         }
 

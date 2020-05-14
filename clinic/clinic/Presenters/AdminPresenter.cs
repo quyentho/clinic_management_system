@@ -28,7 +28,6 @@ namespace clinic.Presenters
         }
         public void DisplayStaffs()
         {
-            //TODO: adding permissionOfStaff
             _view.AdminDataGridView.DataSource = GetStaffsToDisplay();
         }
         public void DisplayMedicines()
@@ -39,23 +38,17 @@ namespace clinic.Presenters
         {
             _view.AdminDataGridView.DataSource = GetServicesToDisplay();
         }
-        private BindingSource GetServicesToDisplay()
+        private List<clinic_service> GetServicesToDisplay()
         {
-            BindingSource servicesBindingSource = new BindingSource();
-            servicesBindingSource.DataSource = _serviceRepository.GetServiceList();
-            return servicesBindingSource;
+            return _serviceRepository.GetServiceList();
         }
-        private BindingSource GetStaffsToDisplay()
+        private List<StaffViewModel> GetStaffsToDisplay()
         {
-            BindingSource staffsBindingSource = new BindingSource();
-            staffsBindingSource.DataSource = _staffRepository.GetStaffList();
-            return staffsBindingSource;
+            return _staffRepository.GetStaffList();
         }
-        private BindingSource GetMedicinesToDisplay()
+        private List<medicine> GetMedicinesToDisplay()
         {
-            BindingSource medicinesBindingSource = new BindingSource();
-            medicinesBindingSource.DataSource = _medicineRepository.GetMedicineList();
-            return medicinesBindingSource;
+            return _medicineRepository.GetMedicineList();
         }
         public void SearchMedicines()
         {

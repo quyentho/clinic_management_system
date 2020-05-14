@@ -13,9 +13,9 @@ namespace clinic
     {
         //FIXME: Inject serviceRepo, staffRepo, medicineRepo from program.cs
         //FIXME: Remove _clinicEntities
-        private readonly clinicEntities _clinicEntities;
-        private AdminPresenter _presenter;
-        private OperationForm _form;
+        private  clinicEntities _clinicEntities;
+        private  AdminPresenter _presenter;
+        private  OperationForm _form;
         private  IMedicineRepository _medicineRepository;
         private  IStaffRepository _staffRepository;
         private  IServiceRepository _serviceRepository;
@@ -78,16 +78,16 @@ namespace clinic
         #endregion
         private void UpdateDataGridView(object sender, EventArgs e)
         {
-            if (_form is FormMedicine) btnMedicine.PerformClick();
-            else if (_form is FormService) btnService.PerformClick();
-            else if (_form is FormStaff) btnStaff.PerformClick();
+            if (_form is FormMedicine) _presenter.DisplayMedicines();
+            else if (_form is FormService) _presenter.DisplayServices();
+            else if (_form is FormStaff) _presenter.DisplayStaffs();
         }
 
         #region functionality button_click
 
         private void btnService_Click(object sender, EventArgs e)
         {
-            if (_form != null)
+            if (_form != null )
                 _form.Dispose();
             _form = new FormService(_serviceRepository);
             _presenter.DisplayServices();

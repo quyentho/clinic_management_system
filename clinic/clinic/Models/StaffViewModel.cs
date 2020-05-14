@@ -12,7 +12,7 @@ namespace clinic.Models
         [DisplayName("Tên Nhân Viên")]
         public string FullName { get; set; }
         [DisplayName("Ngày Sinh")]
-        public string DateOfBirth { get; set; }
+        public DateTime DateOfBirth { get; set; }
         [DisplayName("Số Điện Thoại")]
         public string PhoneNumber { get; set; }
         [DisplayName("Lương Cơ Bản")]

@@ -8,6 +8,6 @@ namespace clinic.Models
 {
     public interface IPermissionRepository
     {
-        IList<permission> GetPermissionList();
+        List<permission> GetPermissionList();
     }
 }

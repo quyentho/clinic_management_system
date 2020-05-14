@@ -19,20 +19,23 @@ namespace clinic.Models
         {
             this.accounts = new HashSet<account>();
             this.bills = new HashSet<bill>();
+            this.prescriptions = new HashSet<prescription>();
         }
     
         public int id { get; set; }
         public string full_name { get; set; }
-        public string date_of_birdth { get; set; }
+        public System.DateTime date_of_birth { get; set; }
         public string phone_number { get; set; }
         public long salary { get; set; }
         public bool is_still_working { get; set; }
         public int permission_id { get; set; }
     
+        public virtual permission permission { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<account> accounts { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<bill> bills { get; set; }
-        public virtual permission permission { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<prescription> prescriptions { get; set; }
     }
 }

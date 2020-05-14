@@ -4,23 +4,24 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="937572ee0c4647a091c25f6628f9b4ef" Name="Diagram1">
-        <EntityTypeShape EntityType="clinicModel.account" Width="1.5" PointX="5.25" PointY="6" IsExpanded="true" />
-        <EntityTypeShape EntityType="clinicModel.bill" Width="1.5" PointX="5.25" PointY="10.125" IsExpanded="true" />
-        <EntityTypeShape EntityType="clinicModel.clinic_service" Width="1.5" PointX="7.5" PointY="10.625" IsExpanded="true" />
-        <EntityTypeShape EntityType="clinicModel.patient" Width="1.5" PointX="3" PointY="11.5" IsExpanded="true" />
-        <EntityTypeShape EntityType="clinicModel.permission" Width="1.5" PointX="0.75" PointY="4.5" IsExpanded="true" />
-        <EntityTypeShape EntityType="clinicModel.prescription" Width="1.5" PointX="7.5" PointY="7.5" IsExpanded="true" />
-        <EntityTypeShape EntityType="clinicModel.staff" Width="1.5" PointX="3" PointY="7.125" IsExpanded="true" />
+      <Diagram DiagramId="14c6a2167e314562b506236528226473" Name="Diagram1">
+        <EntityTypeShape EntityType="clinicModel.account" Width="1.5" PointX="8" PointY="7.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="clinicModel.bill" Width="1.5" PointX="3" PointY="3.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="clinicModel.clinic_service" Width="1.5" PointX="5.25" PointY="3.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="clinicModel.medicine" Width="1.5" PointX="3" PointY="7.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="clinicModel.patient" Width="1.5" PointX="0.75" PointY="3.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="clinicModel.permission" Width="1.5" PointX="5.75" PointY="9.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="clinicModel.prescription" Width="1.5" PointX="5.25" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="clinicModel.staff" Width="1.5" PointX="8" PointY="10.5" IsExpanded="true" />
         <AssociationConnector Association="clinicModel.FK_account_permission" ManuallyRouted="false" />
-        <AssociationConnector Association="clinicModel.FK_staff_account" ManuallyRouted="false" />
         <AssociationConnector Association="clinicModel.FK__prescript__bill___4CA06362" ManuallyRouted="false" />
         <AssociationConnector Association="clinicModel.FK_bill_patient" ManuallyRouted="false" />
-        <AssociationConnector Association="clinicModel.FK_bill_staff" ManuallyRouted="false" />
+        <AssociationConnector Association="clinicModel.FK__prescript__medic__4D94879B" ManuallyRouted="false" />
         <AssociationConnector Association="clinicModel.FK_staff_permission" ManuallyRouted="false" />
         <AssociationConnector Association="clinicModel.services_in_bill" ManuallyRouted="false" />
-        <EntityTypeShape EntityType="clinicModel.medicine" Width="1.5" PointX="3.375" PointY="1" />
-        <AssociationConnector Association="clinicModel.FK__prescript__medic__4D94879B" />
+        <AssociationConnector Association="clinicModel.FK_account_staff" />
+        <AssociationConnector Association="clinicModel.FK_bill_staff" />
+        <AssociationConnector Association="clinicModel.FK_prescription_staff" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>
