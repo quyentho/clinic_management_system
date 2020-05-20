@@ -30,7 +30,7 @@ namespace clinic
             _medicineRepository = new MedicineRepository(_clinicEntities);
             _serviceRepository = new ServiceRepository(_clinicEntities);
             _permissionRepository = new PermissionRepository(_clinicEntities);
-            _staffRepository = new StaffRepository(_clinicEntities, _permissionRepository);
+            _staffRepository = new StaffRepository(_clinicEntities,_permissionRepository);
             _presenter = new AdminPresenter(this,_medicineRepository,_staffRepository,_serviceRepository);
             InitializeComponent();
         }

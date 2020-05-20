@@ -138,5 +138,15 @@ namespace clinic.Test
 
             Assert.IsTrue(!_mockMedicineRepo.GetMedicineList().Contains(_fakeMedicineList.ToList()[0]));
         }
+        [TestMethod]
+        public void DeleteMedicine_WithValidId_DeleteMedicineInDatabaseSuccessfully()
+        {
+            int id = 1;
+
+            _mockMedicineRepo.DeleteMedicine(id);
+
+            _stubContext.Verify(c => c.medicines.Remove(_fakeMedicineList.ToList()[0]));
+            _stubContext.Verify(c => c.SaveChanges());
+        }
     }
 }

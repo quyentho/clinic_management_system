@@ -21,7 +21,7 @@ namespace clinic.Models.Repositories
         }
         private List<permission> GetPermissionsFromDatabase()
         {
-            return  _clinicEntities.permissions.AsNoTracking().ToList();
+            return  _clinicEntities.permissions.ToList();
         }
     }
 }

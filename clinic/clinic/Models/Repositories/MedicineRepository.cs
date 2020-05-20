@@ -8,29 +8,34 @@ namespace clinic.Models.Repositories
     public class MedicineRepository : IMedicineRepository
     {
         private readonly clinicEntities _clinicEntities;
-        private List<medicine> _medicines;
+        private List<medicine> _medicineList;
         public MedicineRepository(clinicEntities entities)
         {
             _clinicEntities = entities;
-            _medicines = GetMedicinesFromDatabase();
+            _medicineList = GetMedicinesFromDatabase();
         }
         public void DeleteMedicine(int id)
         {   
             var medicineFromDb = _clinicEntities.medicines.Find(id);
+            if(medicineFromDb !=null)
+            {
+                _medicineList.Remove(GetMedicineById(id));
+                _clinicEntities.medicines.Remove(medicineFromDb);
+                Save();
+            }
             
-            _medicines.Remove(GetMedicineById(id));
-            _clinicEntities.medicines.Remove(medicineFromDb);
+
         }
 
         public medicine GetMedicineById(int id)
         {
-            var medicine = _medicines.Where(m => m.id == id).FirstOrDefault();
+            var medicine = _medicineList.Where(m => m.id == id).FirstOrDefault();
             return medicine;
         }
 
         public List<medicine> GetMedicinesByName(string medicineName)
         {
-            var medicines = _medicines.Where(m => m.medicine_name.Contains(medicineName)).ToList();
+            var medicines = _medicineList.Where(m => m.medicine_name.Contains(medicineName)).ToList();
             return medicines;
         }
 
@@ -40,11 +45,11 @@ namespace clinic.Models.Repositories
         }
         public List<medicine> GetMedicineList()
         {
-            return _medicines;
+            return _medicineList;
         }
         public void InsertMedicine(medicine medicine)
         {
-            _medicines.Add(medicine);
+            _medicineList.Add(medicine);
             _clinicEntities.medicines.Add(medicine);
             Save();
         }
@@ -56,9 +61,9 @@ namespace clinic.Models.Repositories
 
         public void UpdateMedicine(medicine medicineChanged)
         {
-            int indexToReplace = (_medicines ).FindIndex(m => m.id == medicineChanged.id);
+            int indexToReplace = (_medicineList ).FindIndex(m => m.id == medicineChanged.id);
 
-            _medicines[indexToReplace] = medicineChanged;//replace this way for refresh list immediately
+            _medicineList[indexToReplace] = medicineChanged;//replace this way for refresh list immediately
 
             var medicineFromDb = _clinicEntities.medicines.Find(medicineChanged.id);
             if (medicineFromDb != null)
