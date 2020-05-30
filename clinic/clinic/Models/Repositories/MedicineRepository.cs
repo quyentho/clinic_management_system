@@ -23,8 +23,6 @@ namespace clinic.Models.Repositories
                 _clinicEntities.medicines.Remove(medicineFromDb);
                 Save();
             }
-            
-
         }
 
         public medicine GetMedicineById(int id)

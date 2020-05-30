@@ -2,56 +2,76 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace clinic.Models.Repositories
 {
-    //ERROR: Refactor patientRepo not using async
-    //public class PatientRepository : IPatientRepository
-    //{
-    //    private readonly clinicEntities _clinicEntities;
-    //    public PatientRepository(clinicEntities entities)
-    //    {
-    //        _clinicEntities = entities;
-    //    }
-    //    public patient GetPatientById(int id)
-    //    {
-    //        patient patientFromDb = _clinicEntities.patients.AsNoTracking().FirstOrDefault(patient => patient.id == id);
+    public class PatientRepository : IPatientRepository
+    {
+        private readonly clinicEntities _clinicEntities;
+        private List<patient> _patientList;
+        public PatientRepository(clinicEntities entities)
+        {
+            _clinicEntities = entities;
+            _patientList = GetPatientsFromDatabase();
+        }
 
-    //        return patientFromDb;
-    //    }
-    //    public  Task<IList<patient>> GetPatientsByName(string name)
-    //    {
-    //        List<patient> patientsFromDb = await Task.Run(() => _clinicEntities.patients.AsNoTracking().Where(p => p.patient_name == name).ToList());
+        public List<patient> GetPatientList()
+        {
+            return _patientList;
+        }
 
-    //        return  patientsFromDb;
-    //    }
+        public patient GetPatientById(int id)
+        {
+            patient patientFromDb = _clinicEntities.patients.FirstOrDefault(patient => patient.id == id);
 
-    //    public  Task<IList<patient>> GetPatientsByPhone(string phoneNumber)
-    //    {
-    //        List<patient> patientsFromDb =await Task.Run(() => _clinicEntities.patients.AsNoTracking().Where(p => p.phone_number == phoneNumber).ToList());
+            return patientFromDb;
+        }
+        public List<patient> GetPatientsByName(string name)
+        {
+            List<patient> patientsFromDb = _clinicEntities.patients
+                    .Where(p => p.patient_name == name).ToList();
 
-    //        return patientsFromDb;
-    //    }
+            return patientsFromDb;
+        }
 
-    //    public  Task<IList<patient>> GetPatients()
-    //    {
-    //        return await Task.Run(() => _clinicEntities.patients.AsNoTracking().ToList());
-    //    }
+        public List<patient> GetPatientsByPhone(string phoneNumber)
+        {
+            List<patient> patientsFromDb = _clinicEntities.patients
+                .Where(p => p.phone_number == phoneNumber).ToList();
 
-    //    public void InsertPatient(patient patient)
-    //    {
-    //        _clinicEntities.patients.Add(patient);
-    //    }
+            return patientsFromDb;
+        }
 
-    //    public  Task Save()
-    //    {
-    //        await _clinicEntities.SaveChanges();
-    //    }
+        private List<patient> GetPatientsFromDatabase()
+        {
+            return  _clinicEntities.patients.ToList();
+        }
 
-    //    public void UpdatePatient(patient patient)
-    //    {
-    //        _clinicEntities.Entry(patient).State = System.Data.Entity.EntityState.Modified;
-    //    }
-    //}
+        public void InsertPatient(patient patient)
+        {
+            if(_patientList.Any(p=>p.phone_number == patient.phone_number))
+            {
+                throw new ArgumentException("Phone number already exists ", patient.phone_number);
+            }
+            else
+            {
+                _patientList.Add(patient);
+                _clinicEntities.patients.Add(patient);
+                Save();
+            }
+        }
+
+        private void  Save()
+        {
+             _clinicEntities.SaveChanges();
+        }
+
+        public void UpdatePatient(patient patient)
+        {
+            int index = _patientList.FindIndex(p => p.id == patient.id);
+            _patientList[index] = patient;
+
+            _clinicEntities.Entry(patient).State = System.Data.Entity.EntityState.Modified;
+        }
+    }
 }

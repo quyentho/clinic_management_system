@@ -31,8 +31,8 @@ namespace clinic.Models
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<prescription> prescriptions { get; set; }
         public virtual patient patient { get; set; }
+        public virtual staff staff { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<clinic_service> clinic_service { get; set; }
-        public virtual staff staff { get; set; }
     }
 }

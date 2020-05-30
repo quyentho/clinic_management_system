@@ -20,9 +20,8 @@ namespace clinic
         private  IStaffRepository _staffRepository;
         private  IServiceRepository _serviceRepository;
         private  IPermissionRepository _permissionRepository;
+        private  IAccountRepository _accountRepository;
 
-
-     
         public AdminForm()
         {
             //HACK: temporarily create instance of all repository, will be moved to program.cs
@@ -30,7 +29,8 @@ namespace clinic
             _medicineRepository = new MedicineRepository(_clinicEntities);
             _serviceRepository = new ServiceRepository(_clinicEntities);
             _permissionRepository = new PermissionRepository(_clinicEntities);
-            _staffRepository = new StaffRepository(_clinicEntities,_permissionRepository);
+            _accountRepository = new AccountRepository(_clinicEntities);
+            _staffRepository = new StaffRepository(_clinicEntities,_permissionRepository,_accountRepository);
             _presenter = new AdminPresenter(this,_medicineRepository,_staffRepository,_serviceRepository);
             InitializeComponent();
         }
@@ -52,7 +52,6 @@ namespace clinic
 
 
         #region Add, Edit, Delete button_click
-        //TODO: Update for staff & service
         private void btnAdd_Click(object sender, EventArgs e)
         {
             _form.Operation = Operation.Insert;
@@ -79,7 +78,7 @@ namespace clinic
         private void UpdateDataGridView(object sender, EventArgs e)
         {
             if (_form is FormMedicine) _presenter.DisplayMedicines();
-            else if (_form is FormService) _presenter.DisplayServices();
+            else if (_form is FormService) btnService.PerformClick();
             else if (_form is FormStaff) _presenter.DisplayStaffs();
         }
 
@@ -87,7 +86,7 @@ namespace clinic
 
         private void btnService_Click(object sender, EventArgs e)
         {
-            if (_form != null )
+            if (_form != null)
                 _form.Dispose();
             _form = new FormService(_serviceRepository);
             _presenter.DisplayServices();

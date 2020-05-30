@@ -9,7 +9,7 @@ using clinic.Models;
 using System.Data.Entity;
 using clinic.Models.Repositories;
 
-namespace clinic.Test
+namespace clinic.Test.Repository
 {
     [TestClass]
     public class PermissionRepositoryTest

@@ -33,7 +33,7 @@
           </Key>
           <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="service_name" Type="nvarchar" MaxLength="50" Nullable="false" />
-          <Property Name="price" Type="decimal" Precision="10" Scale="2" Nullable="false" />
+          <Property Name="price" Type="bigint" Nullable="false" />
           <Property Name="is_active" Type="bit" />
         </EntityType>
         <EntityType Name="medicine">
@@ -61,7 +61,7 @@
           <Property Name="patient_name" Type="nvarchar" MaxLength="50" Nullable="false" />
           <Property Name="age" Type="int" />
           <Property Name="gender" Type="nvarchar" MaxLength="10" />
-          <Property Name="phone_number" Type="varchar" MaxLength="15" />
+          <Property Name="phone_number" Type="varchar" MaxLength="15" Nullable="false" />
         </EntityType>
         <EntityType Name="permission">
           <Key>
@@ -302,18 +302,8 @@
           <Property Name="is_paid" Type="Boolean" Nullable="false" />
           <NavigationProperty Name="prescriptions" Relationship="Self.FK__prescript__bill___4CA06362" FromRole="bill" ToRole="prescription" />
           <NavigationProperty Name="patient" Relationship="Self.FK_bill_patient" FromRole="bill" ToRole="patient" />
-          <NavigationProperty Name="clinic_service" Relationship="Self.services_in_bill" FromRole="bill" ToRole="clinic_service" />
           <NavigationProperty Name="staff" Relationship="clinicModel.FK_bill_staff" FromRole="bill" ToRole="staff" />
-        </EntityType>
-        <EntityType Name="clinic_service">
-          <Key>
-            <PropertyRef Name="id" />
-          </Key>
-          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="service_name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="price" Type="Decimal" Precision="10" Scale="2" Nullable="false" />
-          <Property Name="is_active" Type="Boolean" />
-          <NavigationProperty Name="bills" Relationship="Self.services_in_bill" FromRole="clinic_service" ToRole="bill" />
+          <NavigationProperty Name="clinic_service" Relationship="clinicModel.services_in_bill" FromRole="bill" ToRole="clinic_service" />
         </EntityType>
         <EntityType Name="medicine">
           <Key>
@@ -341,7 +331,7 @@
           <Property Name="patient_name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="age" Type="Int32" />
           <Property Name="gender" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
-          <Property Name="phone_number" Type="String" MaxLength="15" FixedLength="false" Unicode="false" />
+          <Property Name="phone_number" Type="String" MaxLength="15" FixedLength="false" Unicode="false" Nullable="false" />
           <NavigationProperty Name="bills" Relationship="Self.FK_bill_patient" FromRole="patient" ToRole="bill" />
         </EntityType>
         <EntityType Name="permission">
@@ -444,14 +434,9 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="services_in_bill">
-          <End Role="bill" Type="Self.bill" Multiplicity="*" />
-          <End Role="clinic_service" Type="Self.clinic_service" Multiplicity="*" />
-        </Association>
         <EntityContainer Name="clinicEntities" annotation:LazyLoadingEnabled="true">
           <EntitySet Name="accounts" EntityType="Self.account" />
           <EntitySet Name="bills" EntityType="Self.bill" />
-          <EntitySet Name="clinic_service" EntityType="Self.clinic_service" />
           <EntitySet Name="medicines" EntityType="Self.medicine" />
           <EntitySet Name="patients" EntityType="Self.patient" />
           <EntitySet Name="permissions" EntityType="Self.permission" />
@@ -477,10 +462,6 @@
             <End Role="permission" EntitySet="permissions" />
             <End Role="staff" EntitySet="staffs" />
           </AssociationSet>
-          <AssociationSet Name="services_in_bill" Association="Self.services_in_bill">
-            <End Role="bill" EntitySet="bills" />
-            <End Role="clinic_service" EntitySet="clinic_service" />
-          </AssociationSet>
           <AssociationSet Name="FK_account_staff" Association="clinicModel.FK_account_staff">
             <End Role="staff" EntitySet="staffs" />
             <End Role="account" EntitySet="accounts" />
@@ -492,6 +473,11 @@
           <AssociationSet Name="FK_prescription_staff" Association="clinicModel.FK_prescription_staff">
             <End Role="staff" EntitySet="staffs" />
             <End Role="prescription" EntitySet="prescriptions" />
+          </AssociationSet>
+          <EntitySet Name="clinic_service" EntityType="clinicModel.clinic_service" />
+          <AssociationSet Name="services_in_bill" Association="clinicModel.services_in_bill">
+            <End Role="bill" EntitySet="bills" />
+            <End Role="clinic_service" EntitySet="clinic_service" />
           </AssociationSet>
         </EntityContainer>
         <Association Name="FK_account_staff">
@@ -530,6 +516,20 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <EntityType Name="clinic_service">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="service_name" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="price" Type="Int64" Nullable="false" />
+          <Property Name="is_active" Type="Boolean" />
+          <NavigationProperty Name="bills" Relationship="clinicModel.services_in_bill" FromRole="clinic_service" ToRole="bill" />
+        </EntityType>
+        <Association Name="services_in_bill">
+          <End Type="clinicModel.bill" Role="bill" Multiplicity="*" />
+          <End Type="clinicModel.clinic_service" Role="clinic_service" Multiplicity="*" />
+        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -557,16 +557,6 @@
                 <ScalarProperty Name="staff_created" ColumnName="staff_created" />
                 <ScalarProperty Name="total_money" ColumnName="total_money" />
                 <ScalarProperty Name="is_paid" ColumnName="is_paid" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="clinic_service">
-            <EntityTypeMapping TypeName="clinicModel.clinic_service">
-              <MappingFragment StoreEntitySet="clinic_service">
-                <ScalarProperty Name="id" ColumnName="id" />
-                <ScalarProperty Name="service_name" ColumnName="service_name" />
-                <ScalarProperty Name="price" ColumnName="price" />
-                <ScalarProperty Name="is_active" ColumnName="is_active" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -632,12 +622,22 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="clinic_service">
+            <EntityTypeMapping TypeName="clinicModel.clinic_service">
+              <MappingFragment StoreEntitySet="clinic_service">
+                <ScalarProperty Name="is_active" ColumnName="is_active" />
+                <ScalarProperty Name="price" ColumnName="price" />
+                <ScalarProperty Name="service_name" ColumnName="service_name" />
+                <ScalarProperty Name="id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           <AssociationSetMapping Name="services_in_bill" TypeName="clinicModel.services_in_bill" StoreEntitySet="services_in_bill">
-            <EndProperty Name="bill">
-              <ScalarProperty Name="id" ColumnName="bills_id" />
-            </EndProperty>
             <EndProperty Name="clinic_service">
               <ScalarProperty Name="id" ColumnName="clinic_service_id" />
+            </EndProperty>
+            <EndProperty Name="bill">
+              <ScalarProperty Name="id" ColumnName="bills_id" />
             </EndProperty>
           </AssociationSetMapping>
         </EntityContainerMapping>

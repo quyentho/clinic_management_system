@@ -22,11 +22,11 @@ namespace clinic.Presenters
             var service = new clinic_service()
             {
                 service_name = _view.TxtServiceName,
-                price = decimal.Parse(_view.TxtPrice),
+                price = long.Parse(_view.TxtPrice),
                 is_active = true
             };
             _repository.InsertService(service);
-            _repository.Save();
+       
         }
         public void Display(int idSelected)
         {
@@ -43,20 +43,25 @@ namespace clinic.Presenters
             var serviceFromDb = _repository.GetServiceById(idSelected);
             if (serviceFromDb != null)
             {
-                _repository.DeleteService(serviceFromDb);
-                _repository.Save();
+                _repository.DeleteService(idSelected);
             }
+        }
+        private clinic_service GetServiceFromView()
+        {
+            clinic_service clinic_Service = new clinic_service()
+            {
+                service_name = _view.TxtServiceName,
+                price = long.Parse(_view.TxtPrice),
+                is_active = true
+            };
+            return clinic_Service;
         }
         public void Edit(int idSelected)
         {
-            var serviceFromDB = _repository.GetServiceById(idSelected);
-            if (serviceFromDB != null)
-            {
+            var serviceEdited = GetServiceFromView();
+            serviceEdited.id = idSelected;
 
-                serviceFromDB.service_name = _view.TxtServiceName;
-                serviceFromDB.price = decimal.Parse(_view.TxtPrice);
-                _repository.Save();
-            }
+            _repository.UpdateService(serviceEdited);
         }
         #region validating Method
         public bool ValidateName()

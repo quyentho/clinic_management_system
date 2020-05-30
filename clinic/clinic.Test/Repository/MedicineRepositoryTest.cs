@@ -8,8 +8,9 @@ using System.Linq;
 using clinic.Models.Repositories;
 using System.Globalization;
 using System.Linq.Expressions;
+using FluentAssertions;
 
-namespace clinic.Test
+namespace clinic.Test.Repository
 {
    
     [TestClass]
@@ -17,7 +18,7 @@ namespace clinic.Test
     {
         private readonly Mock<clinicEntities> _stubContext;
         private IQueryable<medicine> _fakeMedicineList;
-        private readonly MedicineRepository _mockMedicineRepo;
+        private readonly MedicineRepository _sut;
         public MedicineRepositoryTest()
         {
             string[] dateTimeFormats = {"d/M/yyyy","dd/M/yyyy","d/MM/yyyy","dd/MM/yyyy", "d-M-yyyy", "dd-M-yyyy"
@@ -43,18 +44,20 @@ namespace clinic.Test
             stubDbSet.As<IQueryable<medicine>>().Setup(m => m.ElementType).Returns(_fakeMedicineList.ElementType);
             stubDbSet.As<IQueryable<medicine>>().Setup(m => m.GetEnumerator())
                 .Returns(() => _fakeMedicineList.GetEnumerator());
+
             stubDbSet.Setup(m => m.Find(It.IsAny<object[]>()))
                 .Returns<object[]>(ids => _fakeMedicineList.FirstOrDefault(d => d.id == (int)ids[0]));
+
             _stubContext = new Mock<clinicEntities>();
             _stubContext.Setup(c => c.medicines).Returns(stubDbSet.Object);
             _stubContext.Setup(c => c.Set<medicine>()).Returns(stubDbSet.Object);
-            _mockMedicineRepo = new MedicineRepository(_stubContext.Object);
+            _sut = new MedicineRepository(_stubContext.Object);
         }
 
         [TestMethod]
         public void GetMedicinesFromDatabase_WhenCalled_ReturnsMedicineList()
         {
-            var actual = _mockMedicineRepo.GetMedicineList();
+            var actual = _sut.GetMedicineList();
 
             CollectionAssert.AreEqual(_fakeMedicineList.ToList(), actual);
         }
@@ -78,9 +81,9 @@ namespace clinic.Test
                 is_active = true
             };
          
-            _mockMedicineRepo.InsertMedicine(newMedicine);
+            _sut.InsertMedicine(newMedicine);
            
-            Assert.IsTrue(_mockMedicineRepo.GetMedicineList().Contains(newMedicine));
+            Assert.IsTrue(_sut.GetMedicineList().Contains(newMedicine));
             _stubContext.Verify(c => c.medicines.Add(newMedicine), Times.Once);
             _stubContext.Verify(c => c.SaveChanges(), Times.Once);
         }
@@ -89,7 +92,7 @@ namespace clinic.Test
         {
             int id = 1;
 
-            var actual = _mockMedicineRepo.GetMedicineById(id);
+            var actual = _sut.GetMedicineById(id);
             var expected = _fakeMedicineList.ToList()[0];
 
             Assert.AreEqual(expected, actual);
@@ -105,7 +108,7 @@ namespace clinic.Test
             Assert.AreEqual(expected, actual);
         }
         [TestMethod]
-        public void UpdateMedicine_WithValidInput_UpdateMedicineInListAndInDatabase()
+        public void UpdateMedicine_WithValidMedicine_UpdateMedicineInList()
         {
             var medicineUpdated = new medicine()
             {
@@ -123,30 +126,77 @@ namespace clinic.Test
                 sale_price_per_unit = 1000,
                 is_active = true
             };
-            _mockMedicineRepo.UpdateMedicine(medicineUpdated);
+            _sut.UpdateMedicine(medicineUpdated);
 
-            Assert.IsTrue(_mockMedicineRepo.GetMedicineList().Contains(medicineUpdated));
-            _stubContext.Verify(c => c.AddOrUpdateEntity(_stubContext.Object,medicineUpdated));
-            _stubContext.Verify(c => c.SaveChanges(), Times.Once);
+           _sut.GetMedicineList().Should().Contain(medicineUpdated);
+           
         }
+        [TestMethod]
+        public void UpdateMedicine_WithValidMedicine_NotThrowsException()
+        {
+
+            var medicineUpdated = new medicine()
+            {
+                id = 1,
+                medicine_name = "thuoc test 123",
+                entry_unit = "Hop",
+                entry_price = 10000,
+                expiry_day = DateTime.ParseExact("20-10-2020", "dd-MM-yyyy",
+                                                  CultureInfo.InvariantCulture, DateTimeStyles.None),
+                quantity_in_entry_unit = 100,
+                unit_exchange_ratio = 100,
+                quantity_in_sale_unit = 100 * 100,
+                entry_day = DateTime.Now,
+                sale_unit = "Vien",
+                sale_price_per_unit = 1000,
+                is_active = true
+            };
+
+            Action act = () =>  _sut.UpdateMedicine(medicineUpdated);
+
+            act.Should().NotThrow();
+        }
+        
         [TestMethod]
         public void DeleteMedicine_WithValidId_DeleteMedicineInList()
         {
             int id = 1;
 
-            _mockMedicineRepo.DeleteMedicine(id);
+            _sut.DeleteMedicine(id);
 
-            Assert.IsTrue(!_mockMedicineRepo.GetMedicineList().Contains(_fakeMedicineList.ToList()[0]));
+            Assert.IsTrue(!_sut.GetMedicineList().Contains(_fakeMedicineList.ToList()[0]));
         }
         [TestMethod]
         public void DeleteMedicine_WithValidId_DeleteMedicineInDatabaseSuccessfully()
         {
             int id = 1;
 
-            _mockMedicineRepo.DeleteMedicine(id);
+            _sut.DeleteMedicine(id);
 
             _stubContext.Verify(c => c.medicines.Remove(_fakeMedicineList.ToList()[0]));
             _stubContext.Verify(c => c.SaveChanges());
+        }
+
+        [TestMethod]
+        public void GetMedicinesByName_SameMedicineName_ReturnsListMedicine()
+        {
+            List<medicine> actual = _sut.GetMedicinesByName("thuoc");
+
+            actual.Should().BeEquivalentTo(_fakeMedicineList);
+        }
+        [TestMethod]
+        public void GetMedicinesByName_CognomenName_ReturnsExactMedicine()
+        {
+            var actual = _sut.GetMedicinesByName("thuoc 2");
+
+            actual.Should().BeEquivalentTo(_fakeMedicineList.ToList()[1]);
+        }
+        [TestMethod]
+        public void GetMedicinesByName_NotExistName_ReturnsEmpty()
+        {
+            var actual = _sut.GetMedicinesByName("none exist name");
+
+            actual.Should().BeEmpty();
         }
     }
 }

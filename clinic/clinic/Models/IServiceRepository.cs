@@ -12,8 +12,7 @@ namespace clinic.Models
         List<clinic_service> GetServicesByName(string name);
         clinic_service GetServiceById(int id);
         void InsertService(clinic_service clinic_service);
-        void DeleteService(clinic_service clinic_service);
+        void DeleteService( int id);
         void UpdateService(clinic_service clinic_service);
-        void Save();
     }
 }

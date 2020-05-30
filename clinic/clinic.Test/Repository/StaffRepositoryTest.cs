@@ -11,15 +11,17 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace clinic.Test
+namespace clinic.Test.Repository
 {
     [TestClass]
     public class StaffRepositoryTest
     {
         List<StaffViewModel> _mockStaffListVM;
-        StaffRepository _mockStaffRepo;
+        private Mock<IAccountRepository> _stubAccountRepository;
+        StaffRepository _sut;
         Mock<clinicEntities> _stubDbContext;
         List<staff> _stubStaffList;
+
         [TestInitialize]
         public void Test_Initiallize()
         {
@@ -68,11 +70,12 @@ namespace clinic.Test
 
             _stubDbContext.Setup(c => c.staffs).Returns(stubStaffDbSet.Object);
             _stubDbContext.Setup(c => c.Set<staff>()).Returns(stubStaffDbSet.Object);
+             
+            var stubPermissionRepo = new PermissionRepository(_stubDbContext.Object);
 
-            var stubPermissionRepo = new Mock<IPermissionRepository>();
-            stubPermissionRepo.Setup(p => p.GetPermissionList()).Returns(stubPermissionList.ToList());
+            _stubAccountRepository = new Mock<IAccountRepository>();
 
-            _mockStaffRepo = new StaffRepository(_stubDbContext.Object, stubPermissionRepo.Object);
+            _sut = new StaffRepository(_stubDbContext.Object, stubPermissionRepo,_stubAccountRepository.Object);
 
             _mockStaffListVM = new List<StaffViewModel>()
             {
@@ -88,7 +91,7 @@ namespace clinic.Test
         [TestMethod]
         public void GetStaffList_WhenCalled_ReturnsStaffList()
         {
-            var actual = _mockStaffRepo.GetStaffList();
+            var actual = _sut.GetStaffList();
 
             actual.Should().Equals(_mockStaffListVM);
         }
@@ -99,43 +102,43 @@ namespace clinic.Test
             using (new AssertionScope())
             {
                 int validId = 1;
-                StaffViewModel actual = _mockStaffRepo.GetStaffById(validId);
+                StaffViewModel actual = _sut.GetStaffById(validId);
                 actual.Should().Equals(_mockStaffListVM[0]);
 
                 validId = 2;
-                actual = _mockStaffRepo.GetStaffById(validId);
+                actual = _sut.GetStaffById(validId);
                 actual.Should().Equals(_mockStaffListVM[1]);
 
                 validId = 3;
-                actual = _mockStaffRepo.GetStaffById(validId);
+                actual = _sut.GetStaffById(validId);
                 actual.Should().Equals(_mockStaffListVM[2]);
             }
         }
 
         [TestMethod]
-        public void InsertStaff_WhenCalled_InsertToListVM()
+        public void InsertStaff_HasNewPhoneNumber_InsertToListVM()
         {
-            var mockStaff = new staff()
+            var newStaff = new staff()
             {
                 id = 4,
                 full_name = "nv4",
                 date_of_birth = new DateTime(1999, 1, 3),
-                phone_number = "0945664870",
+                phone_number = "1945664870",
                 salary = 4500000,
                 is_still_working = true,
                 permission_id = 1,
             };
 
-            _mockStaffRepo.InsertStaff(mockStaff);
+            _sut.InsertStaff(newStaff);
 
-            var mockUpdatedStaffVMs = _mockStaffRepo.GetStaffList();
+            var mockUpdatedStaffVMs = _sut.GetStaffList();
 
             StaffViewModel stubStaffVM = new StaffViewModel()
             {
                 Id = 4,
                 DateOfBirth = new DateTime(1999, 1, 3),
                 FullName = "nv4",
-                PhoneNumber = "0945664870",
+                PhoneNumber = "1945664870",
                 Salary = 4500000,
                 PositionName = "QUAN LY"
             };
@@ -143,20 +146,20 @@ namespace clinic.Test
         }
 
         [TestMethod]
-        public void InsertStaff_WhenCalled_InsertToDatabaseSuccessfully()
+        public void InsertStaff_HasNewPhoneNumber_InsertToDatabaseSuccessfully()
         {
             var mockStaff = new staff()
             {
-                id = 4,
+                
                 full_name = "nv4",
                 date_of_birth = new DateTime(1999, 1, 3),
-                phone_number = "0945664870",
+                phone_number = "1945664870",
                 salary = 4500000,
                 is_still_working = true,
                 permission_id = 1,
             };
 
-            _mockStaffRepo.InsertStaff(mockStaff);
+            _sut.InsertStaff(mockStaff);
             _stubDbContext.Verify(c => c.staffs.Add(mockStaff), Times.Once);
             _stubDbContext.Verify(c => c.SaveChanges(), Times.Once);
         }
@@ -175,7 +178,7 @@ namespace clinic.Test
                 permission_id = 1
             };
 
-            _mockStaffRepo.UpdateStaff(staffUpdated);
+            _sut.UpdateStaff(staffUpdated);
 
             _stubDbContext.Verify(c => c.AddOrUpdateEntity<staff>(_stubDbContext.Object, staffUpdated));
             _stubDbContext.Verify(c => c.SaveChanges());
@@ -195,7 +198,7 @@ namespace clinic.Test
                 permission_id = 1
             };
 
-            _mockStaffRepo.UpdateStaff(staffUpdated);
+            _sut.UpdateStaff(staffUpdated);
 
             var staffUpdatedVM = new StaffViewModel()
             {
@@ -207,7 +210,7 @@ namespace clinic.Test
                 PositionName = "QUAN LY"
             };
 
-            _mockStaffRepo.GetStaffList().Should().ContainEquivalentOf(staffUpdatedVM);
+            _sut.GetStaffList().Should().ContainEquivalentOf(staffUpdatedVM);
         }
 
         [TestMethod]
@@ -215,7 +218,7 @@ namespace clinic.Test
         {
             int id = 1;
 
-            _mockStaffRepo.DeleteStaff(id);
+            _sut.DeleteStaff(id);
 
             _stubDbContext.Verify(c => c.staffs.Remove(_stubStaffList[0]));
             _stubDbContext.Verify(c => c.SaveChanges());
@@ -226,10 +229,55 @@ namespace clinic.Test
         {
             int id = 1;
 
-            _mockStaffRepo.DeleteStaff(id);
-            var staffVM = _mockStaffRepo.GetStaffById(id);
+            _sut.DeleteStaff(id);
+            var staffVM = _sut.GetStaffById(id);
 
-            _mockStaffRepo.GetStaffList().Should().NotContain(staffVM);
+            _sut.GetStaffList().Should().NotContain(staffVM);
+        }
+
+        [TestMethod]
+        public void InsertStaff_ExistingPhoneNumber_ThrowArgumentException()
+        {
+            var staffWithDuplicatePhoneNumber = new staff()
+            {
+                id = 5,
+                full_name = "nv5",
+                date_of_birth = new DateTime(1999, 1, 3),
+                phone_number = "0945664870",
+                salary = 4500000,
+                is_still_working = true,
+                permission_id = 1
+            };
+
+            Action act = () => _sut.InsertStaff(staffWithDuplicatePhoneNumber);
+
+            act.Should().Throw<ArgumentException>();
+        }
+
+        [TestMethod]
+        public void InsertStaff_HasNewPhoneNumber_CreateNewAccount()
+        {
+            var newStaff = new staff()
+            {
+                
+                full_name = "nv4",
+                date_of_birth = new DateTime(1999, 1, 3),
+                phone_number = "1945664870",
+                salary = 4500000,
+                is_still_working = true,
+                permission_id = 1,
+            };
+            var newAccount = new account();
+            _stubAccountRepository.Setup(a => a.Insert(It.IsAny<account>())).Callback<account>(a => newAccount = a);
+            
+          
+           
+
+
+            _sut.InsertStaff(newStaff);
+
+            _stubAccountRepository.Verify(a => a.Insert(newAccount),Times.Once);
+            _stubDbContext.Verify(c => c.SaveChanges());
         }
     }
 

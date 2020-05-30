@@ -11,7 +11,7 @@ using System.Data.Entity.Infrastructure;
 
 namespace clinic.Presenters
 {
-    class MedicinePresenter : Presenter
+    public class MedicinePresenter : Presenter
     {
         private IMedicineView _view;
         private readonly IMedicineRepository _repository;
@@ -34,7 +34,7 @@ namespace clinic.Presenters
                 entry_price = Int64.Parse(_view.TxtEntryPrice),
                 sale_unit = _view.TxtSaleUnit,
                 sale_price_per_unit = Int64.Parse(_view.TxtSalePrice),
-                entry_day = DateTime.Now,
+                entry_day = TimeProvider.Current.UtcNow,
                 expiry_day = DateTime.ParseExact(_view.TxtExpiryDay, dateTimeFormats,
                                                    CultureInfo.InvariantCulture, DateTimeStyles.None),
                 is_active = true,
@@ -75,8 +75,8 @@ namespace clinic.Presenters
             medicineForUpdate.id = idSelected;
 
             _repository.UpdateMedicine(medicineForUpdate);
-     
         }
+
     }
 }
 

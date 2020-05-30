@@ -11,26 +11,26 @@ namespace clinic.Models.Repositories
     public class StaffRepository : IStaffRepository
     {
         private readonly clinicEntities _clinicEntities;
-        private List<StaffViewModel> _staffViewModels;
+        private List<StaffViewModel> _staffViewModelList;
+        private IAccountRepository _accountRepository;
         private readonly IPermissionRepository _permissionRepository;
         
-        public StaffRepository(clinicEntities entities,IPermissionRepository permissionRepository)
+        public StaffRepository(clinicEntities entities, IPermissionRepository permissionRepository, IAccountRepository accountRepository)
         {
             _clinicEntities = entities;
             _permissionRepository = permissionRepository;
-            _staffViewModels = GetStaffsFromDatabase();
+            _staffViewModelList = GetStaffsFromDatabase();
+            _accountRepository = accountRepository;
 
-       //     GetPermissionForEachStaff();
         }
 
 
-      //  HACK: Comment this function for running
         public void DeleteStaff(int id)
         {
             var staffFromDb = _clinicEntities.staffs.Find(id);
             if(staffFromDb != null)
             {
-                _staffViewModels.Remove(GetStaffById(id));
+                _staffViewModelList.Remove(GetStaffById(id));
                 _clinicEntities.staffs.Remove(staffFromDb);
                 Save();
             }
@@ -38,15 +38,12 @@ namespace clinic.Models.Repositories
 
         public StaffViewModel GetStaffById(int id)
         {
-            var staff = _staffViewModels.Where(s => s.Id == id).FirstOrDefault();
+            var staff = _staffViewModelList.Where(s => s.Id == id).FirstOrDefault();
             return staff;
         }
 
-        //HACK: comment this function for runnning, fix later
         public List<staff> GetStaffsByName(string staffName)
         {
-            //var staffs = _staffs.Where(m => m.full_name.Contains(staffName)).ToList();
-            //return staffs;
             throw new NotImplementedException();
         }
 
@@ -67,28 +64,44 @@ namespace clinic.Models.Repositories
         }
         public List<StaffViewModel> GetStaffList()
         {
-            return _staffViewModels;
+            return _staffViewModelList;
         }
 
-        //HACK: comment this function for runnning, fix later
         public void InsertStaff(staff newStaff)
-        {
+       {
+            if (_staffViewModelList.Any(s => s.PhoneNumber == newStaff.phone_number))
+            {
+                throw new ArgumentException();
+            }
             InsertToList(newStaff);
             _clinicEntities.staffs.Add(newStaff);
+            CreateNewAccount(newStaff);
             Save();
-           
         }
+
+        private void CreateNewAccount(staff newStaff)
+        {
+            var newAccount = new account()
+            {
+                is_active = true,
+                pass = "1",
+                permission_id = newStaff.permission_id,
+                staff_id = _staffViewModelList.FindLastIndex(s => s.PhoneNumber == newStaff.phone_number) + 1,
+                username = newStaff.phone_number
+            };
+            _accountRepository.Insert(newAccount);
+        }
+
         private void InsertToList(staff newStaff)
         {
             var staffVM = ConvertStaffToStaffVM(newStaff);
-            _staffViewModels.Add(staffVM);
+            _staffViewModelList.Add(staffVM);
         }
         private void Save()
         {
             _clinicEntities.SaveChanges();
         }
 
-        //HACK: comment this function for runnning, fix later
         public void UpdateStaff(staff staffUpdated)
         {
 
@@ -106,7 +119,7 @@ namespace clinic.Models.Repositories
             {
                 DateOfBirth = staff.date_of_birth,
                 FullName = staff.full_name,
-                Id = staff.id,
+                Id = staff.id == 0 ? _staffViewModelList.Count() + 1 : staff.id,
                 PhoneNumber = staff.phone_number,
                 Salary = staff.salary,
                 PositionName = _permissionRepository.GetPermissionList()
@@ -116,9 +129,9 @@ namespace clinic.Models.Repositories
         }
         private void UpdateStaffInList(staff staffUpdated)
         {
-            int index = _staffViewModels.FindIndex(s => s.Id == staffUpdated.id);
+            int index = _staffViewModelList.FindIndex(s => s.Id == staffUpdated.id);
             var staffVM = ConvertStaffToStaffVM(staffUpdated);
-            _staffViewModels[index] = staffVM;
+            _staffViewModelList[index] = staffVM;
         }
     }
 }

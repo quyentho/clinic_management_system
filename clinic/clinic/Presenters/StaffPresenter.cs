@@ -15,7 +15,8 @@ namespace clinic.Presenters
         private IStaffView _view;
         private readonly IStaffRepository _repository;
         private readonly IPermissionRepository _permissionRepository;
-        public StaffPresenter(IStaffRepository staffRepository, IPermissionRepository permissionRepository,IStaffView staffView)
+        public StaffPresenter(IStaffRepository staffRepository,
+            IPermissionRepository permissionRepository,IStaffView staffView)
         {
             _view = staffView;
             _permissionRepository = permissionRepository;

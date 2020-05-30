@@ -108,8 +108,8 @@ namespace clinic
 
         private void FormService_FormClosed(object sender, FormClosedEventArgs e)
         {
-            this.Dispose();
             UpdateDataGridViewEventHandler?.Invoke(this, null);
+            this.Dispose();
         }
 
        
