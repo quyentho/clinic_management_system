@@ -69,6 +69,7 @@
     <Compile Include="Models\bill.cs">
       <DependentUpon>Model.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\BillViewModel.cs" />
     <Compile Include="Models\clinic_service.cs">
       <DependentUpon>Model.tt</DependentUpon>
     </Compile>
@@ -129,6 +130,7 @@
     </Compile>
     <Compile Include="Presenters\AssignMedicinePresenter.cs" />
     <Compile Include="Presenters\AssignServicePresenter.cs" />
+    <Compile Include="Presenters\LoginPresenter.cs" />
     <Compile Include="Presenters\PatientPresenter.cs" />
     <Compile Include="Presenters\PersonalInfoPresenter.cs" />
     <Compile Include="Presenters\PrescriptionPresenter.cs" />
@@ -141,12 +143,6 @@
     </Compile>
     <Compile Include="Views\Forms\AdminForm.Designer.cs">
       <DependentUpon>AdminForm.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Views\Forms\DoctorForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Views\Forms\DoctorForm.Designer.cs">
-      <DependentUpon>DoctorForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Views\Forms\FormAssignMedicine.cs">
       <SubType>Form</SubType>
@@ -201,6 +197,12 @@
     <Compile Include="Views\Forms\FormStaff.Designer.cs">
       <DependentUpon>FormStaff.cs</DependentUpon>
     </Compile>
+    <Compile Include="Views\Forms\LoginForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Views\Forms\LoginForm.Designer.cs">
+      <DependentUpon>LoginForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="Views\Forms\ReceptionForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -209,6 +211,7 @@
     </Compile>
     <Compile Include="Views\IAssignMedicineView.cs" />
     <Compile Include="Views\IAssignServiceView.cs" />
+    <Compile Include="Views\ILoginView.cs" />
     <Compile Include="Views\IMedicineView.cs" />
     <Compile Include="Views\IAdminView.cs" />
     <Compile Include="Views\IPatientView.cs" />
@@ -223,9 +226,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Views\Forms\AdminForm.resx">
       <DependentUpon>AdminForm.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Views\Forms\DoctorForm.resx">
-      <DependentUpon>DoctorForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Views\Forms\FormAssignMedicine.resx">
       <DependentUpon>FormAssignMedicine.cs</DependentUpon>
@@ -260,6 +260,9 @@
     </Compile>
     <EmbeddedResource Include="Views\Forms\FormStaff.resx">
       <DependentUpon>FormStaff.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\Forms\LoginForm.resx">
+      <DependentUpon>LoginForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Views\Forms\ReceptionForm.resx">
       <DependentUpon>ReceptionForm.cs</DependentUpon>
@@ -300,6 +303,7 @@
       <DependentUpon>Model.edmx</DependentUpon>
       <LastGenOutput>Model.cs</LastGenOutput>
     </Content>
+    <None Include="Resources\download %281%29.png" />
     <None Include="Resources\avatar.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -21,8 +21,7 @@ namespace clinic.Presenters
         }
         private staff GetMyInfo()
         {
-            //HACK: Missing StaffId
-            return _staffRepository.FindStaffFromDb(3);
+            return _staffRepository.FindStaffFromDb(Program.staffId);
         }
         public void DisplayInfo()
         {
@@ -51,8 +50,7 @@ namespace clinic.Presenters
         {
             if (_view.TxtNewPassword != _view.TxtConfirmPassword)
                 throw new ArgumentException("Xác nhận mật khẩu không chính xác");
-            //HACK: Missing StaffId
-            _staffRepository.ChangeAccountPassword(3, _view.TxtNewPassword);
+            _staffRepository.ChangeAccountPassword(Program.staffId, _view.TxtNewPassword);
         }
     }
 }

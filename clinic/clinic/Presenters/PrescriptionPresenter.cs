@@ -88,8 +88,7 @@ namespace clinic.Presenters
                 date_created = DateTime.Now,
                 quantity_indicated = _view.Quantity,
                 description = _view.Descriptions,
-                //HACK: Missing StaffId
-                staff_id = 3
+                staff_id = Program.staffId
             };
             return prescription;
         }

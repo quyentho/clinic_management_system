@@ -164,6 +164,7 @@
             this.btnLogout.TabIndex = 3;
             this.btnLogout.Text = "ĐĂNG XUẤT";
             this.btnLogout.UseVisualStyleBackColor = false;
+            this.btnLogout.Click += new System.EventHandler(this.btnLogout_Click);
             // 
             // btnPatientFiles
             // 

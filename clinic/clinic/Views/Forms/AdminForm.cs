@@ -11,8 +11,7 @@ namespace clinic
 {
     public partial class AdminForm : Form, IAdminView
     {
-        //FIXME: Inject serviceRepo, staffRepo, medicineRepo from program.cs
-        //FIXME: Remove _clinicEntities
+        
         private  clinicEntities _clinicEntities;
         private  AdminPresenter _presenter;
         private  OperationForm _form;
@@ -22,11 +21,9 @@ namespace clinic
         private  IPermissionRepository _permissionRepository;
         private  IAccountRepository _accountRepository;
         private IBillRepository _billRepository;
-
-        public AdminForm()
+        public AdminForm(clinicEntities clinicEntities)
         {
-            //HACK: temporarily create instance of all repository, will be moved to program.cs
-            _clinicEntities = new clinicEntities();
+            _clinicEntities = clinicEntities;
             _medicineRepository = new MedicineRepository(_clinicEntities);
             _serviceRepository = new ServiceRepository(_clinicEntities);
             _permissionRepository = new PermissionRepository(_clinicEntities);
@@ -36,7 +33,8 @@ namespace clinic
             _presenter = new AdminPresenter(this,_medicineRepository,_staffRepository,_serviceRepository,_billRepository);
             InitializeComponent();
         }
- 
+
+     
         #region Properties
 
         public string TxtTimKiem { get => txtSearch.Text; set => txtSearch.Text = value; }
@@ -193,6 +191,11 @@ namespace clinic
                 btnEdit.Enabled = true;
                 btnDelete.Enabled = true;
             }
+        }
+
+        private void btnLogout_Click(object sender, EventArgs e)
+        {
+            this.Close();
         }
     }
 }

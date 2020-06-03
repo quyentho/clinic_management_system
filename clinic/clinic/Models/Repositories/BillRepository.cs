@@ -25,7 +25,7 @@ namespace clinic.Models.Repositories
 
         private List<bill> GetUnpaidBillFromDb()
         {
-            return _clinicEntities.bills.Include(b=>b.clinic_service).Include(b=>b.patient)
+            return _clinicEntities.bills.Include(b=>b.clinic_service).Include(b=>b.patient).Include(b=>b.patient)
                 .Where(b => b.is_paid == false)
                 .ToList();
         }

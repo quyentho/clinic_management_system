@@ -33,9 +33,9 @@ namespace clinic.Views.Forms
         public string CbSearchValue { get => cbSearch.Text;}
         public ReceptionFunctionalityEnum Functionality { get  ; set  ; }
 
-        public ReceptionForm()
+        public ReceptionForm(clinicEntities clinicEntities)
         {
-            _clinicEntities = new clinicEntities();
+            _clinicEntities = clinicEntities;
             InitializeComponent();
             _patientRepository = new PatientRepository(_clinicEntities);
             _billRepository = new BillRepository(_clinicEntities);
@@ -57,6 +57,8 @@ namespace clinic.Views.Forms
 
         private void ReceptionForm_Load(object sender, EventArgs e)
         {
+            if (Program.permissionId == 2)//Bac si
+                btnPay.Visible = false;
             Functionality = ReceptionFunctionalityEnum.Patient;
             btnPatientFiles.PerformClick();
             cbSearch.SelectedIndex = 0;
@@ -134,15 +136,16 @@ namespace clinic.Views.Forms
             try
             {
                 if(Functionality == ReceptionFunctionalityEnum.Bill)
+                {
                     _presenter.PayBill();
-
+                    MessageBox.Show("Thanh Toán Thành Công");
+                    btnBills.PerformClick();
+                }
             }
             catch (Exception ex)
             {
                 MessageBox.Show(ex.Message);
             }
-            MessageBox.Show("Thanh Toán Thành Công");
-            btnBills.PerformClick();
         }
 
         private void btnPersonality_Click(object sender, EventArgs e)
@@ -151,6 +154,11 @@ namespace clinic.Views.Forms
             {
                 form.ShowDialog();
             }
+        }
+
+        private void btnLogout_Click(object sender, EventArgs e)
+        {
+            this.Close();
         }
     }
 }

@@ -17,7 +17,7 @@ namespace clinic.Presenters
         private IBillRepository _billRepository;
         public ReceptionPresenter(clinicEntities clinicEntities, IReceptionView view, IBillRepository billRepository, IPatientRepository patientRepository)
         {
-           
+
             _clinicEntities = clinicEntities;
             _view = view;
             _billRepository = billRepository;
@@ -31,7 +31,26 @@ namespace clinic.Presenters
         public void DisplayListUnpaidBill()
         {
             _view.DgvReceptionDataSource = null;
-            _view.DgvReceptionDataSource = _billRepository.GetListUnpaidBill();
+            var listUnpaidBill = _billRepository.GetListUnpaidBill();
+
+            _view.DgvReceptionDataSource = BillsToDisPlay(listUnpaidBill);
+        }
+        private List<BillViewModel> BillsToDisPlay(List<bill> ListBill)
+        {
+            var listBillVM = new List<BillViewModel>();
+            foreach (var bill in ListBill)
+            {
+                listBillVM.Add(new BillViewModel()
+                {
+                    Id = bill.id,
+                    PatientId = bill.patient_id,
+                    DateCreated = bill.created_at,
+                    PatientName = bill.patient.patient_name,
+                    StaffName = bill.staff.full_name,
+                    TotalMoney = bill.total_money
+                });
+            }
+            return listBillVM;
         }
         public void PayBill()
         {
@@ -40,14 +59,14 @@ namespace clinic.Presenters
         }
         public void Search()
         {
-            if(_view.CbSearchValue == "SDT")
+            if (_view.CbSearchValue == "SDT")
             {
                 if (_view.Functionality == ReceptionFunctionalityEnum.Bill)
-                   _view.DgvReceptionDataSource =  _billRepository.GetUnpaidBillByPhoneNumber(_view.TxtSearch);
+                    _view.DgvReceptionDataSource = _billRepository.GetUnpaidBillByPhoneNumber(_view.TxtSearch);
                 if (_view.Functionality == ReceptionFunctionalityEnum.Patient)
                     _view.DgvReceptionDataSource = _patientRepository.GetPatientsByPhone(_view.TxtSearch);
             }
-            if(_view.CbSearchValue == "Tên")
+            if (_view.CbSearchValue == "Tên")
             {
                 if (_view.Functionality == ReceptionFunctionalityEnum.Bill)
                     _view.DgvReceptionDataSource = _billRepository.GetUnpaidBillsByPatientName(_view.TxtSearch);
@@ -55,22 +74,20 @@ namespace clinic.Presenters
                     _view.DgvReceptionDataSource = _patientRepository.GetPatientsByName(_view.TxtSearch);
             }
         }
-
         public void CreateBillIfNotExists()
         {
-            if(_view.Functionality == ReceptionFunctionalityEnum.Patient)
+            if (_view.Functionality == ReceptionFunctionalityEnum.Patient)
             {
                 var bill = _billRepository.GetUnpaidBillByPatientId(_view.PatientIdSelected);
                 if (bill is null)
                 {
                     bill = new bill()
                     {
-                        created_at = DateTime.UtcNow,
+                        created_at = DateTime.Now,
                         is_paid = false,
                         patient_id = _view.PatientIdSelected,
                         total_money = 0,
-                        //HACK: Missing staff_created, will get from a static field when Login
-                        staff_created = 3
+                        staff_created = Program.staffId
                     };
                     _billRepository.CreateBill(bill);
                 }

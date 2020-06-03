@@ -34,7 +34,7 @@ namespace clinic.Presenters
                 entry_price = Int64.Parse(_view.TxtEntryPrice),
                 sale_unit = _view.TxtSaleUnit,
                 sale_price_per_unit = Int64.Parse(_view.TxtSalePrice),
-                entry_day = TimeProvider.Current.UtcNow,
+                entry_day = DateTime.Now,
                 expiry_day = DateTime.ParseExact(_view.TxtExpiryDay, dateTimeFormats,
                                                    CultureInfo.InvariantCulture, DateTimeStyles.None),
                 is_active = true,
@@ -43,7 +43,6 @@ namespace clinic.Presenters
             };
             return medicine;
         }
-      
         public  void Add()
         {
             _repository.InsertMedicine(GetMedicineFromView());
