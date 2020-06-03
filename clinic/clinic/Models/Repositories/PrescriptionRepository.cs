@@ -2,7 +2,7 @@
 
 namespace clinic.Models.Repositories
 {
-    public class PrescriptionRepository
+    public class PrescriptionRepository : IPrescriptionRepository
     {
         private clinicEntities _clinicEntities;
         private IMedicineRepository _medicineRepository;
@@ -12,7 +12,7 @@ namespace clinic.Models.Repositories
             _clinicEntities = dbContext;
             _medicineRepository = medicineRepository;
         }
-        public void CreatePrescription(prescription prescription, ref string errMessage)
+        public void AddPrescriptionToDatabase(prescription prescription, ref string errMessage)
         {
             try
             {

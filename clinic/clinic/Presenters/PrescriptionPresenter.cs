@@ -69,6 +69,8 @@ namespace clinic.Presenters
                 {
                     try
                     {
+                        //HACK: Not use Prescription Repository
+                        _medicineRepository.MinusQuantity(prescription.medicine_id, prescription.quantity_indicated);
                         _billRepository.AddPrescriptionToBill(bill.id, prescription);
                     }
                     catch (ArgumentOutOfRangeException ex)

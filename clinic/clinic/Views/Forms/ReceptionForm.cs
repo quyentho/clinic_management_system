@@ -58,7 +58,10 @@ namespace clinic.Views.Forms
         private void ReceptionForm_Load(object sender, EventArgs e)
         {
             if (Program.permissionId == 2)//Bac si
+            {
                 btnPay.Visible = false;
+                btnAddPatient.Visible = false;
+            }
             Functionality = ReceptionFunctionalityEnum.Patient;
             btnPatientFiles.PerformClick();
             cbSearch.SelectedIndex = 0;

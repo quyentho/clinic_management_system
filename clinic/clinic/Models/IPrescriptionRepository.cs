@@ -8,6 +8,6 @@ namespace clinic.Models
 {
     public interface IPrescriptionRepository
     {
-        void CreatePrescription(prescription prescription, ref string errMessage);
+        void AddPrescriptionToDatabase(prescription prescription, ref string errMessage);
     }
 }
