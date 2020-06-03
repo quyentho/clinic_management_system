@@ -70,12 +70,13 @@ namespace clinic.Test.Repository
 
             _stubDbContext.Setup(c => c.staffs).Returns(stubStaffDbSet.Object);
             _stubDbContext.Setup(c => c.Set<staff>()).Returns(stubStaffDbSet.Object);
-             
+
             var stubPermissionRepo = new PermissionRepository(_stubDbContext.Object);
 
             _stubAccountRepository = new Mock<IAccountRepository>();
+            
 
-            _sut = new StaffRepository(_stubDbContext.Object, stubPermissionRepo,_stubAccountRepository.Object);
+            _sut = new StaffRepository(_stubDbContext.Object, stubPermissionRepo, _stubAccountRepository.Object);
 
             _mockStaffListVM = new List<StaffViewModel>()
             {
@@ -150,7 +151,7 @@ namespace clinic.Test.Repository
         {
             var mockStaff = new staff()
             {
-                
+
                 full_name = "nv4",
                 date_of_birth = new DateTime(1999, 1, 3),
                 phone_number = "1945664870",
@@ -234,10 +235,20 @@ namespace clinic.Test.Repository
 
             _sut.GetStaffList().Should().NotContain(staffVM);
         }
+        [TestMethod]
+        public void DeleteStaff_WithValidId_DeleteAccount()
+        {
+            int id = 1;
+
+            _sut.DeleteStaff(id);
+
+            _stubAccountRepository.Verify(a => a.Delete(id));
+        }
 
         [TestMethod]
         public void InsertStaff_ExistingPhoneNumber_ThrowArgumentException()
         {
+            _stubAccountRepository.Setup(a => a.CheckExistsAcount(It.IsAny<string>())).Returns(true);
             var staffWithDuplicatePhoneNumber = new staff()
             {
                 id = 5,
@@ -259,7 +270,7 @@ namespace clinic.Test.Repository
         {
             var newStaff = new staff()
             {
-                
+
                 full_name = "nv4",
                 date_of_birth = new DateTime(1999, 1, 3),
                 phone_number = "1945664870",
@@ -269,15 +280,42 @@ namespace clinic.Test.Repository
             };
             var newAccount = new account();
             _stubAccountRepository.Setup(a => a.Insert(It.IsAny<account>())).Callback<account>(a => newAccount = a);
-            
-          
-           
+
+
+
 
 
             _sut.InsertStaff(newStaff);
 
-            _stubAccountRepository.Verify(a => a.Insert(newAccount),Times.Once);
+            _stubAccountRepository.Verify(a => a.Insert(newAccount), Times.Once);
             _stubDbContext.Verify(c => c.SaveChanges());
+        }
+        [TestMethod]
+        public void GetStaffsByName_NoneExistsName_ReturnsEmpty()
+        {
+            string noneExistsName = "none";
+
+            var actual = _sut.GetStaffsByName(noneExistsName);
+
+            actual.Should().BeEmpty();
+        }
+        [TestMethod]
+        public void GetStaffsByName_SameName_ReturnsListStaffVM()
+        {
+            string sameName = "nv";
+
+            var actual = _sut.GetStaffsByName(sameName);
+
+            actual.Should().BeEquivalentTo(_mockStaffListVM);
+        }
+        [TestMethod]
+        public void GetStaffsByName_ExistsUniqueName_ReturnsStaffVMExactly()
+        {
+            string name = "nv1";
+
+            var actual = _sut.GetStaffsByName(name);
+
+            actual.Should().BeEquivalentTo(_mockStaffListVM[0]);
         }
     }
 

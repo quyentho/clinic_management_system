@@ -50,6 +50,7 @@ namespace clinic.Views.Forms
                 this.txtPhone.Enabled = false;
                 this.txtSalary.Enabled = false;
                 this.txtDoB.Enabled = false;
+                cbPermission.Enabled = false;
 
                 this.btnOK.Text = "Xoá";
 
@@ -128,6 +129,18 @@ namespace clinic.Views.Forms
             }
             errorProvider.SetError(txtPhone, _errMessage);
         }
+        private void txtDoB_Validating(object sender, CancelEventArgs e)
+        {
+            if (_presenter.ValidateStringInput(txtDoB.Text, out _errMessage))
+            {
+                e.Cancel = false;
+            }
+            else
+            {
+                e.Cancel = true;
+            }
+            errorProvider.SetError(txtDoB, _errMessage);
+        }
         #endregion
 
         private void FormStaff_FormClosed(object sender, FormClosedEventArgs e)
@@ -135,5 +148,7 @@ namespace clinic.Views.Forms
             this.Dispose();
             UpdateDataGridViewEventHandler?.Invoke(this, null);
         }
+
+        
     }
 }

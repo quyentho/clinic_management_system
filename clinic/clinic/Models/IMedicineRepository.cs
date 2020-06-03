@@ -14,5 +14,6 @@ namespace clinic.Models
         void InsertMedicine(medicine medicine);
         void DeleteMedicine(int id);
         void UpdateMedicine(medicine medicine);
+        void MinusQuantity(int medicineId, int quantity);
     }
 }

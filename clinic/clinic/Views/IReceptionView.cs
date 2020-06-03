@@ -9,6 +9,10 @@ namespace clinic.Views
     public interface IReceptionView
     {
         string TxtSearch { get; set; }
-        int IdSelected { get; set; }
+        int PatientIdSelected { get; set; }
+        
+        object DgvReceptionDataSource { get; set; }
+        string CbSearchValue { get; }
+        ReceptionFunctionalityEnum Functionality { get;set; }
     }
 }

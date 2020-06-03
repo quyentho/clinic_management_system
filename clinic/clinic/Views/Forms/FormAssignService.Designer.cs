@@ -52,6 +52,7 @@
             this.btnOk.TabIndex = 8;
             this.btnOk.Text = "Xong";
             this.btnOk.UseVisualStyleBackColor = true;
+            this.btnOk.Click += new System.EventHandler(this.btnOk_Click);
             // 
             // btnChoose
             // 
@@ -61,6 +62,7 @@
             this.btnChoose.TabIndex = 7;
             this.btnChoose.Text = "Chọn";
             this.btnChoose.UseVisualStyleBackColor = true;
+            this.btnChoose.Click += new System.EventHandler(this.btnChoose_Click);
             // 
             // dgvService
             // 
@@ -78,6 +80,7 @@
             this.dgvService.RowTemplate.Height = 25;
             this.dgvService.Size = new System.Drawing.Size(365, 230);
             this.dgvService.TabIndex = 6;
+            this.dgvService.CellEnter += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvService_CellEnter);
             // 
             // btnRemove
             // 
@@ -85,11 +88,13 @@
             this.btnRemove.Name = "btnRemove";
             this.btnRemove.Size = new System.Drawing.Size(119, 52);
             this.btnRemove.TabIndex = 10;
-            this.btnRemove.Text = "Xoá";
+            this.btnRemove.Text = "Loại bỏ";
             this.btnRemove.UseVisualStyleBackColor = true;
+            this.btnRemove.Click += new System.EventHandler(this.btnRemove_Click);
             // 
             // dgvServicesSelected
             // 
+            this.dgvServicesSelected.AllowUserToAddRows = false;
             dataGridViewCellStyle8.BackColor = System.Drawing.Color.NavajoWhite;
             this.dgvServicesSelected.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle8;
             this.dgvServicesSelected.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
@@ -112,6 +117,9 @@
             this.dgvServicesSelected.RowsDefaultCellStyle = dataGridViewCellStyle10;
             this.dgvServicesSelected.Size = new System.Drawing.Size(282, 288);
             this.dgvServicesSelected.TabIndex = 11;
+            this.dgvServicesSelected.CellEnter += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvServicesSelected_CellEnter);
+            this.dgvServicesSelected.RowsAdded += new System.Windows.Forms.DataGridViewRowsAddedEventHandler(this.dgvServicesSelected_RowsAdded);
+            this.dgvServicesSelected.RowsRemoved += new System.Windows.Forms.DataGridViewRowsRemovedEventHandler(this.dgvServicesSelected_RowsRemoved);
             // 
             // columnName
             // 

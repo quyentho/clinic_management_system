@@ -98,7 +98,7 @@
             this.txtAge.Name = "txtAge";
             this.txtAge.Size = new System.Drawing.Size(214, 20);
             this.txtAge.TabIndex = 1;
-            this.txtAge.Validated += new System.EventHandler(this.txtAge_Validated);
+            this.txtAge.Validating += new System.ComponentModel.CancelEventHandler(this.txtAge_Validating);
             // 
             // label2
             // 
@@ -125,6 +125,7 @@
             this.txtPhone.Name = "txtPhone";
             this.txtPhone.Size = new System.Drawing.Size(214, 20);
             this.txtPhone.TabIndex = 1;
+            this.txtPhone.Validating += new System.ComponentModel.CancelEventHandler(this.txtPhone_Validating);
             // 
             // label5
             // 
@@ -151,7 +152,7 @@
             this.txtName.Name = "txtName";
             this.txtName.Size = new System.Drawing.Size(214, 20);
             this.txtName.TabIndex = 1;
-            this.txtName.Validated += new System.EventHandler(this.txtName_Validated);
+            this.txtName.Validating += new System.ComponentModel.CancelEventHandler(this.txtName_Validating);
             // 
             // label1
             // 

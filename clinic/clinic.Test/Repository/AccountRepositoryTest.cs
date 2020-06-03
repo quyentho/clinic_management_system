@@ -175,12 +175,11 @@ namespace clinic.Test.Repository
         [TestMethod]
         public void Delete_ExistsId_DeleteInDatabaseSuccessfully()
         {
-            int id = 1;
+            int staffId = 2;
 
-            _sut.Delete(id);
+            _sut.Delete(staffId);
 
-            var accFromDb = _stubDbContext.Object.accounts.FirstOrDefault(a => a.id == id);
-            _stubDbContext.Verify(c => c.accounts.Remove(accFromDb), Times.Once);
+            _stubDbContext.Verify(c => c.accounts.Remove(_stubAccountList[1]), Times.Once);
             _stubDbContext.Verify(c => c.SaveChanges());
         }
 
@@ -193,6 +192,25 @@ namespace clinic.Test.Repository
 
             act.Should().Throw<ArgumentOutOfRangeException>();
         }
+        [TestMethod]
+        public void CheckExistsAccount_ExistingPhoneNumber_ReturnsTrue()
+        {
+            string existsPhone = "0945664870";
+
+            bool actual = _sut.CheckExistsAcount(existsPhone);
+
+            actual.Should().BeTrue();
+        }
+        [TestMethod]
+        public void CheckExistsAccount_NoneExistsPhoneNumber_ReturnsFalse()
+        {
+            string existsPhone = "0945664820";
+
+            bool actual = _sut.CheckExistsAcount(existsPhone);
+
+            actual.Should().BeFalse();
+        }
+
 
     }
 }

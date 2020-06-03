@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Data.Entity;
 using System.Data.Entity.Migrations;
 using System.Linq;
@@ -69,6 +70,16 @@ namespace clinic.Models.Repositories
                 _clinicEntities.AddOrUpdateEntity<medicine>(_clinicEntities, medicineChanged);
                 Save();
             }
+        }
+        public void MinusQuantity(int medicineId, int quantity)
+        {
+            var medicine = GetMedicineById(medicineId);
+            if (medicine.quantity_in_sale_unit - quantity < 0)
+                throw new ArgumentOutOfRangeException("quantity", "Đã hết thuốc trong kho");
+
+            medicine.quantity_in_sale_unit -= quantity;
+
+            UpdateMedicine(medicine);
         }
     }
 }

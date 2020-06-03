@@ -21,8 +21,10 @@ namespace clinic
         {     
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-           
-            Application.Run(new AdminForm());
+
+            clinicEntities clinicEntities = new clinicEntities();
+
+            Application.Run(new ReceptionForm());
         }
     }
 }

@@ -7,7 +7,6 @@ namespace clinic.Models.Repositories
     public class AccountRepository: IAccountRepository
     {
         private clinicEntities _clinicEntities;
-       
         public AccountRepository(clinicEntities clinicEntities)
         {
             _clinicEntities = clinicEntities;
@@ -18,26 +17,23 @@ namespace clinic.Models.Repositories
                                                  && a.pass == password
                                                  && a.is_active == true).FirstOrDefault();
         }
-        public void Delete(int id)
+        public void Delete(int staffId)
         {
-            var accountFromDb = _clinicEntities.accounts.FirstOrDefault(a => a.id == id);
+            var accountFromDb = _clinicEntities.accounts.FirstOrDefault(a => a.staff_id == staffId);
             if (accountFromDb == null)
                 throw new ArgumentOutOfRangeException();
             _clinicEntities.accounts.Remove(accountFromDb);
             Save();
         }
-
         public void Insert(account newAccount)
         {
             _clinicEntities.accounts.Add(newAccount);            
             Save();
         }
-
         private void Save()
         {
             _clinicEntities.SaveChanges();
         }
-
         public void Update(account account)
         {
             var accountFromDb = _clinicEntities.accounts.Find(account.id);
@@ -46,6 +42,16 @@ namespace clinic.Models.Repositories
                 _clinicEntities.AddOrUpdateEntity<account>(_clinicEntities, account);
                 Save();
             }
+        }
+        public bool CheckExistsAcount(string phoneNumber)
+        {
+            return _clinicEntities.accounts.Any(a => a.username == phoneNumber);
+        }
+
+        public account GetAccountByStaffId(int staffId)
+        {
+            return _clinicEntities.accounts.Where(a => a.staff_id == staffId)
+                     .Where(a => a.is_active == true).FirstOrDefault();
         }
     }
 }

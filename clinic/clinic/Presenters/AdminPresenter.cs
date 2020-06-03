@@ -19,13 +19,16 @@ namespace clinic.Presenters
         private readonly IMedicineRepository _medicineRepository;
         private readonly IStaffRepository _staffRepository;
         private readonly IServiceRepository _serviceRepository;
+        private readonly IBillRepository _billRepository;
         public AdminPresenter(IAdminView view,IMedicineRepository medicineRepository
-            ,IStaffRepository staffRepository,IServiceRepository serviceRepository)
+            ,IStaffRepository staffRepository,IServiceRepository serviceRepository
+            ,IBillRepository billRepository)
         {
             _view = view;
             _medicineRepository = medicineRepository;
             _staffRepository = staffRepository;
             _serviceRepository = serviceRepository;
+            _billRepository = billRepository;
         }
         public void DisplayStaffs()
         {
@@ -57,6 +60,30 @@ namespace clinic.Presenters
         public void SearchMedicines()
         {
             _view.AdminDataGridView.DataSource = _medicineRepository.GetMedicinesByName(_view.TxtTimKiem);
+        }
+
+        public void DisplayRevenue()
+        {
+            _view.AdminDataGridView.DataSource = null;
+            var listRevenue = new List<RevenueViewModel>();
+
+            if (_view.RbDate == true)
+                listRevenue.Add(_billRepository.GetRevenueByDate(_view.DtpRevenue));
+            else if (_view.RbMonth == true)
+                   listRevenue.Add(_billRepository.GetRevenueByMonth(_view.DtpRevenue));
+            else if (_view.RbYear == true)
+                listRevenue.Add(_billRepository.GetRevenueByYear(_view.DtpRevenue));
+
+            _view.AdminDataGridView.DataSource = listRevenue;
+        }
+        public void SearchStaffs()
+        {
+            _staffRepository.GetStaffsByName(_view.TxtTimKiem);
+        }
+
+        public void SearchServices()
+        {
+            _serviceRepository.GetServicesByName(_view.TxtTimKiem);
         }
     }
 }

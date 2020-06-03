@@ -45,7 +45,6 @@ namespace clinic.Test.Repository
 
             _sut = new ServiceRepository(_stubDbContext.Object);
         }
-
         [TestMethod]
         public void GetServiceList_WhenCalled_ReturnsServiceList()
         {
@@ -172,6 +171,24 @@ namespace clinic.Test.Repository
             var database = privateObject.Invoke("GetServiceList");
 
             database.Should().NotBeNull();
+        }
+        [TestMethod]
+        public void GetServicesByName_NoneExistsServiceName_ReturnEmpty()
+        {
+            string noneExistsName = "none";
+
+            var actual = _sut.GetServicesByName(noneExistsName);
+
+            actual.Should().BeEmpty();
+        }
+        [TestMethod]
+        public void GetServicesByName_ExistsServiceName_ReturnListService()
+        {
+            var existsName = "Thu mau";
+
+            var actual = _sut.GetServicesByName(existsName);
+
+            actual.Should().BeEquivalentTo(_stubServiceList[0]);
         }
         private void SetupDbSetForUsingFindMethod()
         {

@@ -89,6 +89,7 @@
     <Compile Include="Repository\PatientRepositoryTest.cs" />
     <Compile Include="Repository\PermissionRepositoryTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Repository\PrescriptionRepositoryTest.cs" />
     <Compile Include="Repository\ServiceRepositoryTest.cs" />
     <Compile Include="Repository\StaffRepositoryTest.cs" />
   </ItemGroup>

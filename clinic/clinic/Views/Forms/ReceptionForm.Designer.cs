@@ -34,7 +34,7 @@
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
             this.btnPay = new System.Windows.Forms.Button();
             this.btnAssignService = new System.Windows.Forms.Button();
-            this.btnAdd = new System.Windows.Forms.Button();
+            this.btnAddPatient = new System.Windows.Forms.Button();
             this.panel1 = new System.Windows.Forms.Panel();
             this.dgvReception = new System.Windows.Forms.DataGridView();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
@@ -45,6 +45,7 @@
             this.txtSearch = new System.Windows.Forms.TextBox();
             this.btnSearch = new System.Windows.Forms.Button();
             this.cbSearch = new System.Windows.Forms.ComboBox();
+            this.btnPersonality = new System.Windows.Forms.Button();
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvReception)).BeginInit();
             this.tableLayoutPanel1.SuspendLayout();
@@ -62,6 +63,7 @@
             this.btnPay.TabIndex = 13;
             this.btnPay.Text = "Thanh Toán";
             this.btnPay.UseVisualStyleBackColor = false;
+            this.btnPay.Click += new System.EventHandler(this.btnPay_Click);
             // 
             // btnAssignService
             // 
@@ -74,15 +76,15 @@
             this.btnAssignService.UseVisualStyleBackColor = true;
             this.btnAssignService.Click += new System.EventHandler(this.btnAssignService_Click);
             // 
-            // btnAdd
+            // btnAddPatient
             // 
-            this.btnAdd.Location = new System.Drawing.Point(180, 452);
-            this.btnAdd.Name = "btnAdd";
-            this.btnAdd.Size = new System.Drawing.Size(128, 50);
-            this.btnAdd.TabIndex = 11;
-            this.btnAdd.Text = "Tạo Bệnh";
-            this.btnAdd.UseVisualStyleBackColor = true;
-            this.btnAdd.Click += new System.EventHandler(this.btnAdd_Click);
+            this.btnAddPatient.Location = new System.Drawing.Point(180, 452);
+            this.btnAddPatient.Name = "btnAddPatient";
+            this.btnAddPatient.Size = new System.Drawing.Size(128, 50);
+            this.btnAddPatient.TabIndex = 11;
+            this.btnAddPatient.Text = "Tạo Bệnh Nhân Mới";
+            this.btnAddPatient.UseVisualStyleBackColor = true;
+            this.btnAddPatient.Click += new System.EventHandler(this.btnAdd_Click);
             // 
             // panel1
             // 
@@ -185,19 +187,20 @@
             this.btnBills.Name = "btnBills";
             this.btnBills.Size = new System.Drawing.Size(227, 32);
             this.btnBills.TabIndex = 2;
-            this.btnBills.Text = "XUẤT HOÁ ĐƠN";
+            this.btnBills.Text = "DANH SÁCH HOÁ ĐƠN";
             this.btnBills.UseVisualStyleBackColor = false;
             this.btnBills.Click += new System.EventHandler(this.btnBills_Click);
             // 
             // btnAddPrescription
             // 
             this.btnAddPrescription.Enabled = false;
-            this.btnAddPrescription.Location = new System.Drawing.Point(448, 453);
+            this.btnAddPrescription.Location = new System.Drawing.Point(449, 453);
             this.btnAddPrescription.Name = "btnAddPrescription";
             this.btnAddPrescription.Size = new System.Drawing.Size(128, 50);
             this.btnAddPrescription.TabIndex = 14;
             this.btnAddPrescription.Text = "Tạo Toa Thuốc";
             this.btnAddPrescription.UseVisualStyleBackColor = true;
+            this.btnAddPrescription.Click += new System.EventHandler(this.btnAddPrescription_Click);
             // 
             // txtSearch
             // 
@@ -230,18 +233,32 @@
             this.cbSearch.Size = new System.Drawing.Size(63, 24);
             this.cbSearch.TabIndex = 17;
             // 
+            // btnPersonality
+            // 
+            this.btnPersonality.BackColor = System.Drawing.Color.HotPink;
+            this.btnPersonality.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnPersonality.ForeColor = System.Drawing.Color.Black;
+            this.btnPersonality.Location = new System.Drawing.Point(26, 453);
+            this.btnPersonality.Name = "btnPersonality";
+            this.btnPersonality.Size = new System.Drawing.Size(128, 50);
+            this.btnPersonality.TabIndex = 18;
+            this.btnPersonality.Text = "Cá Nhân";
+            this.btnPersonality.UseVisualStyleBackColor = false;
+            this.btnPersonality.Click += new System.EventHandler(this.btnPersonality_Click);
+            // 
             // ReceptionForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(779, 515);
+            this.Controls.Add(this.btnPersonality);
             this.Controls.Add(this.cbSearch);
             this.Controls.Add(this.btnSearch);
             this.Controls.Add(this.txtSearch);
             this.Controls.Add(this.btnAddPrescription);
             this.Controls.Add(this.btnPay);
             this.Controls.Add(this.btnAssignService);
-            this.Controls.Add(this.btnAdd);
+            this.Controls.Add(this.btnAddPatient);
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.tableLayoutPanel1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.Fixed3D;
@@ -262,7 +279,7 @@
 
         private System.Windows.Forms.Button btnPay;
         private System.Windows.Forms.Button btnAssignService;
-        private System.Windows.Forms.Button btnAdd;
+        private System.Windows.Forms.Button btnAddPatient;
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.DataGridView dgvReception;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
@@ -273,5 +290,6 @@
         private System.Windows.Forms.TextBox txtSearch;
         private System.Windows.Forms.Button btnSearch;
         private System.Windows.Forms.ComboBox cbSearch;
+        private System.Windows.Forms.Button btnPersonality;
     }
 }

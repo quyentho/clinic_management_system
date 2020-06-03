@@ -98,6 +98,7 @@
             this.txtDoB.Name = "txtDoB";
             this.txtDoB.Size = new System.Drawing.Size(214, 20);
             this.txtDoB.TabIndex = 1;
+            this.txtDoB.Validating += new System.ComponentModel.CancelEventHandler(this.txtDoB_Validating);
             // 
             // label1
             // 

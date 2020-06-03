@@ -225,8 +225,6 @@ namespace clinic.Test.Repository
             Action act = () => _sut.InsertPatient(patient);
 
             act.Should().Throw<ArgumentException>();
-
-
         }
     }
 }

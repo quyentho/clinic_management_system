@@ -25,22 +25,27 @@ namespace clinic.Test.Repository
         [TestInitialize]
         public void Test_Initialize()
         {
+            MockDateTime();
+            var stubPatientList = new List<patient>()
+            {
+                new patient(){ id=1, patient_name = "bn1", age= 10, gender = "nam", phone_number = "0123456789"},
+                new patient(){ id=2, patient_name = "bn2", age= 40, gender = "nu", phone_number = "0123452789"},
+                new patient(){ id=3, patient_name = "bn3", age= 35, gender = "nam", phone_number = "0123656789"},
+                new patient(){ id=4, patient_name = "bn1", age= 10, gender = "nam", phone_number = "0223456789"}
+            };
 
-            _timeMock = new Mock<TimeProvider>();
-            _timeMock.SetupGet(tp => tp.UtcNow).Returns(new DateTime(2020, 5, 27));
-            TimeProvider.Current = _timeMock.Object;
             _stubBillList = new List<bill>()
             {
                 new bill(){ id = 1 , is_paid = false, patient_id = 1, staff_created = 1
-                , created_at= _timeMock.Object.UtcNow, total_money =100000},
+                , created_at= _timeMock.Object.UtcNow, total_money =100000, patient = stubPatientList[0]},
                  new bill(){ id = 2 , is_paid = false, patient_id = 2, staff_created = 1
-                , created_at= _timeMock.Object.UtcNow, total_money =250000},
+                , created_at= _timeMock.Object.UtcNow, total_money =250000,patient = stubPatientList[1]},
                   new bill(){ id = 3 , is_paid = false, patient_id = 3, staff_created = 1
-                , created_at= _timeMock.Object.UtcNow, total_money =500000},
+                , created_at= _timeMock.Object.UtcNow, total_money =500000, patient = stubPatientList[2]},
                    new bill(){ id = 4 , is_paid = true, patient_id = 1, staff_created = 1
-                , created_at= _timeMock.Object.UtcNow, total_money =300000},
+                , created_at= _timeMock.Object.UtcNow, total_money =300000, patient = stubPatientList[3]},
             };
-
+       
             _stubDbSet = new Mock<DbSet<bill>>();
             _stubDbSet.As<IQueryable>().Setup(b => b.ElementType).Returns(_stubBillList.AsQueryable().ElementType);
             _stubDbSet.As<IQueryable>().Setup(b => b.Expression).Returns(_stubBillList.AsQueryable().Expression);
@@ -55,8 +60,15 @@ namespace clinic.Test.Repository
             // The following line bypasses the Include call.
             _stubDbSet.Setup(m => m.Include(It.IsAny<String>())).Returns(_stubDbSet.Object);
 
-           
+
             _sut = new BillRepository(_stubDbContext.Object);
+        }
+
+        private void MockDateTime()
+        {
+            _timeMock = new Mock<TimeProvider>();
+            _timeMock.SetupGet(tp => tp.UtcNow).Returns(new DateTime(2020, 5, 27));
+            TimeProvider.Current = _timeMock.Object;
         }
 
         [TestCleanup]
@@ -67,7 +79,7 @@ namespace clinic.Test.Repository
         [TestMethod]
         public void GetListUnpaidBill_WhenCalled_ReturnsListUnpaidBill()
         {
-            var actual = _sut.GetListBillUnpaid();
+            var actual = _sut.GetListUnpaidBill();
 
             actual.Should().BeEquivalentTo(_stubBillList.GetRange(0,3));
         }
@@ -93,7 +105,7 @@ namespace clinic.Test.Repository
 
             _sut.CreateBill(newBill);
 
-            _sut.GetListBillUnpaid().Should().Contain(newBill);
+            _sut.GetListUnpaidBill().Should().Contain(newBill);
         }
         [TestMethod]
         public void CreateBill_WithValidBill_AddNewBillToDatabase()
@@ -148,7 +160,7 @@ namespace clinic.Test.Repository
 
             _sut.PayBill(id);
 
-            _sut.GetListBillUnpaid().Should().NotContain(_stubBillList[0]);
+            _sut.GetListUnpaidBill().Should().NotContain(_stubBillList[0]);
         }
         [TestMethod]
         public void PayBill_ValidBillId_AddBillToPaidList()
@@ -218,6 +230,33 @@ namespace clinic.Test.Repository
             Int64 result = _sut.CalculateRevenueByDate(dateTest);
 
             result.Should().Be(0);
+        }
+        [TestMethod]
+        public void GetRevenueByDate_ValidDateTime_ReturnDatePropertyInCorrectFormatForDate()
+        {
+            DateTime dateTest = new DateTime(2020, 4, 1);
+
+            RevenueViewModel dateTimeVM = _sut.GetRevenueByDate(dateTest);
+
+            dateTimeVM.Date.Should().Be("01/04/2020");
+        }
+        [TestMethod]
+        public void GetRevenueByMonth_ValidDateTime_ReturnDatePropertyInCorrectFormatForMonth()
+        {
+            DateTime dateTest = new DateTime(2020, 4, 1);
+
+            RevenueViewModel dateTimeVM = _sut.GetRevenueByMonth(dateTest);
+
+            dateTimeVM.Date.Should().Be("04/2020");
+        }
+        [TestMethod]
+        public void GetRevenueByYear_ValidDateTime_ReturnDatePropertyInCorrectFormatForYear()
+        {
+            DateTime dateTest = new DateTime(2020, 4, 1);
+
+            RevenueViewModel dateTimeVM = _sut.GetRevenueByYear(dateTest);
+
+            dateTimeVM.Date.Should().Be("2020");
         }
         [TestMethod]
         public void CalculateRevenueByYear_ExistsBillInThatYear_ReturnsRevenueByYear()
@@ -354,7 +393,8 @@ namespace clinic.Test.Repository
         public void AddServiceToBill_ExistsBillIdAndValidService_NotThrowsException()
         {
             clinic_service validService =
-                new clinic_service() { id = 1, service_name = "Thu mau", price = 50000, is_active = true }; 
+                new clinic_service() { id = 1, service_name = "Thu mau", price = 50000, is_active = true };
+            _stubDbContext.Setup(c => c.clinic_service.Attach(validService));
 
             int NoneExistsBillId = 1;
 
@@ -363,18 +403,20 @@ namespace clinic.Test.Repository
             act.Should().NotThrow();
         }
         
-        [TestMethod]
-        public void AddServiceToBill_ExistsBillIdAndValidService_AddToUnpaidListSuccessfully()
-        {
-            clinic_service validService =
-              new clinic_service() { id = 1, service_name = "Thu mau", price = 50000, is_active = true };
-            int existsBillId = 1;
+        //[TestMethod]
+        //public void AddServiceToBill_ExistsBillIdAndValidService_AddToUnpaidListSuccessfully()
+        //{
+        //    clinic_service validService =
+        //      new clinic_service() { id = 1, service_name = "Thu mau", price = 50000, is_active = true };
+        //    _stubDbContext.Setup(c => c.clinic_service.Attach(validService));
+
+        //    int existsBillId = 1;
 
 
-            _sut.AddServiceToBill(existsBillId, validService);
+        //    _sut.AddServiceToBill(existsBillId, validService);
 
-            _sut.GetListBillUnpaid()[0].clinic_service.Should().Contain(validService);
-        }
+        //    _sut.GetListUnpaidBill()[0].clinic_service.Should().Contain(validService);
+        //}
         [TestMethod]
         public void AddPrescriptionToBill_NoneExistsBillId_ThrowArgumentOutOfRangeException()
         {
@@ -403,7 +445,7 @@ namespace clinic.Test.Repository
 
             _sut.AddPrescriptionToBill(existsBillId, validPrescription);
 
-            _sut.GetListBillUnpaid()[0].prescriptions.Should().Contain(validPrescription);
+            _sut.GetListUnpaidBill()[0].prescriptions.Should().Contain(validPrescription);
         }
         [TestMethod]
         public void AddPrescriptionToBill_ExistsBillIdAndValidPrescription_NotThrowsException()
@@ -411,6 +453,7 @@ namespace clinic.Test.Repository
             clinic_service validPrescription =
                 new clinic_service() { id = 1, service_name = "Thu mau", price = 50000, is_active = true };
 
+            _stubDbContext.Setup(c => c.clinic_service.Attach(It.IsAny<clinic_service>()));
             int NoneExistsBillId = 1;
 
             Action act = () => _sut.AddServiceToBill(NoneExistsBillId, validPrescription);
@@ -422,9 +465,63 @@ namespace clinic.Test.Repository
         {
             SetupListMedicineAndServiceForBill1();
 
-            var result = _sut.CalculateTotalMoney(1);
+            _sut.CalculateTotalMoneyInBill(1);
 
-            result.Should().Be(175_000);
+            _stubBillList[0].total_money.Should().Be(175_000);
+        }
+        [TestMethod]
+        public void GetUnpaidBillByPatientId_NoneExistsPatientId_ReturnsNull()
+        {
+            int patientId = -1;
+
+            bill actual = _sut.GetUnpaidBillByPatientId(patientId);
+
+            actual.Should().BeNull();
+        }
+        [TestMethod]
+        public void GetUnpaidBillByPatientId_ExistingPatientId_ReturnsBillExactly()
+        {
+            int patientId = 2;
+
+            var actual = _sut.GetUnpaidBillByPatientId(patientId);
+
+            actual.Should().BeEquivalentTo(_stubBillList[1]);
+        }
+        [TestMethod]
+        public void GetUnpaidBillByPhoneNumber_ExistingPhoneNumber_ReturnsUnpaidBill()
+        {
+            string ExistingPhoneNumber = "0123456789";
+
+            var actual = _sut.GetUnpaidBillByPhoneNumber(ExistingPhoneNumber);
+
+            actual.Should().BeEquivalentTo(_stubBillList[0]);
+        }
+        [TestMethod]
+        public void GetBillByPhoneNumber_NoneExistsPhoneNumber_ReturnsNull()
+        {
+            string NoneExistsPhoneNumber = "00000000000";
+
+            var actual = _sut.GetUnpaidBillByPhoneNumber(NoneExistsPhoneNumber);
+
+            actual.Should().BeNull();
+        }
+        [TestMethod]
+        public void GetBillsByPatientName_NoneExistsPatientName_ReturnsEmpty()
+        {
+            string noneExistsPatientName = "none";
+
+            var actual = _sut.GetUnpaidBillsByPatientName(noneExistsPatientName);
+
+            actual.Should().BeEmpty();
+        }
+        [TestMethod]
+        public void GetBillsByPatientName_ExistingPatientName_ReturnsBillExactly()
+        {
+            string existingPatientName = "bn3";
+
+            var actual = _sut.GetUnpaidBillsByPatientName(existingPatientName);
+
+            actual.Should().BeEquivalentTo(_stubBillList[2]);
         }
         private void SetupListMedicineAndServiceForBill1()
         {
@@ -462,7 +559,6 @@ namespace clinic.Test.Repository
 
             _stubBillList[0].clinic_service = listService;
             _stubBillList[0].prescriptions = listPrescription;
-
         }
         private void SetupDbSetForUsingFindMethod()
         {
@@ -540,5 +636,6 @@ namespace clinic.Test.Repository
 
             _sut = new BillRepository(_stubDbContext.Object);
         }
+            
     }
 }

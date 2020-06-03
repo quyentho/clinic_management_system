@@ -1,10 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.Entity;
-using System.Data.Entity.Migrations;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace clinic.Models.Repositories
 {
@@ -23,8 +20,17 @@ namespace clinic.Models.Repositories
             _accountRepository = accountRepository;
 
         }
+        public void ChangeAccountPassword(int staffId,string newPassword)
+        {
+            var staff = FindStaffFromDb(staffId);
+            var accountUpdated = _accountRepository.GetAccountByStaffId(staffId);
+            if(accountUpdated != null)
+            {
+                accountUpdated.pass = newPassword;
+                _accountRepository.Update(accountUpdated);
+            }
 
-
+        }
         public void DeleteStaff(int id)
         {
             var staffFromDb = _clinicEntities.staffs.Find(id);
@@ -33,6 +39,7 @@ namespace clinic.Models.Repositories
                 _staffViewModelList.Remove(GetStaffById(id));
                 _clinicEntities.staffs.Remove(staffFromDb);
                 Save();
+                _accountRepository.Delete(id);
             }
         }
 
@@ -42,9 +49,9 @@ namespace clinic.Models.Repositories
             return staff;
         }
 
-        public List<staff> GetStaffsByName(string staffName)
+        public List<StaffViewModel> GetStaffsByName(string staffName)
         {
-            throw new NotImplementedException();
+            return _staffViewModelList.Where(s => s.FullName.Contains(staffName)).ToList();
         }
 
         private List<StaffViewModel> GetStaffsFromDatabase()
@@ -69,14 +76,14 @@ namespace clinic.Models.Repositories
 
         public void InsertStaff(staff newStaff)
        {
-            if (_staffViewModelList.Any(s => s.PhoneNumber == newStaff.phone_number))
+            if (_accountRepository.CheckExistsAcount(newStaff.phone_number))
             {
                 throw new ArgumentException();
             }
             InsertToList(newStaff);
             _clinicEntities.staffs.Add(newStaff);
-            CreateNewAccount(newStaff);
             Save();
+            CreateNewAccount(newStaff);
         }
 
         private void CreateNewAccount(staff newStaff)
@@ -86,7 +93,7 @@ namespace clinic.Models.Repositories
                 is_active = true,
                 pass = "1",
                 permission_id = newStaff.permission_id,
-                staff_id = _staffViewModelList.FindLastIndex(s => s.PhoneNumber == newStaff.phone_number) + 1,
+                staff_id = newStaff.id,
                 username = newStaff.phone_number
             };
             _accountRepository.Insert(newAccount);
@@ -101,11 +108,13 @@ namespace clinic.Models.Repositories
         {
             _clinicEntities.SaveChanges();
         }
-
+        public staff FindStaffFromDb(int id)
+        {
+          return _clinicEntities.staffs.Find(id);
+        }
         public void UpdateStaff(staff staffUpdated)
         {
-
-            var staffFromDb = _clinicEntities.staffs.Find(staffUpdated.id);
+            var staffFromDb = FindStaffFromDb(staffUpdated.id);
             if (staffFromDb != null)
             {
                 _clinicEntities.AddOrUpdateEntity<staff>(_clinicEntities, staffUpdated);

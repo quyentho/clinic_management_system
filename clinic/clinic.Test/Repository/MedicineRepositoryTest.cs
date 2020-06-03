@@ -17,13 +17,13 @@ namespace clinic.Test.Repository
     public class MedicineRepositoryTest
     {
         private readonly Mock<clinicEntities> _stubContext;
-        private IQueryable<medicine> _fakeMedicineList;
+        private List<medicine> _stubMedicineList;
         private readonly MedicineRepository _sut;
         public MedicineRepositoryTest()
         {
             string[] dateTimeFormats = {"d/M/yyyy","dd/M/yyyy","d/MM/yyyy","dd/MM/yyyy", "d-M-yyyy", "dd-M-yyyy"
                                             , "d-MM-yyyy","dd-MM-yyyy" };
-            _fakeMedicineList = new List<medicine>{
+            _stubMedicineList = new List<medicine>{
                 new medicine{ id = 1, medicine_name="thuoc 1", entry_unit = "Hop",
                     entry_price = 20000, expiry_day = DateTime.ParseExact("20-10-2020",dateTimeFormats,CultureInfo.InvariantCulture,DateTimeStyles.None),
                     quantity_in_entry_unit = 100, unit_exchange_ratio = 100, quantity_in_sale_unit = 100*100,
@@ -36,17 +36,17 @@ namespace clinic.Test.Repository
                     entry_price = 50000, expiry_day = DateTime.ParseExact("20-11-2021",dateTimeFormats,CultureInfo.InvariantCulture,DateTimeStyles.None),
                     quantity_in_entry_unit = 100, unit_exchange_ratio = 50, quantity_in_sale_unit = 50*100,
                     entry_day = DateTime.Now, sale_unit = "Vien", sale_price_per_unit = 500, is_active = true}
-            }.AsQueryable();
+            };
 
             var stubDbSet = new Mock<DbSet<medicine>>();
-            stubDbSet.As<IQueryable<medicine>>().Setup(m => m.Provider).Returns(_fakeMedicineList.Provider);
-            stubDbSet.As<IQueryable<medicine>>().Setup(m => m.Expression).Returns(_fakeMedicineList.Expression);
-            stubDbSet.As<IQueryable<medicine>>().Setup(m => m.ElementType).Returns(_fakeMedicineList.ElementType);
+            stubDbSet.As<IQueryable<medicine>>().Setup(m => m.Provider).Returns(_stubMedicineList.AsQueryable().Provider);
+            stubDbSet.As<IQueryable<medicine>>().Setup(m => m.Expression).Returns(_stubMedicineList.AsQueryable().Expression);
+            stubDbSet.As<IQueryable<medicine>>().Setup(m => m.ElementType).Returns(_stubMedicineList.AsQueryable().ElementType);
             stubDbSet.As<IQueryable<medicine>>().Setup(m => m.GetEnumerator())
-                .Returns(() => _fakeMedicineList.GetEnumerator());
+                .Returns(() => _stubMedicineList.AsQueryable().GetEnumerator());
 
             stubDbSet.Setup(m => m.Find(It.IsAny<object[]>()))
-                .Returns<object[]>(ids => _fakeMedicineList.FirstOrDefault(d => d.id == (int)ids[0]));
+                .Returns<object[]>(ids => _stubMedicineList.FirstOrDefault(d => d.id == (int)ids[0]));
 
             _stubContext = new Mock<clinicEntities>();
             _stubContext.Setup(c => c.medicines).Returns(stubDbSet.Object);
@@ -59,7 +59,7 @@ namespace clinic.Test.Repository
         {
             var actual = _sut.GetMedicineList();
 
-            CollectionAssert.AreEqual(_fakeMedicineList.ToList(), actual);
+            CollectionAssert.AreEqual(_stubMedicineList.ToList(), actual);
         }
 
         [TestMethod]
@@ -93,7 +93,7 @@ namespace clinic.Test.Repository
             int id = 1;
 
             var actual = _sut.GetMedicineById(id);
-            var expected = _fakeMedicineList.ToList()[0];
+            var expected = _stubMedicineList.ToList()[0];
 
             Assert.AreEqual(expected, actual);
         }
@@ -103,7 +103,7 @@ namespace clinic.Test.Repository
             int id = 2;
 
             var actual = _stubContext.Object.medicines.Find(id);
-            var expected = _fakeMedicineList.ToList()[1];
+            var expected = _stubMedicineList.ToList()[1];
 
             Assert.AreEqual(expected, actual);
         }
@@ -164,7 +164,7 @@ namespace clinic.Test.Repository
 
             _sut.DeleteMedicine(id);
 
-            Assert.IsTrue(!_sut.GetMedicineList().Contains(_fakeMedicineList.ToList()[0]));
+            Assert.IsTrue(!_sut.GetMedicineList().Contains(_stubMedicineList.ToList()[0]));
         }
         [TestMethod]
         public void DeleteMedicine_WithValidId_DeleteMedicineInDatabaseSuccessfully()
@@ -173,7 +173,7 @@ namespace clinic.Test.Repository
 
             _sut.DeleteMedicine(id);
 
-            _stubContext.Verify(c => c.medicines.Remove(_fakeMedicineList.ToList()[0]));
+            _stubContext.Verify(c => c.medicines.Remove(_stubMedicineList.ToList()[0]));
             _stubContext.Verify(c => c.SaveChanges());
         }
 
@@ -182,14 +182,14 @@ namespace clinic.Test.Repository
         {
             List<medicine> actual = _sut.GetMedicinesByName("thuoc");
 
-            actual.Should().BeEquivalentTo(_fakeMedicineList);
+            actual.Should().BeEquivalentTo(_stubMedicineList);
         }
         [TestMethod]
         public void GetMedicinesByName_CognomenName_ReturnsExactMedicine()
         {
             var actual = _sut.GetMedicinesByName("thuoc 2");
 
-            actual.Should().BeEquivalentTo(_fakeMedicineList.ToList()[1]);
+            actual.Should().BeEquivalentTo(_stubMedicineList.ToList()[1]);
         }
         [TestMethod]
         public void GetMedicinesByName_NotExistName_ReturnsEmpty()
@@ -198,5 +198,56 @@ namespace clinic.Test.Repository
 
             actual.Should().BeEmpty();
         }
+        [TestMethod]
+        public void MinusQuantity_MinusNumberGreaterThanInventoryNumber_ThrowArgumentOutOfRangeException()
+        {
+            int minusQuantity = 10000;
+            int medicineId = 3;
+
+            Action act =() => _sut.MinusQuantity(medicineId, minusQuantity);
+
+            act.Should().Throw<ArgumentOutOfRangeException>();
+        }
+        [TestMethod]
+        public void MinusQuantity_MinusNumberEqualsInventoryNumber_NotThrowException()
+        {
+            int minusQuantity = 5000;
+            int medicineId = 3;
+
+            Action act = () => _sut.MinusQuantity(medicineId, minusQuantity);
+
+            act.Should().NotThrow();
+        }
+        [TestMethod]
+        public void MinusQuantity_MinusNumberLessThanInventoryNumber_NotThrowException()
+        {
+            int minusQuantity = 5000;
+            int medicineId = 3;
+
+            Action act = () => _sut.MinusQuantity(medicineId, minusQuantity);
+
+            act.Should().NotThrow();
+        }
+        [TestMethod]
+        public void MinusQuantity_EnoughForMinus_MinusInventoryQuantity()
+        {
+            int minusQuantity = 1000;
+            int medicineId = 3;
+
+            _sut.MinusQuantity(medicineId, minusQuantity);
+
+            _stubMedicineList[2].quantity_in_sale_unit.Should().Be(4000);
+        }
+        [TestMethod]
+        public void MinusQuantity_EnoughForMinus_MinusInventoryQuantityInDatabaseNotThrowException()
+        {
+            int minusQuantity = 1000;
+            int medicineId = 3;
+
+           Action act = () => _sut.MinusQuantity(medicineId, minusQuantity);
+
+            act.Should().NotThrow();
+        }
+
     }
 }

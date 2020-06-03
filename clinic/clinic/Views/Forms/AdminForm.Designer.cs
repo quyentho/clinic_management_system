@@ -44,9 +44,15 @@
             this.dgvAdmin = new System.Windows.Forms.DataGridView();
             this.btnSearch = new System.Windows.Forms.Button();
             this.txtSearch = new System.Windows.Forms.TextBox();
+            this.panel1 = new System.Windows.Forms.Panel();
+            this.dtpRevenue = new System.Windows.Forms.DateTimePicker();
+            this.rbYear = new System.Windows.Forms.RadioButton();
+            this.rbMonth = new System.Windows.Forms.RadioButton();
+            this.rbDate = new System.Windows.Forms.RadioButton();
             this.tableLayoutPanel1.SuspendLayout();
             this.tableLayoutPanel2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvAdmin)).BeginInit();
+            this.panel1.SuspendLayout();
             this.SuspendLayout();
             // 
             // tableLayoutPanel1
@@ -118,6 +124,7 @@
             this.btnRevenue.TabIndex = 1;
             this.btnRevenue.Text = "DOANH THU";
             this.btnRevenue.UseVisualStyleBackColor = false;
+            this.btnRevenue.Click += new System.EventHandler(this.btnRevenue_Click);
             // 
             // btnStaff
             // 
@@ -141,7 +148,7 @@
             this.tableLayoutPanel2.Controls.Add(this.btnDelete, 2, 0);
             this.tableLayoutPanel2.Controls.Add(this.btnEdit, 1, 0);
             this.tableLayoutPanel2.Controls.Add(this.btnAdd, 0, 0);
-            this.tableLayoutPanel2.Location = new System.Drawing.Point(204, 497);
+            this.tableLayoutPanel2.Location = new System.Drawing.Point(222, 497);
             this.tableLayoutPanel2.Name = "tableLayoutPanel2";
             this.tableLayoutPanel2.RightToLeft = System.Windows.Forms.RightToLeft.No;
             this.tableLayoutPanel2.RowCount = 1;
@@ -186,7 +193,6 @@
             // 
             this.dgvAdmin.AllowUserToAddRows = false;
             this.dgvAdmin.AllowUserToDeleteRows = false;
-            this.dgvAdmin.AllowUserToOrderColumns = true;
             dataGridViewCellStyle1.BackColor = System.Drawing.Color.NavajoWhite;
             dataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.Highlight;
             dataGridViewCellStyle1.SelectionForeColor = System.Drawing.Color.White;
@@ -202,20 +208,22 @@
             this.dgvAdmin.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle2;
             this.dgvAdmin.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgvAdmin.EditMode = System.Windows.Forms.DataGridViewEditMode.EditProgrammatically;
-            this.dgvAdmin.Location = new System.Drawing.Point(15, 61);
+            this.dgvAdmin.Location = new System.Drawing.Point(15, 64);
             this.dgvAdmin.Name = "dgvAdmin";
             dataGridViewCellStyle3.SelectionBackColor = System.Drawing.SystemColors.Highlight;
             dataGridViewCellStyle3.SelectionForeColor = System.Drawing.Color.White;
             this.dgvAdmin.RowsDefaultCellStyle = dataGridViewCellStyle3;
             this.dgvAdmin.RowTemplate.Height = 25;
-            this.dgvAdmin.Size = new System.Drawing.Size(922, 372);
+            this.dgvAdmin.Size = new System.Drawing.Size(922, 369);
             this.dgvAdmin.TabIndex = 5;
             this.dgvAdmin.CellEnter += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvAdmin_CellEnter);
+            this.dgvAdmin.RowsAdded += new System.Windows.Forms.DataGridViewRowsAddedEventHandler(this.dgvAdmin_RowsAdded);
+            this.dgvAdmin.RowsRemoved += new System.Windows.Forms.DataGridViewRowsRemovedEventHandler(this.dgvAdmin_RowsRemoved);
             // 
             // btnSearch
             // 
             this.btnSearch.DialogResult = System.Windows.Forms.DialogResult.OK;
-            this.btnSearch.Location = new System.Drawing.Point(549, 451);
+            this.btnSearch.Location = new System.Drawing.Point(597, 449);
             this.btnSearch.Name = "btnSearch";
             this.btnSearch.Size = new System.Drawing.Size(93, 23);
             this.btnSearch.TabIndex = 9;
@@ -225,10 +233,64 @@
             // 
             // txtSearch
             // 
-            this.txtSearch.Location = new System.Drawing.Point(302, 453);
+            this.txtSearch.Location = new System.Drawing.Point(350, 451);
             this.txtSearch.Name = "txtSearch";
             this.txtSearch.Size = new System.Drawing.Size(232, 20);
             this.txtSearch.TabIndex = 8;
+            // 
+            // panel1
+            // 
+            this.panel1.Controls.Add(this.dtpRevenue);
+            this.panel1.Controls.Add(this.rbYear);
+            this.panel1.Controls.Add(this.rbMonth);
+            this.panel1.Controls.Add(this.rbDate);
+            this.panel1.Location = new System.Drawing.Point(12, 435);
+            this.panel1.Name = "panel1";
+            this.panel1.Size = new System.Drawing.Size(204, 106);
+            this.panel1.TabIndex = 10;
+            // 
+            // dtpRevenue
+            // 
+            this.dtpRevenue.Location = new System.Drawing.Point(0, 3);
+            this.dtpRevenue.Name = "dtpRevenue";
+            this.dtpRevenue.Size = new System.Drawing.Size(200, 20);
+            this.dtpRevenue.TabIndex = 3;
+            this.dtpRevenue.ValueChanged += new System.EventHandler(this.dtpRevenue_ValueChanged);
+            // 
+            // rbYear
+            // 
+            this.rbYear.AutoSize = true;
+            this.rbYear.Location = new System.Drawing.Point(15, 75);
+            this.rbYear.Name = "rbYear";
+            this.rbYear.Size = new System.Drawing.Size(75, 17);
+            this.rbYear.TabIndex = 2;
+            this.rbYear.Text = "Theo Năm";
+            this.rbYear.UseVisualStyleBackColor = true;
+            this.rbYear.CheckedChanged += new System.EventHandler(this.rbYear_CheckedChanged);
+            // 
+            // rbMonth
+            // 
+            this.rbMonth.AutoSize = true;
+            this.rbMonth.Location = new System.Drawing.Point(15, 52);
+            this.rbMonth.Name = "rbMonth";
+            this.rbMonth.Size = new System.Drawing.Size(84, 17);
+            this.rbMonth.TabIndex = 1;
+            this.rbMonth.Text = "Theo Tháng";
+            this.rbMonth.UseVisualStyleBackColor = true;
+            this.rbMonth.CheckedChanged += new System.EventHandler(this.rbMonth_CheckedChanged);
+            // 
+            // rbDate
+            // 
+            this.rbDate.AutoSize = true;
+            this.rbDate.Checked = true;
+            this.rbDate.Location = new System.Drawing.Point(15, 29);
+            this.rbDate.Name = "rbDate";
+            this.rbDate.Size = new System.Drawing.Size(78, 17);
+            this.rbDate.TabIndex = 0;
+            this.rbDate.TabStop = true;
+            this.rbDate.Text = "Theo Ngày";
+            this.rbDate.UseVisualStyleBackColor = true;
+            this.rbDate.CheckedChanged += new System.EventHandler(this.rbDate_CheckedChanged);
             // 
             // AdminForm
             // 
@@ -236,6 +298,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(945, 553);
+            this.Controls.Add(this.panel1);
             this.Controls.Add(this.btnSearch);
             this.Controls.Add(this.txtSearch);
             this.Controls.Add(this.dgvAdmin);
@@ -250,6 +313,8 @@
             this.tableLayoutPanel1.ResumeLayout(false);
             this.tableLayoutPanel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dgvAdmin)).EndInit();
+            this.panel1.ResumeLayout(false);
+            this.panel1.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -270,6 +335,11 @@
         private System.Windows.Forms.DataGridView dgvAdmin;
         private System.Windows.Forms.Button btnSearch;
         private System.Windows.Forms.TextBox txtSearch;
+        private System.Windows.Forms.Panel panel1;
+        private System.Windows.Forms.RadioButton rbYear;
+        private System.Windows.Forms.RadioButton rbMonth;
+        private System.Windows.Forms.RadioButton rbDate;
+        private System.Windows.Forms.DateTimePicker dtpRevenue;
     }
 }
 

@@ -73,6 +73,7 @@
       <DependentUpon>Model.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\IAccountRepository.cs" />
+    <Compile Include="Models\IPrescriptionRepository.cs" />
     <Compile Include="Models\medicine.cs">
       <DependentUpon>Model.tt</DependentUpon>
     </Compile>
@@ -103,6 +104,8 @@
     <Compile Include="Models\Repositories\AccountRepository.cs" />
     <Compile Include="Models\Repositories\BillRepository.cs" />
     <Compile Include="Models\IBillRepository.cs" />
+    <Compile Include="Models\Repositories\PrescriptionRepository.cs" />
+    <Compile Include="Models\RevenueViewModel.cs" />
     <Compile Include="Models\staff.cs">
       <DependentUpon>Model.tt</DependentUpon>
     </Compile>
@@ -124,8 +127,11 @@
     <Compile Include="OperationForm.Designer.cs">
       <DependentUpon>OperationForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="Presenters\AssignMedicinePresenter.cs" />
     <Compile Include="Presenters\AssignServicePresenter.cs" />
     <Compile Include="Presenters\PatientPresenter.cs" />
+    <Compile Include="Presenters\PersonalInfoPresenter.cs" />
+    <Compile Include="Presenters\PrescriptionPresenter.cs" />
     <Compile Include="Presenters\Presenter.cs" />
     <Compile Include="Presenters\ReceptionPresenter.cs" />
     <Compile Include="Presenters\StaffPresenter.cs" />
@@ -135,6 +141,18 @@
     </Compile>
     <Compile Include="Views\Forms\AdminForm.Designer.cs">
       <DependentUpon>AdminForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Forms\DoctorForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Views\Forms\DoctorForm.Designer.cs">
+      <DependentUpon>DoctorForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Forms\FormAssignMedicine.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Views\Forms\FormAssignMedicine.Designer.cs">
+      <DependentUpon>FormAssignMedicine.cs</DependentUpon>
     </Compile>
     <Compile Include="Views\Forms\FormAssignService.cs">
       <SubType>Form</SubType>
@@ -153,6 +171,18 @@
     </Compile>
     <Compile Include="Views\Forms\FormPatient.Designer.cs">
       <DependentUpon>FormPatient.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Forms\FormPersonalInfor.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Views\Forms\FormPersonalInfor.Designer.cs">
+      <DependentUpon>FormPersonalInfor.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Forms\FormPrescription.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Views\Forms\FormPrescription.Designer.cs">
+      <DependentUpon>FormPrescription.cs</DependentUpon>
     </Compile>
     <Compile Include="Views\Forms\FormService.cs">
       <SubType>Form</SubType>
@@ -177,18 +207,28 @@
     <Compile Include="Views\Forms\ReceptionForm.Designer.cs">
       <DependentUpon>ReceptionForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="Views\IAssignMedicineView.cs" />
     <Compile Include="Views\IAssignServiceView.cs" />
     <Compile Include="Views\IMedicineView.cs" />
     <Compile Include="Views\IAdminView.cs" />
     <Compile Include="Views\IPatientView.cs" />
+    <Compile Include="Views\IPersonalInfoView.cs" />
+    <Compile Include="Views\IPrescriptionView.cs" />
     <Compile Include="Views\IReceptionView.cs" />
     <Compile Include="Views\IServiceView.cs" />
     <Compile Include="Views\IStaffView.cs" />
+    <Compile Include="ReceptionFunctionalityEnum.cs" />
     <EmbeddedResource Include="OperationForm.resx">
       <DependentUpon>OperationForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Views\Forms\AdminForm.resx">
       <DependentUpon>AdminForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\Forms\DoctorForm.resx">
+      <DependentUpon>DoctorForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\Forms\FormAssignMedicine.resx">
+      <DependentUpon>FormAssignMedicine.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Views\Forms\FormAssignService.resx">
       <DependentUpon>FormAssignService.cs</DependentUpon>
@@ -198,6 +238,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Views\Forms\FormPatient.resx">
       <DependentUpon>FormPatient.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\Forms\FormPersonalInfor.resx">
+      <DependentUpon>FormPersonalInfor.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\Forms\FormPrescription.resx">
+      <DependentUpon>FormPrescription.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Views\Forms\FormService.resx">
       <DependentUpon>FormService.cs</DependentUpon>
@@ -210,6 +256,7 @@
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
     </Compile>
     <EmbeddedResource Include="Views\Forms\FormStaff.resx">
       <DependentUpon>FormStaff.cs</DependentUpon>
@@ -253,6 +300,7 @@
       <DependentUpon>Model.edmx</DependentUpon>
       <LastGenOutput>Model.cs</LastGenOutput>
     </Content>
+    <None Include="Resources\avatar.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

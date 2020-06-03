@@ -37,7 +37,6 @@ namespace clinic.Presenters
                 is_still_working = true
             };
             _repository.InsertStaff(staff);
-        //    _repository.Save();
         }
         private void SetPermissionComboBox()
         {
@@ -46,45 +45,41 @@ namespace clinic.Presenters
             _view.CbPermission.ValueMember = "id";
             _view.CbPermission.Invalidate();
         }
-        //HACK: fix later
         public void Display(int idSelected)
         {
-            //var staffFromDB = _repository.GetStaffById(idSelected);
-            //if (staffFromDB != null)
-            //{
-            //    //Display from db to view
-            //    _view.TxtStaffName = staffFromDB.full_name;
-            //    _view.TxtDoB = staffFromDB.date_of_birdth;
-            //    _view.TxtPhone = staffFromDB.phone_number;
-            //    _view.TxtSalary = staffFromDB.salary.ToString();
-            //    _view.CbPermission_id = staffFromDB.permission_id;
-            //}
+            var staffToDisplay = _repository.GetStaffById(idSelected);
+            if (staffToDisplay != null)
+            {
+                //Display from db to view
+                _view.TxtStaffName = staffToDisplay.FullName;
+                _view.TxtDoB = staffToDisplay.DateOfBirth.ToString("dd/MM/yyyy");
+                _view.TxtPhone = staffToDisplay.PhoneNumber;
+                _view.TxtSalary = staffToDisplay.Salary.ToString();
+                _view.CbPermission.Text = staffToDisplay.PositionName;
+            }
         }
-        //HACK: fix later
         public void Delete(int idSelected)
         {
- 
-            //var staffFromDb = _repository.GetStaffById(idSelected);
-            //if (staffFromDb != null)
-            //{
-            //    _repository.DeleteStaff(staffFromDb);
-            //    _repository.Save();
-            //}
-         }
-        //HACK: fix later
+            _repository.DeleteStaff(idSelected);
+        }
         public void Edit(int idSelected)
         {
 
-            //var staffFromDB = _repository.GetStaffById(idSelected);
-            //if (staffFromDB != null)
-            //{
-            //    staffFromDB.full_name = _view.TxtStaffName;
-            //    staffFromDB.date_of_birdth = _view.TxtDoB;
-            //    staffFromDB.phone_number = _view.TxtPhone;
-            //    staffFromDB.salary = float.Parse(_view.TxtSalary);
-            //    staffFromDB.permission_id = _view.CbPermission_id;
-            //    _repository.Save();
-            //}
+            var staffFromDB = _repository.GetStaffById(idSelected);
+            var staffUpdated = new staff() { is_still_working = true };
+                
+            if (staffFromDB != null)
+            {
+                staffUpdated.id = idSelected;
+                staffUpdated.full_name = _view.TxtStaffName;
+                staffUpdated.date_of_birth = DateTime.ParseExact(_view.TxtDoB, dateTimeFormats
+                                            ,CultureInfo.InvariantCulture, DateTimeStyles.None);
+                staffUpdated.phone_number = _view.TxtPhone;
+                staffUpdated.salary = long.Parse(_view.TxtSalary);
+                staffUpdated.permission_id = _view.CbPermission_id;
+
+                _repository.UpdateStaff(staffUpdated);
+            }
         }
     }
 }

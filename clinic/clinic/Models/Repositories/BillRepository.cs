@@ -1,8 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using clinic.Models;
 using System.Data.Entity;
+using System.Linq;
 
 namespace clinic.Models.Repositories
 {
@@ -19,14 +18,14 @@ namespace clinic.Models.Repositories
             _listPaidBill = GetListPaidBillFromDb();
         }
 
-        public List<bill> GetListBillUnpaid()
+        public List<bill> GetListUnpaidBill()
         {
             return _listUnpaidBill.ToList();
         }
 
         private List<bill> GetUnpaidBillFromDb()
         {
-            return _clinicEntities.bills.Include(b=>b.clinic_service)
+            return _clinicEntities.bills.Include(b=>b.clinic_service).Include(b=>b.patient)
                 .Where(b => b.is_paid == false)
                 .ToList();
         }
@@ -75,7 +74,6 @@ namespace clinic.Models.Repositories
         {
             _listPaidBill.Add(billFromDb);
         }
-
         private void RemoveBillFromUnpaidList(bill billFromDb)
         {
             _listUnpaidBill.Remove(billFromDb);
@@ -85,12 +83,30 @@ namespace clinic.Models.Repositories
             return _listPaidBill.Where(b => b.created_at.Month == dateTime.Month && b.created_at.Year == dateTime.Year)
                 .Select(b => b.total_money).Sum();
         }
-
+        public RevenueViewModel GetRevenueByDate(DateTime dateTime)
+        {
+            var revenueVM = new RevenueViewModel();
+            revenueVM.Date = dateTime.Date.ToString("dd/MM/yyyy");
+            revenueVM.Revenue = CalculateRevenueByDate(dateTime);
+            return revenueVM;
+        }
+        public RevenueViewModel GetRevenueByMonth(DateTime dateTime)
+        {
+            var revenueVM = new RevenueViewModel();
+            revenueVM.Date = dateTime.Date.ToString("MM/yyyy");
+            revenueVM.Revenue = CalculateRevenueByMonth(dateTime);
+            return revenueVM;
+        }
+        public RevenueViewModel GetRevenueByYear(DateTime dateTime)
+        {
+            var revenueVM = new RevenueViewModel();
+            revenueVM.Date = dateTime.Date.ToString("yyyy");
+            revenueVM.Revenue = CalculateRevenueByYear(dateTime);
+            return revenueVM;
+        }
         public long CalculateRevenueByDate(DateTime dateTime)
         {
-            return _listPaidBill.Where(b => b.created_at.Month == dateTime.Month 
-            && b.created_at.Year == dateTime.Year
-            && b.created_at.Date == dateTime.Date)
+            return _listPaidBill.Where(b => b.created_at.Date == dateTime.Date)
                 .Select(b => b.total_money).Sum();
         }
 
@@ -125,15 +141,17 @@ namespace clinic.Models.Repositories
                 throw new ArgumentOutOfRangeException("billId", "Bill Khong Ton Tai");
             }
             var item = _clinicEntities.Entry(bill);
-            item.State = System.Data.Entity.EntityState.Modified;
+            item.State = EntityState.Modified;
 
             item.Collection(i => i.clinic_service).Load();
 
-            bill.clinic_service.Add(service);
+            //bill.clinic_service.Clear();
 
+            var serviceForAdd  = _clinicEntities.clinic_service.Find(service.id);
+            bill.clinic_service.Add(serviceForAdd);
             Save();
         }
-        private bill GetUnpaidBillById(int billId)
+        public bill GetUnpaidBillById(int billId)
         {
             return _listUnpaidBill.Where(b => b.id == billId).FirstOrDefault();
         }
@@ -154,14 +172,37 @@ namespace clinic.Models.Repositories
             Save();
         }
 
-        public Int64 CalculateTotalMoney(int billId)
+        public void CalculateTotalMoneyInBill(int billId)
         {
             var bill = GetUnpaidBillById(billId);
 
             Int64 totalMoney = bill.clinic_service.Select(s => s.price).Sum()
                 + bill.prescriptions.Select(p => p.quantity_indicated * p.medicine.sale_price_per_unit).Sum();
 
-            return totalMoney;
+            bill.total_money = totalMoney;
+            UpdateTotalMoneyOfBillInDatabase(billId, totalMoney);
+        }
+
+        private void UpdateTotalMoneyOfBillInDatabase(int billId, long totalMoney)
+        {
+            var billToUpdate = _clinicEntities.bills.Find(billId);
+            billToUpdate.total_money = totalMoney;
+            Save();
+        }
+
+        public bill GetUnpaidBillByPhoneNumber(string phoneNumber)
+        {
+            return _listUnpaidBill.Where(b => b.patient.phone_number == phoneNumber).FirstOrDefault();
+        }
+
+        public List<bill> GetUnpaidBillsByPatientName(string patientName)
+        {
+            return _listUnpaidBill.Where(b => b.patient.patient_name == patientName).ToList();
+        }
+
+        public bill GetUnpaidBillByPatientId(int patientId)
+        {
+            return _listUnpaidBill.Where(b => b.patient_id == patientId).FirstOrDefault();
         }
     }
 }

@@ -17,7 +17,9 @@ namespace clinic.Views.Forms
     {
         //ERROR: Refactor not use async
         private readonly IPatientRepository _repository;
-       // PatientPresenter _presenter;
+        private PatientPresenter _presenter;
+        public EventHandler updateDgvEvent;
+
         #region IView Properties
         public string Txtname { get => txtName.Text; set => txtName.Text = value; }
         public string TxtPhone { get => txtPhone.Text; set => txtPhone.Text = value; }
@@ -32,17 +34,22 @@ namespace clinic.Views.Forms
 
         private void FormPatient_Load(object sender, EventArgs e)
         {
-           // _presenter = new PatientPresenter(_repository, this);
+            _presenter = new PatientPresenter(_repository, this);
+            cbGender.SelectedIndex = 0;
         }
 
         private  void btnOK_Click(object sender, EventArgs e)
         {
-            //if (_presenter.ValidateAllInput())
-            //{
-            //   await _presenter.Add();
-            //    UpdateDataGridView.Invoke(this,null);
-            //    this.Close();
-            //}
+            if (ValidateChildren(ValidationConstraints.Enabled))
+            {
+                string err = _presenter.Add();
+                if (!string.IsNullOrWhiteSpace(err))
+                {
+                    MessageBox.Show(err, "Loi", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                }
+                this.Close();
+                updateDgvEvent?.Invoke(this,null);
+            }
         }
 
         private void btnCancel_Click(object sender, EventArgs e)
@@ -50,24 +57,45 @@ namespace clinic.Views.Forms
             this.Close();
         }
         #region Validate textbox event
-        private void txtName_Validated(object sender, EventArgs e)
+        private string _errMessage;
+        private void txtName_Validating(object sender, CancelEventArgs e)
         {
-            //bool isValid = _presenter.ValidateName();
-            //if (!isValid)
-            //{
-            //    errorProvider1.SetError(txtName, ErrorMessage);
-            //}
-        }
-
-
-        private void txtAge_Validated(object sender, EventArgs e)
-        {
-            //bool isValid = _presenter.ValidateAge();
-            //if (!isValid)
-            //{
-            //    errorProvider3.SetError(txtAge, ErrorMessage);
-            //}
+            if (_presenter.ValidateStringInput(txtName.Text, out _errMessage))
+            {
+                e.Cancel = false;
+            }
+            else
+            {
+                e.Cancel = true;
+            }
+            errorProvider.SetError(txtName, _errMessage);
         }
         #endregion
+
+        private void txtPhone_Validating(object sender, CancelEventArgs e)
+        {
+            if (_presenter.ValidateStringInput(txtPhone.Text, out _errMessage))
+            {
+                e.Cancel = false;
+            }
+            else
+            {
+                e.Cancel = true;
+            }
+            errorProvider.SetError(txtPhone, _errMessage);
+        }
+
+        private void txtAge_Validating(object sender, CancelEventArgs e)
+        {
+            if (_presenter.ValidateStringInput(txtAge.Text, out _errMessage))
+            {
+                e.Cancel = false;
+            }
+            else
+            {
+                e.Cancel = true;
+            }
+            errorProvider.SetError(txtAge, _errMessage);
+        }
     }
 }
