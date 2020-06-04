@@ -130,6 +130,7 @@
     </Compile>
     <Compile Include="Presenters\AssignMedicinePresenter.cs" />
     <Compile Include="Presenters\AssignServicePresenter.cs" />
+    <Compile Include="Presenters\DisplayPrescriptionPresenter.cs" />
     <Compile Include="Presenters\LoginPresenter.cs" />
     <Compile Include="Presenters\PatientPresenter.cs" />
     <Compile Include="Presenters\PersonalInfoPresenter.cs" />
@@ -155,6 +156,12 @@
     </Compile>
     <Compile Include="Views\Forms\FormAssignService.Designer.cs">
       <DependentUpon>FormAssignService.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Forms\FormDisplayPrescription.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Views\Forms\FormDisplayPrescription.Designer.cs">
+      <DependentUpon>FormDisplayPrescription.cs</DependentUpon>
     </Compile>
     <Compile Include="Views\Forms\FormMedicine.cs">
       <SubType>Form</SubType>
@@ -211,6 +218,7 @@
     </Compile>
     <Compile Include="Views\IAssignMedicineView.cs" />
     <Compile Include="Views\IAssignServiceView.cs" />
+    <Compile Include="Views\IDisplayPrescriptionView.cs" />
     <Compile Include="Views\ILoginView.cs" />
     <Compile Include="Views\IMedicineView.cs" />
     <Compile Include="Views\IAdminView.cs" />
@@ -232,6 +240,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Views\Forms\FormAssignService.resx">
       <DependentUpon>FormAssignService.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\Forms\FormDisplayPrescription.resx">
+      <DependentUpon>FormDisplayPrescription.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Views\Forms\FormMedicine.resx">
       <DependentUpon>FormMedicine.cs</DependentUpon>

@@ -9,5 +9,6 @@ namespace clinic.Models
     public interface IPrescriptionRepository
     {
         void AddPrescriptionToDatabase(prescription prescription, ref string errMessage);
+        List<prescription> GetListPrescriptionByBillId(int billId);
     }
 }

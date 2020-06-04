@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace clinic.Models.Repositories
 {
@@ -23,6 +25,11 @@ namespace clinic.Models.Repositories
             {
                 errMessage = ex.Message;
             }
+        }
+
+        public List<prescription> GetListPrescriptionByBillId(int billId)
+        {
+            return _clinicEntities.prescriptions.Where(p => p.bill_id == billId).ToList();
         }
     }
 }

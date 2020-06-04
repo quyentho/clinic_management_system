@@ -50,8 +50,8 @@ namespace clinic.Views.Forms
 
         private  void btnPatientFiles_Click(object sender, EventArgs e)
         {
-            btnAddPatient.Enabled = true;
-            Functionality = ReceptionFunctionalityEnum.Patient;
+             Functionality = ReceptionFunctionalityEnum.Patient;
+             btnAddPatient.Enabled = true;
             _presenter.DisplayPatientsData();
         }
 
@@ -62,7 +62,6 @@ namespace clinic.Views.Forms
                 btnPay.Visible = false;
                 btnAddPatient.Visible = false;
             }
-            Functionality = ReceptionFunctionalityEnum.Patient;
             btnPatientFiles.PerformClick();
             cbSearch.SelectedIndex = 0;
         }
@@ -91,16 +90,21 @@ namespace clinic.Views.Forms
                 _presenter.Search();
         }
         private void dgvReception_CellEnter(object sender, DataGridViewCellEventArgs e)
-        {           
-            PatientIdSelected = int.Parse(dgvReception.Rows[e.RowIndex].Cells[0].Value.ToString());
+        {
+
             btnAssignService.Enabled = true;
             btnAddPrescription.Enabled = true;
-
+            //BUG: get patientId wrong because this event occur before btnBill click
             if (Functionality == ReceptionFunctionalityEnum.Bill)
             {
                 PatientIdSelected = int.Parse(dgvReception.Rows[e.RowIndex].Cells[1].Value.ToString());
                 btnPay.Enabled = true;
             }
+            else if(Functionality == ReceptionFunctionalityEnum.Patient)
+            {
+                PatientIdSelected = int.Parse(dgvReception.Rows[e.RowIndex].Cells[0].Value.ToString());
+            }
+
         }
         private void btnAssignService_Click(object sender, EventArgs e)
         {
@@ -125,6 +129,7 @@ namespace clinic.Views.Forms
         }
         private void btnAddPrescription_Click(object sender, EventArgs e)
         {
+            
             _presenter.CreateBillIfNotExists();
             using (FormPrescription form = new FormPrescription(_medicineRepository, _billRepository))
             {
@@ -162,6 +167,17 @@ namespace clinic.Views.Forms
         private void btnLogout_Click(object sender, EventArgs e)
         {
             this.Close();
+        }
+
+        private void dgvReception_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
+        {
+            if(Functionality == ReceptionFunctionalityEnum.Bill)
+            {
+                FormDisplayPrescription form = new FormDisplayPrescription(new PrescriptionRepository(_clinicEntities, _medicineRepository));
+                form.BillId = int.Parse(dgvReception.Rows[e.RowIndex].Cells[0].Value.ToString());
+                form.LbPatientName = dgvReception.Rows[e.RowIndex].Cells[2].Value.ToString();
+                form.Show();
+            }
         }
     }
 }

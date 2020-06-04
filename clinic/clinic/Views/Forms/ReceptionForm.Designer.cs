@@ -135,6 +135,7 @@
             this.dgvReception.RowTemplate.Height = 25;
             this.dgvReception.Size = new System.Drawing.Size(746, 366);
             this.dgvReception.TabIndex = 0;
+            this.dgvReception.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvReception_CellDoubleClick);
             this.dgvReception.CellEnter += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvReception_CellEnter);
             // 
             // tableLayoutPanel1
