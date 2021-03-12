@@ -46,11 +46,21 @@
     <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.SqlServer.dll</HintPath>
     </Reference>
+    <Reference Include="Microsoft.Bcl.AsyncInterfaces, Version=1.0.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Bcl.AsyncInterfaces.1.1.0\lib\net461\Microsoft.Bcl.AsyncInterfaces.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
+    <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Runtime.CompilerServices.Unsafe, Version=4.0.4.1, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Runtime.CompilerServices.Unsafe.4.5.2\lib\netstandard2.0\System.Runtime.CompilerServices.Unsafe.dll</HintPath>
+    </Reference>
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Security" />
+    <Reference Include="System.Threading.Tasks.Extensions, Version=4.2.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Threading.Tasks.Extensions.4.5.2\lib\netstandard2.0\System.Threading.Tasks.Extensions.dll</HintPath>
+    </Reference>
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -62,72 +72,56 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Business Domain\Account\account.cs" />
+    <Compile Include="Business Domain\Bill\bill.cs" />
+    <Compile Include="Business Domain\Medicine\MedicineViewModel.cs" />
+    <Compile Include="Business Domain\Service\clinic_service.cs" />
+    <Compile Include="Business Domain\Statistic\ServiceStatistic.cs" />
     <Compile Include="DefaultTimeProvider.cs" />
-    <Compile Include="Models\account.cs">
-      <DependentUpon>Model.tt</DependentUpon>
+    <Compile Include="Business Domain\Medicine\medicine.cs" />
+    <Compile Include="clinicEntities.cs" />
+    <Compile Include="Business Domain\Bill\BillViewModel.cs" />
+    <Compile Include="Business Domain\Account\IAccountRepository.cs" />
+    <Compile Include="Business Domain\Prescription\IPrescriptionRepository.cs" />
+    <Compile Include="Business Domain\Account\AccountRepository.cs" />
+    <Compile Include="Business Domain\Bill\BillRepository.cs" />
+    <Compile Include="Business Domain\Bill\IBillRepository.cs" />
+    <Compile Include="Business Domain\Prescription\PrescriptionRepository.cs" />
+    <Compile Include="Business Domain\RevenueViewModel.cs" />
+    <Compile Include="Business Domain\Staff\StaffViewModel.cs" />
+    <Compile Include="Migrations\202103051350222_InitialCreate.cs" />
+    <Compile Include="Migrations\202103051350222_InitialCreate.Designer.cs">
+      <DependentUpon>202103051350222_InitialCreate.cs</DependentUpon>
     </Compile>
-    <Compile Include="Models\bill.cs">
-      <DependentUpon>Model.tt</DependentUpon>
+    <Compile Include="Migrations\202103051352240_UpdateStatisticForService.cs" />
+    <Compile Include="Migrations\202103051352240_UpdateStatisticForService.Designer.cs">
+      <DependentUpon>202103051352240_UpdateStatisticForService.cs</DependentUpon>
     </Compile>
-    <Compile Include="Models\BillViewModel.cs" />
-    <Compile Include="Models\clinic_service.cs">
-      <DependentUpon>Model.tt</DependentUpon>
+    <Compile Include="Migrations\202103051408371_AddRelationshipToServiceStatistic.cs" />
+    <Compile Include="Migrations\202103051408371_AddRelationshipToServiceStatistic.Designer.cs">
+      <DependentUpon>202103051408371_AddRelationshipToServiceStatistic.cs</DependentUpon>
     </Compile>
-    <Compile Include="Models\IAccountRepository.cs" />
-    <Compile Include="Models\IPrescriptionRepository.cs" />
-    <Compile Include="Models\medicine.cs">
-      <DependentUpon>Model.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\Model.Context.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Model.Context.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\Model.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Model.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\Model.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Model.edmx</DependentUpon>
-    </Compile>
-    <Compile Include="Models\patient.cs">
-      <DependentUpon>Model.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\permission.cs">
-      <DependentUpon>Model.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\prescription.cs">
-      <DependentUpon>Model.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\Repositories\AccountRepository.cs" />
-    <Compile Include="Models\Repositories\BillRepository.cs" />
-    <Compile Include="Models\IBillRepository.cs" />
-    <Compile Include="Models\Repositories\PrescriptionRepository.cs" />
-    <Compile Include="Models\RevenueViewModel.cs" />
-    <Compile Include="Models\staff.cs">
-      <DependentUpon>Model.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\StaffViewModel.cs" />
+    <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="OperationEnum.cs" />
-    <Compile Include="Models\IMedicineRepository.cs" />
-    <Compile Include="Models\IPatientRepository.cs" />
-    <Compile Include="Models\IPermissionRepository.cs" />
-    <Compile Include="Models\IServiceRepository.cs" />
-    <Compile Include="Models\IStaffRepository.cs" />
-    <Compile Include="Models\Repositories\MedicineRepository.cs" />
-    <Compile Include="Models\Repositories\PatientRepository.cs" />
-    <Compile Include="Models\Repositories\PermissionRepository.cs" />
-    <Compile Include="Models\Repositories\ServiceRepository.cs" />
-    <Compile Include="Models\Repositories\StaffRepository.cs" />
+    <Compile Include="Business Domain\Medicine\IMedicineRepository.cs" />
+    <Compile Include="Business Domain\Patient\IPatientRepository.cs" />
+    <Compile Include="Business Domain\Permission\IPermissionRepository.cs" />
+    <Compile Include="Business Domain\Service\IServiceRepository.cs" />
+    <Compile Include="Business Domain\Staff\IStaffRepository.cs" />
+    <Compile Include="Business Domain\Medicine\MedicineRepository.cs" />
+    <Compile Include="Business Domain\Patient\PatientRepository.cs" />
+    <Compile Include="Business Domain\Permission\PermissionRepository.cs" />
+    <Compile Include="Business Domain\Service\ServiceRepository.cs" />
+    <Compile Include="Business Domain\Staff\StaffRepository.cs" />
     <Compile Include="OperationForm.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="OperationForm.Designer.cs">
       <DependentUpon>OperationForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="Business Domain\Patient\patient.cs" />
+    <Compile Include="Business Domain\Permission\permission.cs" />
+    <Compile Include="Business Domain\Prescription\prescription.cs" />
     <Compile Include="Presenters\AssignMedicinePresenter.cs" />
     <Compile Include="Presenters\AssignServicePresenter.cs" />
     <Compile Include="Presenters\DisplayPrescriptionPresenter.cs" />
@@ -138,6 +132,7 @@
     <Compile Include="Presenters\Presenter.cs" />
     <Compile Include="Presenters\ReceptionPresenter.cs" />
     <Compile Include="Presenters\StaffPresenter.cs" />
+    <Compile Include="Business Domain\Staff\staff.cs" />
     <Compile Include="TimeProvider.cs" />
     <Compile Include="Views\Forms\AdminForm.cs">
       <SubType>Form</SubType>
@@ -156,6 +151,12 @@
     </Compile>
     <Compile Include="Views\Forms\FormAssignService.Designer.cs">
       <DependentUpon>FormAssignService.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Forms\FormDisplayMedicine.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Views\Forms\FormDisplayMedicine.Designer.cs">
+      <DependentUpon>FormDisplayMedicine.cs</DependentUpon>
     </Compile>
     <Compile Include="Views\Forms\FormDisplayPrescription.cs">
       <SubType>Form</SubType>
@@ -229,6 +230,15 @@
     <Compile Include="Views\IServiceView.cs" />
     <Compile Include="Views\IStaffView.cs" />
     <Compile Include="ReceptionFunctionalityEnum.cs" />
+    <EmbeddedResource Include="Migrations\202103051350222_InitialCreate.resx">
+      <DependentUpon>202103051350222_InitialCreate.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202103051352240_UpdateStatisticForService.resx">
+      <DependentUpon>202103051352240_UpdateStatisticForService.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202103051408371_AddRelationshipToServiceStatistic.resx">
+      <DependentUpon>202103051408371_AddRelationshipToServiceStatistic.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="OperationForm.resx">
       <DependentUpon>OperationForm.cs</DependentUpon>
     </EmbeddedResource>
@@ -240,6 +250,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Views\Forms\FormAssignService.resx">
       <DependentUpon>FormAssignService.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\Forms\FormDisplayMedicine.resx">
+      <DependentUpon>FormDisplayMedicine.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Views\Forms\FormDisplayPrescription.resx">
       <DependentUpon>FormDisplayPrescription.cs</DependentUpon>
@@ -278,13 +291,6 @@
     <EmbeddedResource Include="Views\Forms\ReceptionForm.resx">
       <DependentUpon>ReceptionForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EntityDeploy Include="Models\Model.edmx">
-      <Generator>EntityModelCodeGenerator</Generator>
-      <LastGenOutput>Model.Designer.cs</LastGenOutput>
-    </EntityDeploy>
-    <None Include="Models\Model.edmx.diagram">
-      <DependentUpon>Model.edmx</DependentUpon>
-    </None>
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -303,20 +309,11 @@
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Models\Model.Context.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <DependentUpon>Model.edmx</DependentUpon>
-      <LastGenOutput>Model.Context.cs</LastGenOutput>
-    </Content>
-    <Content Include="Models\Model.edmx.sql" />
-    <Content Include="Models\Model.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <DependentUpon>Model.edmx</DependentUpon>
-      <LastGenOutput>Model.cs</LastGenOutput>
-    </Content>
+    <Content Include="Model.edmx.sql" />
     <None Include="Resources\download %281%29.png" />
     <None Include="Resources\avatar.png" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>

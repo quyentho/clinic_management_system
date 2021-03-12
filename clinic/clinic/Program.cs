@@ -25,6 +25,7 @@ namespace clinic
             Application.SetCompatibleTextRenderingDefault(false);
 
             clinicEntities clinicEntities = new clinicEntities();
+
             IAccountRepository accountRepository = new AccountRepository(clinicEntities);
             var form = new LoginForm(accountRepository);
             if(form.ShowDialog() == DialogResult.OK)

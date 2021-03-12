@@ -166,26 +166,6 @@ namespace clinic.Test.Repository
         }
 
         [TestMethod]
-        public void UpdateStaff_WithExistsStaff_UpdateDatabaseSuccessfully()
-        {
-            var staffUpdated = new staff()
-            {
-                id = 1,
-                full_name = "nvupdate",
-                date_of_birth = new DateTime(1999, 1, 3),
-                phone_number = "0945664870",
-                salary = 700000,
-                is_still_working = true,
-                permission_id = 1
-            };
-
-            _sut.UpdateStaff(staffUpdated);
-
-            _stubDbContext.Verify(c => c.AddOrUpdateEntity<staff>(_stubDbContext.Object, staffUpdated));
-            _stubDbContext.Verify(c => c.SaveChanges());
-        }
-
-        [TestMethod]
         public void UpdateStaff_WithExistsStaff_UpdateStaffList()
         {
             var staffUpdated = new staff()

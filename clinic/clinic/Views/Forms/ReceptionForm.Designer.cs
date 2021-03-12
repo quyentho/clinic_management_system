@@ -253,6 +253,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(779, 515);
+            this.Controls.Add(this.btnAddPatient);
             this.Controls.Add(this.btnPersonality);
             this.Controls.Add(this.cbSearch);
             this.Controls.Add(this.btnSearch);
@@ -260,7 +261,6 @@
             this.Controls.Add(this.btnAddPrescription);
             this.Controls.Add(this.btnPay);
             this.Controls.Add(this.btnAssignService);
-            this.Controls.Add(this.btnAddPatient);
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.tableLayoutPanel1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.Fixed3D;

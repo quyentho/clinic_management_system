@@ -11,11 +11,10 @@ namespace clinic.Views
     public interface IPrescriptionView
     {
         object DgvMedicineDataSource { get; set; }
-        List<prescription> ListPrescriptionOfMedicineSelected { get; set; }
         int PatientId { get; set; }
-        int IdMedicineSelected { get; set; }
+        int MedicineSelectedId { get; set; }
         int IndexRemove { get; set; }
-        DataGridView DgvMedicinesSelected { get; set; }
+        object DgvMedicinesSelectedDatasource { get; set; }
         string TxtSearch { get; set; }
         string Descriptions { get; set; }
         int Quantity { get; set; }

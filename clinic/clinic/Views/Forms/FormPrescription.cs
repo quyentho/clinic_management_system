@@ -11,28 +11,31 @@ namespace clinic.Views.Forms
         private PrescriptionPresenter _presenter;
         private IMedicineRepository _medicineRepository;
         private IBillRepository _billRepository;
+        private readonly IPrescriptionRepository _prescriptionRepository;
         #region IView properties
         public object DgvMedicineDataSource { get => dgvMedicine.DataSource; set => dgvMedicine.DataSource = value; }
-        public List<prescription> ListPrescriptionOfMedicineSelected { get; set; } = new List<prescription>();
-        public int PatientId { get ; set ; }
-        public int IdMedicineSelected { get; set; }
+        public int PatientId { get; set; }
+        public int MedicineSelectedId { get; set; }
         public int IndexRemove { get; set; }
-        public DataGridView DgvMedicinesSelected { get => dgvMedicinesSelected; set => dgvMedicinesSelected = value; }
-        public string ErrMessage { get ; set ; }
+        public object DgvMedicinesSelectedDatasource { get => dgvMedicinesSelected.DataSource; set => dgvMedicinesSelected.DataSource = value; }
+        public string ErrMessage { get; set; }
         public string Descriptions { get; set; }
-        public int Quantity { get; set ; }
+        public int Quantity { get; set; }
         public string TxtSearch { get => txtSearch.Text; set => txtSearch.Text = value; }
         #endregion
-        public FormPrescription(IMedicineRepository medicineRepository, IBillRepository billRepository)
+        public FormPrescription(IMedicineRepository medicineRepository, IBillRepository billRepository, IPrescriptionRepository prescriptionRepository)
         {
             _medicineRepository = medicineRepository;
             _billRepository = billRepository;
+            this._prescriptionRepository = prescriptionRepository;
             InitializeComponent();
         }
 
         private void FormPrescription_Load(object sender, EventArgs e)
         {
-            _presenter = new PrescriptionPresenter(_medicineRepository, _billRepository, this);
+            _presenter = new PrescriptionPresenter(_medicineRepository, _billRepository, _prescriptionRepository, this);
+
+            _presenter.LoadExistingPrescription(PatientId);
         }
 
         private void btnRemove_Click(object sender, EventArgs e)
@@ -45,19 +48,18 @@ namespace clinic.Views.Forms
             using (FormAssignMedicine form = new FormAssignMedicine())
             {
                 form.ShowDialog();
-                if(form.IsSetValue == true)
+                if (form.IsSetValue == true)
                 {
                     Quantity = int.Parse(form.Quantity);
                     Descriptions = form.Description;
                     _presenter.AssignMedicine();
                 }
-
             }
         }
 
         private void btnOk_Click(object sender, EventArgs e)
         {
-            _presenter.AddPresciptionToBillIfExists();
+            _presenter.AddPresciptionToBill();
             if (!string.IsNullOrEmpty(ErrMessage))
             {
                 MessageBox.Show(ErrMessage);
@@ -68,7 +70,7 @@ namespace clinic.Views.Forms
 
         private void dgvMedicine_CellEnter(object sender, DataGridViewCellEventArgs e)
         {
-            IdMedicineSelected = int.Parse(dgvMedicine.Rows[e.RowIndex].Cells[0].Value.ToString());
+            MedicineSelectedId = int.Parse(dgvMedicine.Rows[e.RowIndex].Cells[0].Value.ToString());
         }
 
         private void dgvMedicinesSelected_CellEnter(object sender, DataGridViewCellEventArgs e)

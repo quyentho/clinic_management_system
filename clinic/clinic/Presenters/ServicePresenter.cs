@@ -25,7 +25,7 @@ namespace clinic.Presenters
                 price = long.Parse(_view.TxtPrice),
                 is_active = true
             };
-            _repository.InsertService(service);
+            _repository.Insert(service);
        
         }
         public void Display(int idSelected)
@@ -43,7 +43,7 @@ namespace clinic.Presenters
             var serviceFromDb = _repository.GetServiceById(idSelected);
             if (serviceFromDb != null)
             {
-                _repository.DeleteService(idSelected);
+                _repository.Delete(idSelected);
             }
         }
         private clinic_service GetServiceFromView()
@@ -61,7 +61,7 @@ namespace clinic.Presenters
             var serviceEdited = GetServiceFromView();
             serviceEdited.id = idSelected;
 
-            _repository.UpdateService(serviceEdited);
+            _repository.Update(serviceEdited);
         }
         #region validating Method
         public bool ValidateName()

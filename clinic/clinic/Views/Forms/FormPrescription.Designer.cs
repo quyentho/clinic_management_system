@@ -34,10 +34,6 @@
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle5 = new System.Windows.Forms.DataGridViewCellStyle();
             this.dgvMedicinesSelected = new System.Windows.Forms.DataGridView();
-            this.columnName = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.columnPrice = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.columnQuantity = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.columnDosage = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.btnRemove = new System.Windows.Forms.Button();
             this.btnOk = new System.Windows.Forms.Button();
             this.btnChoose = new System.Windows.Forms.Button();
@@ -63,11 +59,6 @@
             dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
             this.dgvMedicinesSelected.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle2;
             this.dgvMedicinesSelected.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dgvMedicinesSelected.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-            this.columnName,
-            this.columnPrice,
-            this.columnQuantity,
-            this.columnDosage});
             this.dgvMedicinesSelected.Location = new System.Drawing.Point(9, 12);
             this.dgvMedicinesSelected.Name = "dgvMedicinesSelected";
             dataGridViewCellStyle3.Padding = new System.Windows.Forms.Padding(0, 4, 0, 4);
@@ -77,32 +68,6 @@
             this.dgvMedicinesSelected.CellEnter += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvMedicinesSelected_CellEnter);
             this.dgvMedicinesSelected.RowsAdded += new System.Windows.Forms.DataGridViewRowsAddedEventHandler(this.dgvMedicinesSelected_RowsAdded);
             this.dgvMedicinesSelected.RowsRemoved += new System.Windows.Forms.DataGridViewRowsRemovedEventHandler(this.dgvMedicinesSelected_RowsRemoved);
-            // 
-            // columnName
-            // 
-            this.columnName.FillWeight = 99.49239F;
-            this.columnName.HeaderText = "Tên Thuốc";
-            this.columnName.Name = "columnName";
-            this.columnName.ReadOnly = true;
-            // 
-            // columnPrice
-            // 
-            this.columnPrice.FillWeight = 101.5228F;
-            this.columnPrice.HeaderText = "Giá";
-            this.columnPrice.Name = "columnPrice";
-            this.columnPrice.ReadOnly = true;
-            // 
-            // columnQuantity
-            // 
-            this.columnQuantity.FillWeight = 99.49239F;
-            this.columnQuantity.HeaderText = "Số Lượng";
-            this.columnQuantity.Name = "columnQuantity";
-            // 
-            // columnDosage
-            // 
-            this.columnDosage.FillWeight = 99.49239F;
-            this.columnDosage.HeaderText = "Liều lượng";
-            this.columnDosage.Name = "columnDosage";
             // 
             // btnRemove
             // 
@@ -189,9 +154,5 @@
         private System.Windows.Forms.Button btnChoose;
         private System.Windows.Forms.DataGridView dgvMedicine;
         private System.Windows.Forms.TextBox txtSearch;
-        private System.Windows.Forms.DataGridViewTextBoxColumn columnName;
-        private System.Windows.Forms.DataGridViewTextBoxColumn columnPrice;
-        private System.Windows.Forms.DataGridViewTextBoxColumn columnQuantity;
-        private System.Windows.Forms.DataGridViewTextBoxColumn columnDosage;
     }
 }

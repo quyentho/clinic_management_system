@@ -93,7 +93,7 @@ namespace clinic.Test.Repository
                 price = 10000
             };
 
-            _sut.InsertService(newService);
+            _sut.Insert(newService);
 
             _sut.GetServiceList().Should().Contain(newService);
         }
@@ -108,7 +108,7 @@ namespace clinic.Test.Repository
                 price = 10000
             };
 
-            Action act = () => _sut.InsertService(newService);
+            Action act = () => _sut.Insert(newService);
 
             act.Should().NotThrow();
 
@@ -124,30 +124,14 @@ namespace clinic.Test.Repository
                 price = 10000
             };
 
-            _sut.UpdateService(serviceUpdated);
+            _sut.Update(serviceUpdated);
 
             _sut.GetServiceList().Should()
                 .Contain(serviceUpdated)
                 .And
                 .NotContain(_stubServiceList[0]);
         }
-        [TestMethod]
-        public void UpdateService_WithValidService_NotThrowsException()
-        {
-            var serviceUpdated = new clinic_service()
-            {
-                id = 1,
-                service_name = "test",
-                is_active = true,
-                price = 10000
-            };
-            SetupDbSetForUsingFindMethod();
-
-            _sut.UpdateService(serviceUpdated);
-
-            _stubDbContext.Verify(c => c.AddOrUpdateEntity(_stubDbContext.Object, serviceUpdated),Times.Once);
-            _stubDbContext.Verify(c => c.SaveChanges(),Times.Once);
-        }
+       
         [TestMethod]
         public void DeleteService_ExistsId_DelelteServiceInDatabaseSuccessfully()
         {
@@ -157,7 +141,7 @@ namespace clinic.Test.Repository
             _stubDbContext.Setup(c => c.clinic_service.Remove(It.IsAny<clinic_service>()))
                 .Callback<clinic_service>(service => serviceDeleted = service);
 
-            _sut.DeleteService(id);
+            _sut.Delete(id);
 
             _stubDbContext.Verify(c => c.clinic_service.Remove(serviceDeleted),Times.Once);
             _stubDbContext.Verify(c => c.SaveChanges());
@@ -165,7 +149,7 @@ namespace clinic.Test.Repository
         [TestMethod]
         public void DeleteService_DeleteSuccessfully_NotDeleteAllData()
         {
-            _sut.DeleteService(1);
+            _sut.Delete(1);
 
             PrivateObject privateObject = new PrivateObject(_sut);
             var database = privateObject.Invoke("GetServiceList");

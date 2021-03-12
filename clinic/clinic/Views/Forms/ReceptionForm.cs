@@ -21,11 +21,13 @@ namespace clinic.Views.Forms
         private readonly ReceptionPresenter _presenter;
         private readonly PatientRepository _patientRepository;
         private readonly BillRepository _billRepository;
+        private readonly PrescriptionRepository _prescriptionRepository;
         private readonly ServiceRepository _serviceRepository;
         private readonly MedicineRepository _medicineRepository;
         private readonly AccountRepository _accountRepository;
         private readonly PermissionRepository _permissionRepository;
         private readonly StaffRepository _staffRepository;
+
 
         public string TxtSearch { get => txtSearch.Text; set => txtSearch.Text = value; }
         public int PatientIdSelected { get; set ; }
@@ -41,6 +43,7 @@ namespace clinic.Views.Forms
             _billRepository = new BillRepository(_clinicEntities);
             _serviceRepository = new ServiceRepository(_clinicEntities);
             _medicineRepository = new MedicineRepository(_clinicEntities);
+            _prescriptionRepository = new PrescriptionRepository(_clinicEntities,_medicineRepository);
             _accountRepository = new AccountRepository(_clinicEntities);
             _permissionRepository = new PermissionRepository(_clinicEntities);
             _staffRepository = new StaffRepository(_clinicEntities,_permissionRepository, _accountRepository);
@@ -91,7 +94,6 @@ namespace clinic.Views.Forms
         }
         private void dgvReception_CellEnter(object sender, DataGridViewCellEventArgs e)
         {
-
             btnAssignService.Enabled = true;
             btnAddPrescription.Enabled = true;
             //BUG: get patientId wrong because this event occur before btnBill click
@@ -129,9 +131,8 @@ namespace clinic.Views.Forms
         }
         private void btnAddPrescription_Click(object sender, EventArgs e)
         {
-            
             _presenter.CreateBillIfNotExists();
-            using (FormPrescription form = new FormPrescription(_medicineRepository, _billRepository))
+            using (FormPrescription form = new FormPrescription(_medicineRepository, _billRepository, _prescriptionRepository))
             {
                 form.PatientId = PatientIdSelected;
                 form.ShowDialog();
@@ -173,7 +174,7 @@ namespace clinic.Views.Forms
         {
             if(Functionality == ReceptionFunctionalityEnum.Bill)
             {
-                FormDisplayPrescription form = new FormDisplayPrescription(new PrescriptionRepository(_clinicEntities, _medicineRepository));
+                FormDisplayMedicine form = new FormDisplayPrescription(new PrescriptionRepository(_clinicEntities, _medicineRepository));
                 form.BillId = int.Parse(dgvReception.Rows[e.RowIndex].Cells[0].Value.ToString());
                 form.LbPatientName = dgvReception.Rows[e.RowIndex].Cells[2].Value.ToString();
                 form.Show();

@@ -21,7 +21,7 @@ namespace clinic.Presenters
 
         public void Display()
         {
-            _view.DgvDisplayDataSource = _repository.GetListPrescriptionByBillId(_view.BillId);
+            _view.DgvDisplayDataSource = _repository.GetPrescriptionByBillId(_view.BillId);
         }
     }
 }

@@ -105,39 +105,40 @@ namespace clinic.Test.Repository
             _stubDbContext.Verify(c => c.patients.Add(patient),Times.Once);
             _stubDbContext.Verify(c => c.SaveChanges(), Times.Once);
         }
-        [TestMethod]
-        public void UpdatePatient_WithValidInput_UpdateDatabaseSuccessfully()
-        {
-            var patientUpdated = new patient()
-            {
-                id = 1,
-                patient_name = "bnUpdate",
-                age = 12,
-                gender = "Nu",
-                phone_number = "0123456789"
-            };
+        //[TestMethod]
+        //public void UpdatePatient_WithValidInput_UpdateDatabaseSuccessfully()
+        //{
+        //    var patientUpdated = new patient()
+        //    {
+        //        id = 1,
+        //        patient_name = "bnUpdate",
+        //        age = 12,
+        //        gender = "Nu",
+        //        phone_number = "0123456789"
+        //    };
 
-             Action act = () =>  _sut.UpdatePatient(patientUpdated);
+        //     Action act = () =>  _sut.UpdatePatient(patientUpdated);
 
-            act.Should().NotThrow();
-        }
-        [TestMethod]
-        public void UpdatePatient_WithValidInput_UpdatePatientListExactly()
-        {
-            var patientUpdated = new patient()
-            {
-                id = 1,
-                patient_name = "bnUpdate",
-                age = 12,
-                gender = "Nu",
-                phone_number = "0123456789"
-            };
+        //    act.Should().NotThrow();
+        //}
 
-            _sut.UpdatePatient(patientUpdated);
+        //[TestMethod]
+        //public void UpdatePatient_WithValidInput_UpdatePatientListExactly()
+        //{
+        //    var patientUpdated = new patient()
+        //    {
+        //        id = 1,
+        //        patient_name = "bnUpdate",
+        //        age = 12,
+        //        gender = "Nu",
+        //        phone_number = "0123456789"
+        //    };
+
+        //    _sut.UpdatePatient(patientUpdated);
            
 
-            _sut.GetPatientList().Should().Contain(patientUpdated);
-        }
+        //    _sut.GetPatientList().Should().Contain(patientUpdated);
+        //}
 
         [TestMethod]
         public void GetPatientsByName_WithExistsPatientName_ReturnExactly()

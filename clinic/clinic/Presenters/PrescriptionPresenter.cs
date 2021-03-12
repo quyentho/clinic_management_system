@@ -1,10 +1,10 @@
-﻿using clinic.Models;
+﻿using clinic.BusinessDomain.Medicine;
+using clinic.Models;
 using clinic.Views;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace clinic.Presenters
 {
@@ -12,11 +12,16 @@ namespace clinic.Presenters
     {
         private readonly IMedicineRepository _medicineRepository;
         private readonly IBillRepository _billRepository;
+        private readonly IPrescriptionRepository _prescriptionRepository;
         private readonly IPrescriptionView _view;
-        public PrescriptionPresenter(IMedicineRepository repository, IBillRepository billRepository, IPrescriptionView view)
+
+        private List<prescription> _temporaryPrescription = new List<prescription>();
+        private List<MedicineViewModel> _selectedMedicineList = new List<MedicineViewModel>();
+        public PrescriptionPresenter(IMedicineRepository repository, IBillRepository billRepository, IPrescriptionRepository prescriptionRepository, IPrescriptionView view)
         {
             _medicineRepository = repository;
             _billRepository = billRepository;
+            _prescriptionRepository = prescriptionRepository;
             _view = view;
 
             DisplayMedicineDataGridView();
@@ -27,51 +32,92 @@ namespace clinic.Presenters
             var bill = _billRepository.GetUnpaidBillByPatientId(_view.PatientId);
             HashSet<int> medicineAssignedIds = new HashSet<int>(bill.prescriptions.Select(p => p.medicine_id));
 
-            List<medicine> medicineToDisplay = _medicineRepository.GetMedicineList()
-                .Where(s => !medicineAssignedIds.Contains(s.id)).ToList(); // Not display medicine  
-                                                                           // already assinged                    
-            _view.DgvMedicineDataSource = medicineToDisplay;
+            List<medicine> medicinesInPrescription = _medicineRepository.GetMedicineList().Where(s => medicineAssignedIds.Contains(s.id)).ToList();
+
+            _view.DgvMedicineDataSource = _medicineRepository.GetMedicineList();
+
         }
         public void AssignMedicine()
         {
             var bill = _billRepository.GetUnpaidBillByPatientId(_view.PatientId);
 
-            var prescription = CreatePresciption(bill.id, _view.IdMedicineSelected);
+            var prescriptionItem = AddMedicineToPrescription(bill.id, _view.MedicineSelectedId);
 
-            if (!(_view.ListPrescriptionOfMedicineSelected.Contains(prescription)))
+            if (!(_temporaryPrescription.Contains(prescriptionItem)))
             {
-                _view.ListPrescriptionOfMedicineSelected.Add(prescription);
+                _temporaryPrescription.Add(prescriptionItem);
 
-                var medicineSelected = _medicineRepository.GetMedicineById(_view.IdMedicineSelected);
+                MedicineViewModel medicineSelected = GetMedicineViewModel(prescriptionItem);
+
                 DisplayMedicineSelected(medicineSelected);
             }
+        }
 
+        public void LoadExistingPrescription(int patientId)
+        {
+            var bill = _billRepository.GetUnpaidBillByPatientId(patientId);
+
+            _temporaryPrescription = _prescriptionRepository.GetPrescriptionByBillId(bill.id);
+
+            foreach (var item in _temporaryPrescription)
+            {
+                var medicineVM = GetMedicineViewModel(item);
+
+                DisplayMedicineSelected(medicineVM);
+            }
 
         }
 
-        private void DisplayMedicineSelected(medicine medicineSelected)
+        private MedicineViewModel GetMedicineViewModel(prescription prescriptionItem)
         {
-            _view.DgvMedicinesSelected.Rows.Add(medicineSelected.medicine_name, medicineSelected.sale_price_per_unit, _view.Quantity, _view.Descriptions);
+            medicine med = _medicineRepository.GetMedicineById(prescriptionItem.medicine_id);
+
+            return new MedicineViewModel()
+            {
+                Name = med.medicine_name,
+                Description = prescriptionItem.description,
+                Quantity = prescriptionItem.quantity_indicated.ToString(),
+                SalePrice = med.sale_price_per_unit.ToString(),
+                Unit = med.sale_unit
+            };
+
+        }
+
+        private void DisplayMedicineSelected(MedicineViewModel medicineSelected)
+        {
+            _selectedMedicineList.Add(medicineSelected);
+
+            RefreshDatagridView();
+        }
+
+        private void RefreshDatagridView()
+        {
+            _view.DgvMedicinesSelectedDatasource = typeof(List<MedicineViewModel>);
+            _view.DgvMedicinesSelectedDatasource = _selectedMedicineList;
         }
 
         public void RemoveMedicineAssigned()
         {
-            _view.DgvMedicinesSelected.Rows.RemoveAt(_view.IndexRemove);
-            _view.ListPrescriptionOfMedicineSelected.RemoveAt(_view.IndexRemove);
+            _selectedMedicineList.RemoveAt(_view.IndexRemove);
+            _temporaryPrescription.RemoveAt(_view.IndexRemove);
+
+            RefreshDatagridView();
         }
 
-        public void AddPresciptionToBillIfExists()
+        public void AddPresciptionToBill()
         {
             var bill = _billRepository.GetUnpaidBillByPatientId(_view.PatientId);
-            if (_view.ListPrescriptionOfMedicineSelected.Count > 0)
+           
+            // clear presciption in case of update.
+            _prescriptionRepository.ClearPresciptionInBill(bill);
+
+            foreach (prescription prescriptionItem in _temporaryPrescription)
             {
-                foreach (prescription prescription in _view.ListPrescriptionOfMedicineSelected)
+                if (!bill.prescriptions.Contains(prescriptionItem))
                 {
                     try
                     {
-                        //HACK: Not use Prescription Repository
-                        _medicineRepository.MinusQuantity(prescription.medicine_id, prescription.quantity_indicated);
-                        _billRepository.AddPrescriptionToBill(bill.id, prescription);
+                        _prescriptionRepository.AddPrescriptionToDatabase(prescriptionItem);
                     }
                     catch (ArgumentOutOfRangeException ex)
                     {
@@ -79,9 +125,10 @@ namespace clinic.Presenters
                     }
                 }
             }
+            
             _billRepository.CalculateTotalMoneyInBill(bill.id);
         }
-        private prescription CreatePresciption(int billId, int medicineId)
+        private prescription AddMedicineToPrescription(int billId, int medicineId)
         {
             prescription prescription = new prescription()
             {

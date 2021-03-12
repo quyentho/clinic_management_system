@@ -52,7 +52,7 @@ namespace clinic.Presenters
             {
                 //Display from db to view
                 _view.TxtStaffName = staffToDisplay.FullName;
-                _view.TxtDoB = staffToDisplay.DateOfBirth.ToString("dd/MM/yyyy");
+                _view.TxtDoB = staffToDisplay.DateOfBirth?.ToString("dd/MM/yyyy");
                 _view.TxtPhone = staffToDisplay.PhoneNumber;
                 _view.TxtSalary = staffToDisplay.Salary.ToString();
                 _view.CbPermission.Text = staffToDisplay.PositionName;

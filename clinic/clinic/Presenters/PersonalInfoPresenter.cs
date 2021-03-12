@@ -28,7 +28,7 @@ namespace clinic.Presenters
             var myInfo = GetMyInfo();
 
             _view.TxtName = myInfo.full_name;
-            _view.DtpDoB = myInfo.date_of_birth;
+            _view.DtpDoB = (DateTime)myInfo.date_of_birth;
         }
 
         public void UpdateInfo()

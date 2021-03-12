@@ -128,17 +128,13 @@ namespace clinic.Test.Repository
         }
 
         [TestMethod]
-        public void PayBill_ValidBillId_UpdateBillStateInDatabaseSuccessfully()
+        public void PayBill_ValidBillId_ChangesBillStatus()
         {
             int id = 1;
             var billUpdated = new bill();
-            _stubDbContext.Setup(c => c.AddOrUpdateEntity<bill>(_stubDbContext.Object, It.IsAny<bill>()))
-                .Callback<clinicEntities, bill>((c, b) => billUpdated = b);
-
+           
             _sut.PayBill(id);
 
-            _stubDbContext.Verify(c => c.AddOrUpdateEntity<bill>(_stubDbContext.Object,billUpdated));
-            _stubDbContext.Verify(c => c.SaveChanges());
             billUpdated.Should().BeOfType<bill>().Which.is_paid.Should().BeTrue();
         }
         [TestMethod]
@@ -429,6 +425,7 @@ namespace clinic.Test.Repository
             act.Should().Throw<ArgumentOutOfRangeException>()
                 .WithMessage("Bill Khong Ton Tai\nParameter name: billId");
         }
+       
         [TestMethod]
         public void AddPrescriptionToBill_ExistsBillIdAndValidService_AddToUnpaidListSuccessfully()
         {
@@ -447,19 +444,7 @@ namespace clinic.Test.Repository
 
             _sut.GetListUnpaidBill()[0].prescriptions.Should().Contain(validPrescription);
         }
-        [TestMethod]
-        public void AddPrescriptionToBill_ExistsBillIdAndValidPrescription_NotThrowsException()
-        {
-            clinic_service validPrescription =
-                new clinic_service() { id = 1, service_name = "Thu mau", price = 50000, is_active = true };
-
-            _stubDbContext.Setup(c => c.clinic_service.Attach(It.IsAny<clinic_service>()));
-            int NoneExistsBillId = 1;
-
-            Action act = () => _sut.AddServiceToBill(NoneExistsBillId, validPrescription);
-
-            act.Should().NotThrow();
-        }
+     
         [TestMethod]
         public void CalculateToTalMoney_ExistsUnpaidBill_ReturnsTotalMoney()
         {

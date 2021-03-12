@@ -154,25 +154,6 @@ namespace clinic.Test.Repository
         }
 
         [TestMethod]
-        public void Update_ValidInput_UpdateDatabaseSuccessfully()
-        {
-            var accountUpdated = new account()
-            {
-                id = 1,
-                is_active = true,
-                pass = "1234",
-                permission_id = 1,
-                staff_id = 1,
-                username = "0945664870"
-            };
-
-            _sut.Update(accountUpdated);
-
-            _stubDbContext.Verify(c => c.AddOrUpdateEntity<account>(_stubDbContext.Object, accountUpdated));
-            _stubDbContext.Verify(c => c.SaveChanges());
-        }
-
-        [TestMethod]
         public void Delete_ExistsId_DeleteInDatabaseSuccessfully()
         {
             int staffId = 2;
