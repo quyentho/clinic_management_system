@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using clinic.BusinessDomain.Service;
 using clinic.Models;
 using clinic.Views;
 namespace clinic.Presenters
@@ -25,6 +26,12 @@ namespace clinic.Presenters
                 price = long.Parse(_view.TxtPrice),
                 is_active = true
             };
+
+            if (_view.SelectedMedicineId != null)
+            {
+                service.Medicine_Id = _view.SelectedMedicineId;
+            }
+
             _repository.Insert(service);
        
         }
@@ -35,8 +42,19 @@ namespace clinic.Presenters
             {
                 _view.TxtServiceName = serviceFromDB.service_name;
                 _view.TxtPrice = serviceFromDB.price.ToString();
+                _view.CbServiceTypes.SelectedItem = serviceFromDB.Type;
             }
         }
+
+        public void LoadServiceTypes()
+        {
+            _view.CbServiceTypes.Items.Add(ServiceTypes.Normal);
+            _view.CbServiceTypes.Items.Add(ServiceTypes.Test);
+            _view.CbServiceTypes.Items.Add(ServiceTypes.Injection);
+
+            _view.CbServiceTypes.SelectedIndex = 0;
+        }
+
         public void Delete(int idSelected)
         {
 

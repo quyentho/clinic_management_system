@@ -42,7 +42,7 @@ namespace clinic.Models.Repositories
         {
             return _clinicEntities.medicines.Where(m => m.is_active == true).ToList();
         }
-        public List<medicine> GetMedicineList()
+        public List<medicine> GetAll()
         {
             return _medicineList;
         }

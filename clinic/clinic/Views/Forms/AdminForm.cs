@@ -98,7 +98,7 @@ namespace clinic
         {
             if (_form != null)
                 DisposeFormAndSetNull();
-            _form = new FormService(_serviceRepository);
+            _form = new FormService(_serviceRepository, _medicineRepository);
             _presenter.DisplayServices();
         }
 

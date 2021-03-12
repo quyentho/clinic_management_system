@@ -12,12 +12,12 @@ using System.Windows.Forms;
 
 namespace clinic.Views.Forms
 {
-    public partial class FormDisplayMedicine : Form, IDisplayPrescriptionView
+    public partial class FormDisplayPrescription : Form, IDisplayPrescriptionView
     {
         private IPrescriptionRepository _repository;
         private DisplayPrescriptionPresenter _presenter;
 
-        public FormDisplayMedicine(IPrescriptionRepository prescriptionRepository)
+        public FormDisplayPrescription(IPrescriptionRepository prescriptionRepository)
         {
             _repository = prescriptionRepository;
             InitializeComponent();

@@ -57,7 +57,7 @@ namespace clinic.Test.Repository
         [TestMethod]
         public void GetMedicinesFromDatabase_WhenCalled_ReturnsMedicineList()
         {
-            var actual = _sut.GetMedicineList();
+            var actual = _sut.GetAll();
 
             CollectionAssert.AreEqual(_stubMedicineList.ToList(), actual);
         }
@@ -83,7 +83,7 @@ namespace clinic.Test.Repository
          
             _sut.InsertMedicine(newMedicine);
            
-            Assert.IsTrue(_sut.GetMedicineList().Contains(newMedicine));
+            Assert.IsTrue(_sut.GetAll().Contains(newMedicine));
             _stubContext.Verify(c => c.medicines.Add(newMedicine), Times.Once);
             _stubContext.Verify(c => c.SaveChanges(), Times.Once);
         }
@@ -128,7 +128,7 @@ namespace clinic.Test.Repository
             };
             _sut.UpdateMedicine(medicineUpdated);
 
-           _sut.GetMedicineList().Should().Contain(medicineUpdated);
+           _sut.GetAll().Should().Contain(medicineUpdated);
            
         }
         [TestMethod]
@@ -164,7 +164,7 @@ namespace clinic.Test.Repository
 
             _sut.DeleteMedicine(id);
 
-            Assert.IsTrue(!_sut.GetMedicineList().Contains(_stubMedicineList.ToList()[0]));
+            Assert.IsTrue(!_sut.GetAll().Contains(_stubMedicineList.ToList()[0]));
         }
         [TestMethod]
         public void DeleteMedicine_WithValidId_DeleteMedicineInDatabaseSuccessfully()

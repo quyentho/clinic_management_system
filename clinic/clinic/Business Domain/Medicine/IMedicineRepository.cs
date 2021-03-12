@@ -8,7 +8,7 @@ namespace clinic.Models
 {
     public interface IMedicineRepository
     {
-        List<medicine> GetMedicineList();
+        List<medicine> GetAll();
         medicine GetMedicineById(int id);
         List<medicine> GetMedicinesByName(string name);
         void InsertMedicine(medicine medicine);

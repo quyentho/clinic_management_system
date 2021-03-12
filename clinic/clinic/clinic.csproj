@@ -74,8 +74,10 @@
   <ItemGroup>
     <Compile Include="Business Domain\Account\account.cs" />
     <Compile Include="Business Domain\Bill\bill.cs" />
-    <Compile Include="Business Domain\Medicine\MedicineViewModel.cs" />
+    <Compile Include="Business Domain\Medicine\MedicineVM.cs" />
+    <Compile Include="Business Domain\Medicine\MedicineAssignedVM.cs" />
     <Compile Include="Business Domain\Service\clinic_service.cs" />
+    <Compile Include="Business Domain\Service\ServiceTypes.cs" />
     <Compile Include="Business Domain\Statistic\ServiceStatistic.cs" />
     <Compile Include="DefaultTimeProvider.cs" />
     <Compile Include="Business Domain\Medicine\medicine.cs" />
@@ -100,6 +102,10 @@
     <Compile Include="Migrations\202103051408371_AddRelationshipToServiceStatistic.cs" />
     <Compile Include="Migrations\202103051408371_AddRelationshipToServiceStatistic.Designer.cs">
       <DependentUpon>202103051408371_AddRelationshipToServiceStatistic.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202103121738549_UpdateMedicineForeignKeyInClinic_service.cs" />
+    <Compile Include="Migrations\202103121738549_UpdateMedicineForeignKeyInClinic_service.Designer.cs">
+      <DependentUpon>202103121738549_UpdateMedicineForeignKeyInClinic_service.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="OperationEnum.cs" />
@@ -140,6 +146,7 @@
     <Compile Include="Views\Forms\AdminForm.Designer.cs">
       <DependentUpon>AdminForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="Presenters\DisplayMedicinePresenter.cs" />
     <Compile Include="Views\Forms\FormAssignMedicine.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -156,6 +163,7 @@
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Views\Forms\FormDisplayMedicine.Designer.cs">
+      <SubType>Form</SubType>
       <DependentUpon>FormDisplayMedicine.cs</DependentUpon>
     </Compile>
     <Compile Include="Views\Forms\FormDisplayPrescription.cs">
@@ -205,6 +213,7 @@
     <Compile Include="Views\Forms\FormStaff.Designer.cs">
       <DependentUpon>FormStaff.cs</DependentUpon>
     </Compile>
+    <Compile Include="Views\IDisplayMedicineView.cs" />
     <Compile Include="Views\Forms\LoginForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -238,6 +247,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202103051408371_AddRelationshipToServiceStatistic.resx">
       <DependentUpon>202103051408371_AddRelationshipToServiceStatistic.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202103121738549_UpdateMedicineForeignKeyInClinic_service.resx">
+      <DependentUpon>202103121738549_UpdateMedicineForeignKeyInClinic_service.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="OperationForm.resx">
       <DependentUpon>OperationForm.cs</DependentUpon>

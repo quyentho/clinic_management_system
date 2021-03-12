@@ -55,7 +55,7 @@ namespace clinic.Presenters
         }
         private List<medicine> GetMedicinesToDisplay()
         {
-            return _medicineRepository.GetMedicineList();
+            return _medicineRepository.GetAll();
         }
         public void SearchMedicines()
         {

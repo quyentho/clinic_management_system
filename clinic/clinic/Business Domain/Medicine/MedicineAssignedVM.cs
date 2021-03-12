@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace clinic.BusinessDomain.Medicine
 {
-    public class MedicineViewModel
+    public class MedicineAssignedVM
     {
         [DisplayName("Tên thuốc")]
         public string Name { get; set; }

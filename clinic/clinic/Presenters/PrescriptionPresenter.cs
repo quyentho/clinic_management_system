@@ -16,7 +16,7 @@ namespace clinic.Presenters
         private readonly IPrescriptionView _view;
 
         private List<prescription> _temporaryPrescription = new List<prescription>();
-        private List<MedicineViewModel> _selectedMedicineList = new List<MedicineViewModel>();
+        private List<MedicineAssignedVM> _selectedMedicineList = new List<MedicineAssignedVM>();
         public PrescriptionPresenter(IMedicineRepository repository, IBillRepository billRepository, IPrescriptionRepository prescriptionRepository, IPrescriptionView view)
         {
             _medicineRepository = repository;
@@ -32,9 +32,9 @@ namespace clinic.Presenters
             var bill = _billRepository.GetUnpaidBillByPatientId(_view.PatientId);
             HashSet<int> medicineAssignedIds = new HashSet<int>(bill.prescriptions.Select(p => p.medicine_id));
 
-            List<medicine> medicinesInPrescription = _medicineRepository.GetMedicineList().Where(s => medicineAssignedIds.Contains(s.id)).ToList();
+            List<medicine> medicinesInPrescription = _medicineRepository.GetAll().Where(s => medicineAssignedIds.Contains(s.id)).ToList();
 
-            _view.DgvMedicineDataSource = _medicineRepository.GetMedicineList();
+            _view.DgvMedicineDataSource = _medicineRepository.GetAll();
 
         }
         public void AssignMedicine()
@@ -47,7 +47,7 @@ namespace clinic.Presenters
             {
                 _temporaryPrescription.Add(prescriptionItem);
 
-                MedicineViewModel medicineSelected = GetMedicineViewModel(prescriptionItem);
+                MedicineAssignedVM medicineSelected = GetMedicineViewModel(prescriptionItem);
 
                 DisplayMedicineSelected(medicineSelected);
             }
@@ -68,11 +68,11 @@ namespace clinic.Presenters
 
         }
 
-        private MedicineViewModel GetMedicineViewModel(prescription prescriptionItem)
+        private MedicineAssignedVM GetMedicineViewModel(prescription prescriptionItem)
         {
             medicine med = _medicineRepository.GetMedicineById(prescriptionItem.medicine_id);
 
-            return new MedicineViewModel()
+            return new MedicineAssignedVM()
             {
                 Name = med.medicine_name,
                 Description = prescriptionItem.description,
@@ -83,7 +83,7 @@ namespace clinic.Presenters
 
         }
 
-        private void DisplayMedicineSelected(MedicineViewModel medicineSelected)
+        private void DisplayMedicineSelected(MedicineAssignedVM medicineSelected)
         {
             _selectedMedicineList.Add(medicineSelected);
 
@@ -92,7 +92,7 @@ namespace clinic.Presenters
 
         private void RefreshDatagridView()
         {
-            _view.DgvMedicinesSelectedDatasource = typeof(List<MedicineViewModel>);
+            _view.DgvMedicinesSelectedDatasource = typeof(List<MedicineAssignedVM>);
             _view.DgvMedicinesSelectedDatasource = _selectedMedicineList;
         }
 

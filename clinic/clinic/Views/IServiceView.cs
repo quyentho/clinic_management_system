@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Windows.Forms;
 
 namespace clinic.Views
 {
@@ -11,5 +7,9 @@ namespace clinic.Views
         string TxtServiceName { get; set; }
         string TxtPrice { get; set; }
         string ErrorMessage { get; set; }
+
+        ComboBox CbServiceTypes { get; }
+
+        int? SelectedMedicineId { get; set; }
     }
 }

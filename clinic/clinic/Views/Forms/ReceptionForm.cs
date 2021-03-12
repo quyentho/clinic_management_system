@@ -174,7 +174,7 @@ namespace clinic.Views.Forms
         {
             if(Functionality == ReceptionFunctionalityEnum.Bill)
             {
-                FormDisplayMedicine form = new FormDisplayPrescription(new PrescriptionRepository(_clinicEntities, _medicineRepository));
+                FormDisplayPrescription form = new FormDisplayPrescription(new PrescriptionRepository(_clinicEntities, _medicineRepository));
                 form.BillId = int.Parse(dgvReception.Rows[e.RowIndex].Cells[0].Value.ToString());
                 form.LbPatientName = dgvReception.Rows[e.RowIndex].Cells[2].Value.ToString();
                 form.Show();

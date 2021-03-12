@@ -14,7 +14,5 @@ namespace clinic.Models
         void Insert(clinic_service clinic_service);
         void Delete( int id);
         void Update(clinic_service clinic_service);
-
-        void AssignService(clinic_service clinic_service);
     }
 }

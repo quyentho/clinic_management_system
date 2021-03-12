@@ -25,7 +25,9 @@ namespace clinic
 
         public string Type { get; set; }
 
-        public medicine Medicine { get; set; }
+        [ForeignKey("medicine")]
+        public int? Medicine_Id { get; set; }
+        public medicine medicine { get; set; }
 
         public virtual ICollection<bill> bills { get; set; }
     }

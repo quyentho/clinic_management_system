@@ -79,6 +79,5 @@ namespace clinic.Models.Repositories
         {
             _clinicEntities.SaveChanges();
         }
-
     }
 }
