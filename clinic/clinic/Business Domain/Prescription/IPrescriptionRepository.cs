@@ -10,7 +10,6 @@ namespace clinic.Models
     {
         void AddPrescriptionToDatabase(prescription prescription);
         
-        void ClearPresciptionInBill(bill bill);
         List<prescription> GetPrescriptionByBillId(int billId);
     }
 }

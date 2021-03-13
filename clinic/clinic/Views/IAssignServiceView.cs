@@ -12,7 +12,6 @@ namespace clinic.Views
     public interface IAssignServiceView
     {
         object DgvServiceDataSource { get; set; }
-        List<clinic_service> ListServiceSelected { get; set; }
         int PatientId { get; set; }
         int IdServiceSelected { get; set; }
         int IndexRemove { get; set; }

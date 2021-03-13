@@ -1,11 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using clinic.Models;
 using clinic.Presenters;
@@ -27,7 +20,6 @@ namespace clinic.Views.Forms
         public object DgvServiceDataSource { get => dgvService.DataSource; set => dgvService.DataSource = value; }
         public int PatientId { get ; set; }
         public DataGridView DgvServicesSelected{ get => dgvServicesSelected; set => dgvServicesSelected = value; }
-        public List<clinic_service> ListServiceSelected { get; set; } = new List<clinic_service>();
         public int IdServiceSelected { get; set; }
         public int IndexRemove { get; set; }
         public string ErrMessage { get ; set ; }
@@ -35,6 +27,7 @@ namespace clinic.Views.Forms
         private void FormAssignServices_Load(object sender, EventArgs e)
         {
             _presenter = new AssignServicePresenter(_serviceRepository,_billRepository, this);
+            _presenter.LoadExistingServices(PatientId);
             btnRemove.Enabled = false;
         }
 
@@ -70,7 +63,7 @@ namespace clinic.Views.Forms
 
         private void btnOk_Click(object sender, EventArgs e)
         {
-            _presenter.AddServiceAssignedToBillIfExists();
+            _presenter.AddServicesToBill();
             if(!string.IsNullOrEmpty(ErrMessage))
             {
                 MessageBox.Show(ErrMessage);

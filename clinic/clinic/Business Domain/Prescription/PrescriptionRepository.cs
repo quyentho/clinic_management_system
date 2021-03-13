@@ -20,11 +20,7 @@ namespace clinic.Models.Repositories
                 _clinicEntities.prescriptions.Add(prescription);
         }
 
-        public void ClearPresciptionInBill(bill bill)
-        {
-            bill.prescriptions.Clear();
-            _clinicEntities.SaveChanges();
-        }
+     
 
         public List<prescription> GetPrescriptionByBillId(int billId)
         {

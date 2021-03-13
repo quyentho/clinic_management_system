@@ -5,6 +5,9 @@ namespace clinic.Models
 {
     public interface IBillRepository
     {
+        void ClearPresciptionInBill(bill bill);
+        void ClearServicesInBill(bill bill);
+
         List<bill> GetListUnpaidBill();
         List<bill> GetListPaidBill();
         void CreateBill(bill newBill);

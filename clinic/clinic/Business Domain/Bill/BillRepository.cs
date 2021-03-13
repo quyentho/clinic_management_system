@@ -25,7 +25,10 @@ namespace clinic.Models.Repositories
 
         private List<bill> GetUnpaidBillFromDb()
         {
-            return _clinicEntities.bills.Include(b=>b.clinic_service).Include(b=>b.patient).Include(b=>b.prescriptions)
+            return _clinicEntities.bills.Include(b=>b.clinic_service)
+                .Include(b=>b.patient)
+                .Include(b=>b.prescriptions)
+                .Include(b=>b.clinic_service)
                 .Where(b => b.is_paid == false)
                 .ToList();
         }
@@ -197,6 +200,18 @@ namespace clinic.Models.Repositories
         public bill GetUnpaidBillByPatientId(int patientId)
         {
             return _listUnpaidBill.Where(b => b.patient_id == patientId).FirstOrDefault();
+        }
+
+        public void ClearPresciptionInBill(bill bill)
+        {
+            bill.prescriptions.Clear();
+            Save();
+        }
+
+        public void ClearServicesInBill(bill bill)
+        {
+            bill.clinic_service.Clear();
+            Save();
         }
     }
 }

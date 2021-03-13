@@ -14,6 +14,8 @@ namespace clinic.Presenters
         private readonly IServiceRepository _serviceRepository;
         private readonly IBillRepository _billRepository;
         private readonly IAssignServiceView _view;
+
+        private List<clinic_service> _temporarySelectedServices = new List<clinic_service>();
         public AssignServicePresenter(IServiceRepository repository,
             IBillRepository billRepository,
             IAssignServiceView view)
@@ -27,14 +29,16 @@ namespace clinic.Presenters
 
         public void DisplayServiceDataGridView()
         {
-            var serviceVMs = GetServiceVMs();
+            var services = _serviceRepository.GetAll();
+            var serviceVMs = GetServiceVMs(services);
+
             _view.DgvServiceDataSource = serviceVMs;
         }
 
-        private List<ServiceVM> GetServiceVMs()
+        private List<ServiceVM> GetServiceVMs(List<clinic_service> services)
         {
             List<ServiceVM> serviceVMs = new List<ServiceVM>();
-            foreach (var service in _serviceRepository.GetAll())
+            foreach (var service in services)
             {
                 serviceVMs.Add(Transform.ServiceTransform(service));
             }
@@ -45,9 +49,9 @@ namespace clinic.Presenters
         {
             var serviceSelected = _serviceRepository.GetServiceById(_view.IdServiceSelected);
 
-            if (!(_view.ListServiceSelected.Contains(serviceSelected)))
+            if (!(_temporarySelectedServices.Contains(serviceSelected)))
             {
-                _view.ListServiceSelected.Add(serviceSelected);
+                _temporarySelectedServices.Add(serviceSelected);
                 DisplayServiceSelected(serviceSelected);
             }
         }
@@ -60,15 +64,29 @@ namespace clinic.Presenters
         public void RemoveServiceAssigned()
         {
             _view.DgvServicesSelected.Rows.RemoveAt(_view.IndexRemove);
-            _view.ListServiceSelected.RemoveAt(_view.IndexRemove);
+            _temporarySelectedServices.RemoveAt(_view.IndexRemove);
         }
+        public void LoadExistingServices(int patientId)
+        {
+            var bill = _billRepository.GetUnpaidBillByPatientId(patientId);
 
-        public void AddServiceAssignedToBillIfExists()
+            _temporarySelectedServices = bill.clinic_service.ToList();
+
+            foreach (var service in _temporarySelectedServices)
+            {
+                DisplayServiceSelected(service);
+            }
+        }
+        public void AddServicesToBill()
         {
             var bill = _billRepository.GetUnpaidBillByPatientId(_view.PatientId);
-            if(_view.ListServiceSelected.Count > 0)
+            
+            // clear in case of update.
+            _billRepository.ClearServicesInBill(bill);
+
+            if (_temporarySelectedServices.Count > 0)
             {
-                foreach(clinic_service serviceSelected in _view.ListServiceSelected)
+                foreach (clinic_service serviceSelected in _temporarySelectedServices)
                 {
                     try
                     {

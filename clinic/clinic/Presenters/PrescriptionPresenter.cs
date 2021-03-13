@@ -114,9 +114,9 @@ namespace clinic.Presenters
         public void AddPresciptionToBill()
         {
             var bill = _billRepository.GetUnpaidBillByPatientId(_view.PatientId);
-           
-            // clear presciption in case of update.
-            _prescriptionRepository.ClearPresciptionInBill(bill);
+
+            // clear prescription in case of update prescription.
+            _billRepository.ClearPresciptionInBill(bill);
 
             foreach (prescription prescriptionItem in _temporaryPrescription)
             {
