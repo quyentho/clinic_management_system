@@ -15,7 +15,7 @@ namespace clinic.Models.Repositories
             _clinicEntities = entities;
             _medicineList = GetMedicinesFromDatabase();
         }
-        public void DeleteMedicine(int id)
+        public void Delete(int id)
         {   
             var medicineFromDb = _clinicEntities.medicines.Find(id);
             if(medicineFromDb !=null)
@@ -46,7 +46,7 @@ namespace clinic.Models.Repositories
         {
             return _medicineList;
         }
-        public void InsertMedicine(medicine medicine)
+        public void Insert(medicine medicine)
         {
             _medicineList.Add(medicine);
             _clinicEntities.medicines.Add(medicine);
@@ -58,7 +58,7 @@ namespace clinic.Models.Repositories
             _clinicEntities.SaveChanges();
         }
 
-        public void UpdateMedicine(medicine medicineChanged)
+        public void Update(medicine medicineChanged)
         {
             int indexToReplace = (_medicineList ).FindIndex(m => m.id == medicineChanged.id);
 
@@ -78,7 +78,7 @@ namespace clinic.Models.Repositories
 
             medicine.quantity_in_sale_unit -= quantity;
 
-            UpdateMedicine(medicine);
+            Update(medicine);
         }
     }
 }

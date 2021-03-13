@@ -26,7 +26,7 @@ namespace clinic
             _medicineRepository = medicineRepository;
             InitializeComponent();
         }
-        #region Iview Properties
+        #region IView Properties
         public string TxtServiceName { get => txtServiceName.Text; set => txtServiceName.Text = value; }
         public string TxtPrice { get => txtPrice.Text; set => txtPrice.Text = value; }
         public string ErrorMessage { get; set; }

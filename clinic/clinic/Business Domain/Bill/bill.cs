@@ -1,14 +1,10 @@
+using System;
+using System.Collections.Generic;
+
 namespace clinic
 {
-    using System;
-    using System.Collections.Generic;
-    using System.ComponentModel.DataAnnotations;
-    using System.ComponentModel.DataAnnotations.Schema;
-    using System.Data.Entity.Spatial;
-
     public partial class bill
     {
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public bill()
         {
             prescriptions = new HashSet<prescription>();
@@ -27,14 +23,12 @@ namespace clinic
 
         public bool is_paid { get; set; }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<prescription> prescriptions { get; set; }
 
         public virtual patient patient { get; set; }
 
         public virtual staff staff { get; set; }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<clinic_service> clinic_service { get; set; }
     }
 }

@@ -62,12 +62,12 @@ namespace clinic.Test.Presenter
         public void Add_WithValidInput_AddSuccessfully()
         {
             medicine medicineInserted = null;
-            _mockMedicineRepo.Setup(m => m.InsertMedicine(It.IsAny<medicine>())).Callback<medicine>(medicine =>
+            _mockMedicineRepo.Setup(m => m.Insert(It.IsAny<medicine>())).Callback<medicine>(medicine =>
                   medicineInserted = medicine
             );
             _sut.Add();
 
-            _mockMedicineRepo.Verify(m => m.InsertMedicine(medicineInserted));
+            _mockMedicineRepo.Verify(m => m.Insert(medicineInserted));
 
             medicineInserted.Should().BeEquivalentTo(_stubMedicine);
         }

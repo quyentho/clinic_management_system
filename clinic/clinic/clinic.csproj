@@ -76,13 +76,15 @@
     <Compile Include="Business Domain\Bill\bill.cs" />
     <Compile Include="Business Domain\Medicine\MedicineVM.cs" />
     <Compile Include="Business Domain\Medicine\MedicineAssignedVM.cs" />
+    <Compile Include="Business Domain\Patient\PatientVM.cs" />
     <Compile Include="Business Domain\Service\clinic_service.cs" />
     <Compile Include="Business Domain\Service\ServiceTypes.cs" />
+    <Compile Include="Business Domain\Service\ServiceVM.cs" />
     <Compile Include="Business Domain\Statistic\ServiceStatistic.cs" />
     <Compile Include="DefaultTimeProvider.cs" />
     <Compile Include="Business Domain\Medicine\medicine.cs" />
     <Compile Include="clinicEntities.cs" />
-    <Compile Include="Business Domain\Bill\BillViewModel.cs" />
+    <Compile Include="Business Domain\Bill\BillVM.cs" />
     <Compile Include="Business Domain\Account\IAccountRepository.cs" />
     <Compile Include="Business Domain\Prescription\IPrescriptionRepository.cs" />
     <Compile Include="Business Domain\Account\AccountRepository.cs" />
@@ -140,6 +142,7 @@
     <Compile Include="Presenters\StaffPresenter.cs" />
     <Compile Include="Business Domain\Staff\staff.cs" />
     <Compile Include="TimeProvider.cs" />
+    <Compile Include="Utilities\Transform.cs" />
     <Compile Include="Views\Forms\AdminForm.cs">
       <SubType>Form</SubType>
     </Compile>

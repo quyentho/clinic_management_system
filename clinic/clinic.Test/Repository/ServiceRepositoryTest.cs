@@ -48,7 +48,7 @@ namespace clinic.Test.Repository
         [TestMethod]
         public void GetServiceList_WhenCalled_ReturnsServiceList()
         {
-            var serviceList = _sut.GetServiceList();
+            var serviceList = _sut.GetAll();
 
             serviceList.Should().BeEquivalentTo(_stubServiceList);
         }
@@ -95,7 +95,7 @@ namespace clinic.Test.Repository
 
             _sut.Insert(newService);
 
-            _sut.GetServiceList().Should().Contain(newService);
+            _sut.GetAll().Should().Contain(newService);
         }
         [TestMethod]
         public void InsertService_WithValidService_InsertToDatabaseSuccessfully()
@@ -126,7 +126,7 @@ namespace clinic.Test.Repository
 
             _sut.Update(serviceUpdated);
 
-            _sut.GetServiceList().Should()
+            _sut.GetAll().Should()
                 .Contain(serviceUpdated)
                 .And
                 .NotContain(_stubServiceList[0]);

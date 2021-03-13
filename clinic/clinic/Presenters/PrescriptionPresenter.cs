@@ -1,5 +1,6 @@
 ﻿using clinic.BusinessDomain.Medicine;
 using clinic.Models;
+using clinic.Utilities;
 using clinic.Views;
 using System;
 using System.Collections.Generic;
@@ -29,21 +30,27 @@ namespace clinic.Presenters
 
         public void DisplayMedicineDataGridView()
         {
-            var bill = _billRepository.GetUnpaidBillByPatientId(_view.PatientId);
-            HashSet<int> medicineAssignedIds = new HashSet<int>(bill.prescriptions.Select(p => p.medicine_id));
-
-            List<medicine> medicinesInPrescription = _medicineRepository.GetAll().Where(s => medicineAssignedIds.Contains(s.id)).ToList();
-
-            _view.DgvMedicineDataSource = _medicineRepository.GetAll();
-
+            var medicineVMs = GetMedicineVMs();
+            _view.DgvMedicineDataSource = medicineVMs;
         }
+
+        private List<MedicineVM> GetMedicineVMs()
+        {
+            List<MedicineVM> medicineVMs = new List<MedicineVM>();
+            foreach (var medicine in _medicineRepository.GetAll())
+            {
+               medicineVMs.Add(Transform.MedicineTransform(medicine));
+            }
+            return medicineVMs;
+        }
+
         public void AssignMedicine()
         {
             var bill = _billRepository.GetUnpaidBillByPatientId(_view.PatientId);
 
             var prescriptionItem = AddMedicineToPrescription(bill.id, _view.MedicineSelectedId);
 
-            if (!(_temporaryPrescription.Contains(prescriptionItem)))
+            if (!_temporaryPrescription.Any(p=>p.medicine_id == prescriptionItem.medicine_id))
             {
                 _temporaryPrescription.Add(prescriptionItem);
 

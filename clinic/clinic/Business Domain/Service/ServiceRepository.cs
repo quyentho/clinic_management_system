@@ -33,9 +33,11 @@ namespace clinic.Models.Repositories
 
         private List<clinic_service> GetServicesFromDatabase()
         {
-            return _clinicEntities.clinic_service.Where(m => m.is_active == true).AsNoTracking().ToList();
+            return _clinicEntities.clinic_service.Where(m => m.is_active == true)
+                .Include(s=>s.medicine)
+                .ToList();
         }
-        public List<clinic_service> GetServiceList()
+        public List<clinic_service> GetAll()
         {
             return _serviceList;
         }

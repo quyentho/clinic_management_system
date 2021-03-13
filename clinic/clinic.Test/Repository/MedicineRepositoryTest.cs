@@ -81,7 +81,7 @@ namespace clinic.Test.Repository
                 is_active = true
             };
          
-            _sut.InsertMedicine(newMedicine);
+            _sut.Insert(newMedicine);
            
             Assert.IsTrue(_sut.GetAll().Contains(newMedicine));
             _stubContext.Verify(c => c.medicines.Add(newMedicine), Times.Once);
@@ -126,7 +126,7 @@ namespace clinic.Test.Repository
                 sale_price_per_unit = 1000,
                 is_active = true
             };
-            _sut.UpdateMedicine(medicineUpdated);
+            _sut.Update(medicineUpdated);
 
            _sut.GetAll().Should().Contain(medicineUpdated);
            
@@ -152,7 +152,7 @@ namespace clinic.Test.Repository
                 is_active = true
             };
 
-            Action act = () =>  _sut.UpdateMedicine(medicineUpdated);
+            Action act = () =>  _sut.Update(medicineUpdated);
 
             act.Should().NotThrow();
         }
@@ -162,7 +162,7 @@ namespace clinic.Test.Repository
         {
             int id = 1;
 
-            _sut.DeleteMedicine(id);
+            _sut.Delete(id);
 
             Assert.IsTrue(!_sut.GetAll().Contains(_stubMedicineList.ToList()[0]));
         }
@@ -171,7 +171,7 @@ namespace clinic.Test.Repository
         {
             int id = 1;
 
-            _sut.DeleteMedicine(id);
+            _sut.Delete(id);
 
             _stubContext.Verify(c => c.medicines.Remove(_stubMedicineList.ToList()[0]));
             _stubContext.Verify(c => c.SaveChanges());

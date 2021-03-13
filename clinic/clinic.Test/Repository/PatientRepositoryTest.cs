@@ -50,7 +50,7 @@ namespace clinic.Test.Repository
         [TestMethod]
         public void GetPatientList_WhenCalled_ReturnsPatientList()
         {
-            var patientList = _sut.GetPatientList();
+            var patientList = _sut.GetPatients();
 
             patientList.Should().BeEquivalentTo(_stubPatientList);
         }
@@ -86,7 +86,7 @@ namespace clinic.Test.Repository
 
             _sut.InsertPatient(patient);
 
-            _sut.GetPatientList().Should().Contain(patient);
+            _sut.GetPatients().Should().Contain(patient);
         }
         [TestMethod]
         public void InsertPatient_WithValidPatient_InsertPatientToDatabaseSuccessfully()

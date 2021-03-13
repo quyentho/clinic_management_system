@@ -11,9 +11,9 @@ namespace clinic.Models
         List<medicine> GetAll();
         medicine GetMedicineById(int id);
         List<medicine> GetMedicinesByName(string name);
-        void InsertMedicine(medicine medicine);
-        void DeleteMedicine(int id);
-        void UpdateMedicine(medicine medicine);
+        void Insert(medicine medicine);
+        void Delete(int id);
+        void Update(medicine medicine);
         void DecreaseQuantity(int medicineId, int quantity);
     }
 }

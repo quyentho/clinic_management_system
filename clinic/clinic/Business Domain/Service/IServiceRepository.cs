@@ -8,7 +8,7 @@ namespace clinic.Models
 {
     public interface IServiceRepository
     {
-        List<clinic_service> GetServiceList();
+        List<clinic_service> GetAll();
         List<clinic_service> GetServicesByName(string name);
         clinic_service GetServiceById(int id);
         void Insert(clinic_service clinic_service);

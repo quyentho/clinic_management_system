@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace clinic.Models
 {
-    public class BillViewModel
+    public class BillVM
     {
         [DisplayName("Mã Hóa Đơn")]
         public int Id { get; set; }

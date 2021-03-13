@@ -39,13 +39,13 @@ namespace clinic.Presenters
                                                    CultureInfo.InvariantCulture, DateTimeStyles.None),
                 is_active = true,
                 unit_exchange_ratio = int.Parse(_view.TxtExchangeRatio),
-                quantity_in_sale_unit = CalculateQuantityInSaleUnit()
+                quantity_in_sale_unit = CalculateQuantityInSaleUnit(),
             };
             return medicine;
         }
-        public  void Add()
+        public void Add()
         {
-            _repository.InsertMedicine(GetMedicineFromView());
+            _repository.Insert(GetMedicineFromView());
             
         }
         public void Display(int idSelected)
@@ -65,7 +65,7 @@ namespace clinic.Presenters
         }
         public void Delete(int idSelected)
         {
-            _repository.DeleteMedicine(idSelected);
+            _repository.Delete(idSelected);
       
         }
         public  void Edit(int idSelected)
@@ -73,7 +73,7 @@ namespace clinic.Presenters
             var medicineForUpdate = GetMedicineFromView();
             medicineForUpdate.id = idSelected;
 
-            _repository.UpdateMedicine(medicineForUpdate);
+            _repository.Update(medicineForUpdate);
         }
 
     }

@@ -1,15 +1,10 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using clinic.Views;
 using clinic.Models;
 using clinic.Models.Repositories;
-using System.ComponentModel;
-using System.Windows.Forms;
-using System.Data;
+using clinic.BusinessDomain.Medicine;
+using clinic.Utilities;
+using clinic.BusinessDomain.Service;
 
 namespace clinic.Presenters
 {
@@ -45,17 +40,31 @@ namespace clinic.Presenters
             _view.AdminDataGridView.DataSource = null;
             _view.AdminDataGridView.DataSource = GetServicesToDisplay();
         }
-        private List<clinic_service> GetServicesToDisplay()
+        private List<ServiceVM> GetServicesToDisplay()
         {
-            return _serviceRepository.GetServiceList();
+            var services = _serviceRepository.GetAll();
+            List<ServiceVM> serviceVMs = new List<ServiceVM>();
+            foreach (var service in services)
+            {
+                serviceVMs.Add(Transform.ServiceTransform(service));
+            }
+
+            return serviceVMs;
         }
         private List<StaffViewModel> GetStaffsToDisplay()
         {
             return _staffRepository.GetStaffList();
         }
-        private List<medicine> GetMedicinesToDisplay()
+        private List<MedicineVM> GetMedicinesToDisplay()
         {
-            return _medicineRepository.GetAll();
+            var medicines = _medicineRepository.GetAll();
+            List<MedicineVM> medicineVMs = new List<MedicineVM>();
+            foreach (var medicine in medicines)
+            {
+                medicineVMs.Add(Transform.MedicineTransform(medicine));
+            }
+
+            return medicineVMs;
         }
         public void SearchMedicines()
         {

@@ -1,5 +1,7 @@
-﻿using clinic.Models;
+﻿using clinic.BusinessDomain.Patient;
+using clinic.Models;
 using clinic.Models.Repositories;
+using clinic.Utilities;
 using clinic.Views;
 using System;
 using System.Collections.Generic;
@@ -23,24 +25,39 @@ namespace clinic.Presenters
             _billRepository = billRepository;
             _patientRepository = patientRepository;
         }
-        public void DisplayPatientsData()
+        public void DisplayPatients()
         {
+
             _view.DgvReceptionDataSource = null;
-            _view.DgvReceptionDataSource = _patientRepository.GetPatientList();
+
+            var patients = _patientRepository.GetPatients();
+
+            _view.DgvReceptionDataSource = GetPatientVMs(patients);
         }
-        public void DisplayListUnpaidBill()
+
+        private List<PatientVM> GetPatientVMs(List<patient> patients)
+        {
+            List<PatientVM> patientVMs = new List<PatientVM>();
+            foreach (var patient in patients)
+            {
+                patientVMs.Add(Transform.PatientTransform(patient));
+            }
+            return patientVMs;
+        }
+
+        public void DisplayUnpaidBills()
         {
             _view.DgvReceptionDataSource = null;
             var listUnpaidBill = _billRepository.GetListUnpaidBill();
 
             _view.DgvReceptionDataSource = BillsToDisPlay(listUnpaidBill);
         }
-        private List<BillViewModel> BillsToDisPlay(List<bill> ListBill)
+        private List<BillVM> BillsToDisPlay(List<bill> ListBill)
         {
-            var listBillVM = new List<BillViewModel>();
+            var listBillVM = new List<BillVM>();
             foreach (var bill in ListBill)
             {
-                listBillVM.Add(new BillViewModel()
+                listBillVM.Add(new BillVM()
                 {
                     Id = bill.id,
                     PatientId = bill.patient_id,
@@ -61,17 +78,30 @@ namespace clinic.Presenters
         {
             if (_view.CbSearchValue == "SDT")
             {
-                if (_view.Functionality == ReceptionFunctionalityEnum.Bill)
-                    _view.DgvReceptionDataSource = _billRepository.GetUnpaidBillByPhoneNumber(_view.TxtSearch);
-                if (_view.Functionality == ReceptionFunctionalityEnum.Patient)
-                    _view.DgvReceptionDataSource = _patientRepository.GetPatientsByPhone(_view.TxtSearch);
+                switch (_view.Functionality)
+                {
+                    case ReceptionFunctionalityEnum.Patient:
+                        var patients = _patientRepository.GetPatientsByPhone(_view.TxtSearch);
+                        _view.DgvReceptionDataSource = GetPatientVMs(patients);
+                        break;
+                    case ReceptionFunctionalityEnum.Bill:
+                        _view.DgvReceptionDataSource = _billRepository.GetUnpaidBillByPhoneNumber(_view.TxtSearch);
+                        break;
+                }
             }
-            if (_view.CbSearchValue == "Tên")
+            else if (_view.CbSearchValue == "Tên")
             {
-                if (_view.Functionality == ReceptionFunctionalityEnum.Bill)
-                    _view.DgvReceptionDataSource = _billRepository.GetUnpaidBillsByPatientName(_view.TxtSearch);
-                if (_view.Functionality == ReceptionFunctionalityEnum.Patient)
-                    _view.DgvReceptionDataSource = _patientRepository.GetPatientsByName(_view.TxtSearch);
+                switch (_view.Functionality)
+                {
+                    case ReceptionFunctionalityEnum.Patient:
+                        var patients = _patientRepository.GetPatientsByName(_view.TxtSearch);
+                        _view.DgvReceptionDataSource = GetPatientVMs(patients);
+                        break;
+                    case ReceptionFunctionalityEnum.Bill:
+                        _view.DgvReceptionDataSource = _billRepository.GetUnpaidBillsByPatientName(_view.TxtSearch);
+                        break;
+                }
+
             }
         }
         public void CreateBillIfNotExists()

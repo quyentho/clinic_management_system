@@ -7,7 +7,7 @@ namespace clinic.Models
 {
     public interface IPatientRepository
     {
-        List<patient> GetPatientList();
+        List<patient> GetPatients();
         List<patient> GetPatientsByName(string name);
         List<patient> GetPatientsByPhone(string phone);
         patient GetPatientById(int id);

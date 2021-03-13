@@ -15,7 +15,7 @@ namespace clinic.Models.Repositories
             _patientList = GetPatientsFromDatabase();
         }
 
-        public List<patient> GetPatientList()
+        public List<patient> GetPatients()
         {
             return _patientList;
         }

@@ -55,7 +55,7 @@ namespace clinic.Views.Forms
         {
              Functionality = ReceptionFunctionalityEnum.Patient;
              btnAddPatient.Enabled = true;
-            _presenter.DisplayPatientsData();
+            _presenter.DisplayPatients();
         }
 
         private void ReceptionForm_Load(object sender, EventArgs e)
@@ -72,7 +72,7 @@ namespace clinic.Views.Forms
         private void btnBills_Click(object sender, EventArgs e)
         {
             btnAddPatient.Enabled = false;
-            _presenter.DisplayListUnpaidBill();
+            _presenter.DisplayUnpaidBills();
             Functionality = ReceptionFunctionalityEnum.Bill;
         }
 

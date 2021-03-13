@@ -1,8 +1,11 @@
-﻿using clinic.Models;
+﻿using clinic.BusinessDomain.Service;
+using clinic.Models;
+using clinic.Utilities;
 using clinic.Views;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+
 
 namespace clinic.Presenters
 {
@@ -11,7 +14,9 @@ namespace clinic.Presenters
         private readonly IServiceRepository _serviceRepository;
         private readonly IBillRepository _billRepository;
         private readonly IAssignServiceView _view;
-        public AssignServicePresenter(IServiceRepository repository,IBillRepository billRepository,IAssignServiceView view)
+        public AssignServicePresenter(IServiceRepository repository,
+            IBillRepository billRepository,
+            IAssignServiceView view)
         {
             _serviceRepository = repository;
             _billRepository = billRepository;
@@ -20,16 +25,22 @@ namespace clinic.Presenters
             DisplayServiceDataGridView();
         }
 
-        private void DisplayServiceDataGridView()
+        public void DisplayServiceDataGridView()
         {
-            var bill = _billRepository.GetUnpaidBillByPatientId(_view.PatientId);
-            HashSet<int> serviceAssignedIds = new HashSet<int>(bill.clinic_service.Select(s => s.id));
-
-            List<clinic_service> serviceToDisplay = _serviceRepository.GetServiceList()
-                .Where(s => !serviceAssignedIds.Contains(s.id)).ToList(); // Not display service  
-                                                                          // already assinged                    
-            _view.DgvServiceDataSource = serviceToDisplay;
+            var serviceVMs = GetServiceVMs();
+            _view.DgvServiceDataSource = serviceVMs;
         }
+
+        private List<ServiceVM> GetServiceVMs()
+        {
+            List<ServiceVM> serviceVMs = new List<ServiceVM>();
+            foreach (var service in _serviceRepository.GetAll())
+            {
+                serviceVMs.Add(Transform.ServiceTransform(service));
+            }
+            return serviceVMs;
+        }
+
         public void AssignService()
         {
             var serviceSelected = _serviceRepository.GetServiceById(_view.IdServiceSelected);

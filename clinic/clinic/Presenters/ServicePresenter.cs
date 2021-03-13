@@ -24,6 +24,7 @@ namespace clinic.Presenters
             {
                 service_name = _view.TxtServiceName,
                 price = long.Parse(_view.TxtPrice),
+                Type = _view.CbServiceTypes.Text,
                 is_active = true
             };
 
@@ -70,6 +71,7 @@ namespace clinic.Presenters
             {
                 service_name = _view.TxtServiceName,
                 price = long.Parse(_view.TxtPrice),
+                Type = _view.CbServiceTypes.Text,
                 is_active = true
             };
             return clinic_Service;
