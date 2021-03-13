@@ -45,16 +45,7 @@ namespace clinic.Models.Repositories
             _serviceList.Add(clinic_service);
             _clinicEntities.clinic_service.Add(clinic_service);
 
-            if (clinic_service.Medicine_Id != null)
-            {
-                _clinicEntities.ServiceStatistics.Add(new ServiceStatistic()
-                {
-                    ServiceId = clinic_service.id,
-                    MedicineId = Convert.ToInt32(clinic_service.Medicine_Id),
-                    Count = 1,
-                    StartDate = DateTime.Now,
-                });
-            }
+           
             Save();
         }
         public void Delete(int id)

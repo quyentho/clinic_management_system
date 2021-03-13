@@ -5,6 +5,8 @@ using clinic.Models.Repositories;
 using clinic.BusinessDomain.Medicine;
 using clinic.Utilities;
 using clinic.BusinessDomain.Service;
+using clinic.BusinessDomain.Statistic;
+using System;
 
 namespace clinic.Presenters
 {
@@ -15,15 +17,20 @@ namespace clinic.Presenters
         private readonly IStaffRepository _staffRepository;
         private readonly IServiceRepository _serviceRepository;
         private readonly IBillRepository _billRepository;
+        private readonly IStatisticRepository _statisticRepository;
+
         public AdminPresenter(IAdminView view,IMedicineRepository medicineRepository
             ,IStaffRepository staffRepository,IServiceRepository serviceRepository
-            ,IBillRepository billRepository)
+            ,IBillRepository billRepository,
+            IStatisticRepository statisticRepository
+            )
         {
             _view = view;
             _medicineRepository = medicineRepository;
             _staffRepository = staffRepository;
             _serviceRepository = serviceRepository;
             _billRepository = billRepository;
+            _statisticRepository = statisticRepository;
         }
         public void DisplayStaffs()
         {
@@ -93,6 +100,28 @@ namespace clinic.Presenters
         public void SearchServices()
         {
             _serviceRepository.GetServicesByName(_view.TxtTimKiem);
+        }
+
+        public void DisplayTestStatistic()
+        {
+            _view.AdminDataGridView.DataSource = null;
+
+            List<ServiceStatistic> testStatistics = _statisticRepository.GetAllActive();
+            List<TestVM> testVMs = new List<TestVM>();
+            foreach (var item in testStatistics)
+            {
+                testVMs.Add(Transform.TestTransform(item));
+            }
+
+            _view.AdminDataGridView.DataSource = testVMs;
+            
+        }
+
+        public void InitializeNewRecord(int serviceId, int medicineId)
+        {
+            _statisticRepository.InitializeNewRecord(serviceId, medicineId);
+            
+            DisplayTestStatistic();
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using clinic.Models;
+﻿using clinic.BusinessDomain.Statistic;
+using clinic.Models;
 using clinic.Models.Repositories;
 using clinic.Presenters;
 using clinic.Views;
@@ -11,16 +12,18 @@ namespace clinic
 {
     public partial class AdminForm : Form, IAdminView
     {
-        
-        private  clinicEntities _clinicEntities;
-        private  AdminPresenter _presenter;
-        private  OperationForm _form;
-        private  IMedicineRepository _medicineRepository;
-        private  IStaffRepository _staffRepository;
-        private  IServiceRepository _serviceRepository;
-        private  IPermissionRepository _permissionRepository;
-        private  IAccountRepository _accountRepository;
+
+        private clinicEntities _clinicEntities;
+        private AdminPresenter _presenter;
+        private OperationForm _form;
+        private IMedicineRepository _medicineRepository;
+        private IStaffRepository _staffRepository;
+        private StatisticRepository _statisticRepository;
+        private IServiceRepository _serviceRepository;
+        private IPermissionRepository _permissionRepository;
+        private IAccountRepository _accountRepository;
         private IBillRepository _billRepository;
+
         public AdminForm(clinicEntities clinicEntities)
         {
             _clinicEntities = clinicEntities;
@@ -29,18 +32,19 @@ namespace clinic
             _permissionRepository = new PermissionRepository(_clinicEntities);
             _accountRepository = new AccountRepository(_clinicEntities);
             _billRepository = new BillRepository(_clinicEntities);
-            _staffRepository = new StaffRepository(_clinicEntities,_permissionRepository,_accountRepository);
-            _presenter = new AdminPresenter(this,_medicineRepository,_staffRepository,_serviceRepository,_billRepository);
+            _staffRepository = new StaffRepository(_clinicEntities, _permissionRepository, _accountRepository);
+            _statisticRepository = new StatisticRepository(_clinicEntities);
+            _presenter = new AdminPresenter(this, _medicineRepository, _staffRepository, _serviceRepository, _billRepository, _statisticRepository);
             InitializeComponent();
         }
 
-     
+
         #region Properties
 
         public string TxtTimKiem { get => txtSearch.Text; set => txtSearch.Text = value; }
         public int IndexSelected { get; set; }
         public DataGridView AdminDataGridView { get => dgvAdmin; set => dgvAdmin = value; }
-        public DateTime DtpRevenue { get => dtpRevenue.Value; set => dtpRevenue.Value=value; }
+        public DateTime DtpRevenue { get => dtpRevenue.Value; set => dtpRevenue.Value = value; }
         public bool RbDate { get => rbDate.Checked; set => rbDate.Checked = value; }
         public bool RbMonth { get => rbMonth.Checked; set => rbMonth.Checked = value; }
         public bool RbYear { get => rbYear.Checked; set => rbYear.Checked = value; }
@@ -54,18 +58,18 @@ namespace clinic
         #region Add, Edit, Delete button_click
         private void btnAdd_Click(object sender, EventArgs e)
         {
-            if(_form != null)
+            if (_form != null)
             {
                 _form.Operation = Operation.Insert;
                 _form.UpdateDataGridViewEventHandler += UpdateDataGridView;
                 _form.ShowDialog();
             }
-            
+
         }
 
         private void btnEdit_Click(object sender, EventArgs e)
         {
-            if(_form != null)
+            if (_form != null)
             {
                 _form.Operation = Operation.Edit;
                 _form.IdSelected = IndexSelected;
@@ -76,7 +80,7 @@ namespace clinic
 
         private void btnDelete_Click(object sender, EventArgs e)
         {
-            if(_form != null)
+            if (_form != null)
             {
                 _form.Operation = Operation.Delete;
                 _form.IdSelected = IndexSelected;
@@ -96,6 +100,8 @@ namespace clinic
 
         private void btnService_Click(object sender, EventArgs e)
         {
+            isTestFunctionality = false;
+
             if (_form != null)
                 DisposeFormAndSetNull();
             _form = new FormService(_serviceRepository, _medicineRepository);
@@ -104,14 +110,18 @@ namespace clinic
 
         private void btnStaff_Click(object sender, EventArgs e)
         {
+            isTestFunctionality = false;
+
             if (_form != null)
                 DisposeFormAndSetNull();
-            _form = new FormStaff(_staffRepository,_permissionRepository);
+            _form = new FormStaff(_staffRepository, _permissionRepository);
             _presenter.DisplayStaffs();
         }
 
-        private  void btnMedicine_Click(object sender, EventArgs e)
+        private void btnMedicine_Click(object sender, EventArgs e)
         {
+            isTestFunctionality = false;
+
             if (_form != null)
                 DisposeFormAndSetNull();
             _form = new FormMedicine(_medicineRepository);
@@ -131,16 +141,18 @@ namespace clinic
             if (_form is FormMedicine) _presenter.SearchMedicines();
             else if (_form is FormService) _presenter.SearchServices();
             else if (_form is FormStaff) _presenter.SearchStaffs();
-          
+
         }
 
         private void btnRevenue_Click(object sender, EventArgs e)
         {
+            isTestFunctionality = false;
+
             if (_form != null)
             {
                 DisposeFormAndSetNull();
             }
-              _presenter.DisplayRevenue();
+            _presenter.DisplayRevenue();
         }
 
         private void DisposeFormAndSetNull()
@@ -177,7 +189,7 @@ namespace clinic
 
         private void dgvAdmin_RowsRemoved(object sender, DataGridViewRowsRemovedEventArgs e)
         {
-            if(dgvAdmin.RowCount <= 0)
+            if (dgvAdmin.RowCount <= 0)
             {
                 btnEdit.Enabled = false;
                 btnDelete.Enabled = false;
@@ -186,7 +198,7 @@ namespace clinic
 
         private void dgvAdmin_RowsAdded(object sender, DataGridViewRowsAddedEventArgs e)
         {
-            if(dgvAdmin.RowCount > 0)
+            if (dgvAdmin.RowCount > 0)
             {
                 btnEdit.Enabled = true;
                 btnDelete.Enabled = true;
@@ -195,12 +207,39 @@ namespace clinic
 
         private void btnLogout_Click(object sender, EventArgs e)
         {
+            isTestFunctionality = false;
+
             this.Close();
         }
 
         private void btnServiceStatistic_Click(object sender, EventArgs e)
         {
+            isTestFunctionality = true;
+            if (_form != null)
+            {
+                DisposeFormAndSetNull();
+            }
+            _presenter.DisplayTestStatistic();
+        }
 
+        private bool isTestFunctionality = false;
+        private void dgvAdmin_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
+        {
+            if (isTestFunctionality)
+            {
+                DialogResult result = MessageBox.Show("Lấy thuốc xét nghiệm mới?", "Xác nhận",
+               MessageBoxButtons.YesNo);
+
+                if (result == DialogResult.Yes)
+                {
+                    var serviceId = Convert.ToInt32(dgvAdmin.Rows[e.RowIndex].Cells[0].Value);
+                    var medicineId = Convert.ToInt32(dgvAdmin.Rows[e.RowIndex].Cells[2].Value);
+
+                    _presenter.InitializeNewRecord(serviceId, medicineId);
+                }
+            }
+
+            
         }
     }
 }

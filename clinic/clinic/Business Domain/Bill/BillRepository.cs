@@ -1,4 +1,5 @@
-﻿using System;
+﻿using clinic.BusinessDomain.Statistic;
+using System;
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
@@ -66,10 +67,40 @@ namespace clinic.Models.Repositories
                 throw new ArgumentOutOfRangeException("id", "Hoa Don Khong Ton Tai");
             }
 
+            SaveServiceStatistic(billFromDb);
+
             billFromDb.is_paid = true;
             RemoveBillFromUnpaidList(billFromDb);
             AddBillToPaidList(billFromDb);
             Save();
+        }
+
+        private void SaveServiceStatistic(bill billFromDb)
+        {
+            foreach (var service in billFromDb.clinic_service)
+            {
+                if (service.Medicine_Id != null)
+                {
+                    service.medicine.quantity_in_sale_unit -= 1;
+
+                    var serviceStatistic = _clinicEntities.ServiceStatistics
+                        .Where(s => s.ServiceId == service.id && s.IsActive == true)
+                        .FirstOrDefault();
+
+                    if (serviceStatistic is null)
+                    {
+                        serviceStatistic = _clinicEntities.ServiceStatistics.Add(new ServiceStatistic()
+                        {
+                            ServiceId = service.id,
+                            MedicineId = Convert.ToInt32(service.Medicine_Id),
+                            Count = 0,
+                            StartDate = DateTime.Now,
+                        });
+                    }
+
+                    serviceStatistic.Count++;
+                }
+            }
         }
 
         private void AddBillToPaidList(bill billFromDb)
@@ -145,16 +176,7 @@ namespace clinic.Models.Repositories
 
             var serviceToAdd  = _clinicEntities.clinic_service.Find(service.id);
 
-            if (serviceToAdd.Medicine_Id != null)
-            {
-                serviceToAdd.medicine.quantity_in_sale_unit -= 1;
-                
-                var serviceStatistic = _clinicEntities.ServiceStatistics
-                    .Where(s => s.ServiceId == service.id && s.IsActive == true)
-                    .FirstOrDefault();
-
-                serviceStatistic.Count++;
-            }
+           
 
             bill.clinic_service.Add(serviceToAdd);
             Save();

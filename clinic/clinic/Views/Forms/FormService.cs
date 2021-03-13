@@ -66,7 +66,7 @@ namespace clinic
                         _presenter.Add();
                         break;
                     case Operation.Edit:
-                        _presenter.Edit(IdSelected);
+                        _presenter.Update(IdSelected);
                         break;
                     case Operation.Delete:
                         DialogResult dialogResult = MessageBox.Show("Có chắc muốn xoá?", "Cảnh báo", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);

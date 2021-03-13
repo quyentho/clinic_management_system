@@ -1,6 +1,7 @@
 ﻿using clinic.BusinessDomain.Medicine;
 using clinic.BusinessDomain.Patient;
 using clinic.BusinessDomain.Service;
+using clinic.BusinessDomain.Statistic;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,6 +12,20 @@ namespace clinic.Utilities
 {
     public static class Transform
     {
+        public static TestVM TestTransform(ServiceStatistic test)
+        {
+            return new TestVM
+            {
+                MedicineId = test.MedicineId,
+                EndDate = test.EndDate,
+                Count = test.Count,
+                MedicineName = test.medicine.medicine_name,
+                ServiceId = test.ServiceId,
+                ServiceName = test.clinic_service.service_name,
+                StartDate = test.StartDate
+            };
+        }
+
         public static ReceptionMedicineVM ReceptionMedicineTransform(medicine medicine)
         {
             return new ReceptionMedicineVM

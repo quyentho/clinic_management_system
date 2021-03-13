@@ -34,7 +34,7 @@ namespace clinic.Presenters
             }
 
             _repository.Insert(service);
-       
+
         }
         public void Display(int idSelected)
         {
@@ -44,6 +44,7 @@ namespace clinic.Presenters
                 _view.TxtServiceName = serviceFromDB.service_name;
                 _view.TxtPrice = serviceFromDB.price.ToString();
                 _view.CbServiceTypes.SelectedItem = serviceFromDB.Type;
+                _view.SelectedMedicineId = serviceFromDB.Medicine_Id;
             }
         }
 
@@ -72,11 +73,12 @@ namespace clinic.Presenters
                 service_name = _view.TxtServiceName,
                 price = long.Parse(_view.TxtPrice),
                 Type = _view.CbServiceTypes.Text,
+                Medicine_Id = _view.SelectedMedicineId,
                 is_active = true
             };
             return clinic_Service;
         }
-        public void Edit(int idSelected)
+        public void Update(int idSelected)
         {
             var serviceEdited = GetServiceFromView();
             serviceEdited.id = idSelected;
@@ -117,7 +119,7 @@ namespace clinic.Presenters
             }
             _view.ErrorMessage = "";
             return true;
-        }       
+        }
         #endregion
     }
 }

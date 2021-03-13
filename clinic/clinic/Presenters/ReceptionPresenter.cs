@@ -1,4 +1,5 @@
 ﻿using clinic.BusinessDomain.Patient;
+using clinic.BusinessDomain.Statistic;
 using clinic.Models;
 using clinic.Models.Repositories;
 using clinic.Utilities;
@@ -72,6 +73,9 @@ namespace clinic.Presenters
         public void PayBill()
         {
             var bill = _billRepository.GetUnpaidBillByPatientId(_view.PatientIdSelected);
+            
+         
+
             _billRepository.PayBill(bill.id);
         }
         public void Search()
