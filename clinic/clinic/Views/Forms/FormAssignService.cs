@@ -28,7 +28,9 @@ namespace clinic.Views.Forms
         {
             _presenter = new AssignServicePresenter(_serviceRepository,_billRepository, this);
             _presenter.LoadExistingServices(PatientId);
-            btnRemove.Enabled = false;
+
+            if (dgvServicesSelected.Rows.Count > 0)
+                btnRemove.Enabled = true;
         }
 
         private void btnChoose_Click(object sender, EventArgs e)

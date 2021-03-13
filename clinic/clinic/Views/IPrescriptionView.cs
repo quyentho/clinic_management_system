@@ -13,7 +13,7 @@ namespace clinic.Views
         object DgvMedicineDataSource { get; set; }
         int PatientId { get; set; }
         int MedicineSelectedId { get; set; }
-        int IndexRemove { get; set; }
+        int RemoveIndex { get; set; }
         object DgvMedicinesSelectedDatasource { get; set; }
         string TxtSearch { get; set; }
         string Descriptions { get; set; }

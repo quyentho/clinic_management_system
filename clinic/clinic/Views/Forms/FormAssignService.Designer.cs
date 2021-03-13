@@ -28,11 +28,11 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle6 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle7 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle8 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle9 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle10 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle5 = new System.Windows.Forms.DataGridViewCellStyle();
             this.btnOk = new System.Windows.Forms.Button();
             this.btnChoose = new System.Windows.Forms.Button();
             this.dgvService = new System.Windows.Forms.DataGridView();
@@ -66,17 +66,17 @@
             // 
             // dgvService
             // 
-            dataGridViewCellStyle6.BackColor = System.Drawing.Color.NavajoWhite;
-            dataGridViewCellStyle6.ForeColor = System.Drawing.Color.Black;
-            dataGridViewCellStyle6.SelectionBackColor = System.Drawing.Color.DodgerBlue;
-            this.dgvService.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle6;
+            dataGridViewCellStyle1.BackColor = System.Drawing.Color.NavajoWhite;
+            dataGridViewCellStyle1.ForeColor = System.Drawing.Color.Black;
+            dataGridViewCellStyle1.SelectionBackColor = System.Drawing.Color.DodgerBlue;
+            this.dgvService.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle1;
             this.dgvService.BackgroundColor = System.Drawing.SystemColors.ActiveBorder;
             this.dgvService.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgvService.EditMode = System.Windows.Forms.DataGridViewEditMode.EditProgrammatically;
             this.dgvService.Location = new System.Drawing.Point(300, 12);
             this.dgvService.Name = "dgvService";
-            dataGridViewCellStyle7.Padding = new System.Windows.Forms.Padding(0, 4, 0, 4);
-            this.dgvService.RowsDefaultCellStyle = dataGridViewCellStyle7;
+            dataGridViewCellStyle2.Padding = new System.Windows.Forms.Padding(0, 4, 0, 4);
+            this.dgvService.RowsDefaultCellStyle = dataGridViewCellStyle2;
             this.dgvService.RowTemplate.Height = 25;
             this.dgvService.Size = new System.Drawing.Size(365, 230);
             this.dgvService.TabIndex = 6;
@@ -84,6 +84,7 @@
             // 
             // btnRemove
             // 
+            this.btnRemove.Enabled = false;
             this.btnRemove.Location = new System.Drawing.Point(421, 248);
             this.btnRemove.Name = "btnRemove";
             this.btnRemove.Size = new System.Drawing.Size(119, 52);
@@ -95,26 +96,26 @@
             // dgvServicesSelected
             // 
             this.dgvServicesSelected.AllowUserToAddRows = false;
-            dataGridViewCellStyle8.BackColor = System.Drawing.Color.NavajoWhite;
-            this.dgvServicesSelected.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle8;
+            dataGridViewCellStyle3.BackColor = System.Drawing.Color.NavajoWhite;
+            this.dgvServicesSelected.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle3;
             this.dgvServicesSelected.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this.dgvServicesSelected.BackgroundColor = System.Drawing.SystemColors.ButtonHighlight;
-            dataGridViewCellStyle9.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle9.BackColor = System.Drawing.Color.Orange;
-            dataGridViewCellStyle9.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle9.ForeColor = System.Drawing.SystemColors.WindowText;
-            dataGridViewCellStyle9.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle9.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle9.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.dgvServicesSelected.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle9;
+            dataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle4.BackColor = System.Drawing.Color.Orange;
+            dataGridViewCellStyle4.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle4.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle4.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle4.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle4.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.dgvServicesSelected.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle4;
             this.dgvServicesSelected.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgvServicesSelected.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.columnName,
             this.columnPrice});
             this.dgvServicesSelected.Location = new System.Drawing.Point(12, 12);
             this.dgvServicesSelected.Name = "dgvServicesSelected";
-            dataGridViewCellStyle10.Padding = new System.Windows.Forms.Padding(0, 4, 0, 4);
-            this.dgvServicesSelected.RowsDefaultCellStyle = dataGridViewCellStyle10;
+            dataGridViewCellStyle5.Padding = new System.Windows.Forms.Padding(0, 4, 0, 4);
+            this.dgvServicesSelected.RowsDefaultCellStyle = dataGridViewCellStyle5;
             this.dgvServicesSelected.Size = new System.Drawing.Size(282, 288);
             this.dgvServicesSelected.TabIndex = 11;
             this.dgvServicesSelected.CellEnter += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvServicesSelected_CellEnter);

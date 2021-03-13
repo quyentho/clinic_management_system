@@ -105,8 +105,11 @@ namespace clinic.Presenters
 
         public void RemoveMedicineAssigned()
         {
-            _selectedMedicineList.RemoveAt(_view.IndexRemove);
-            _temporaryPrescription.RemoveAt(_view.IndexRemove);
+            _selectedMedicineList.RemoveAt(_view.RemoveIndex);
+
+            var removedMedicine = _temporaryPrescription[_view.RemoveIndex];
+
+            _temporaryPrescription.RemoveAt(_view.RemoveIndex);
 
             RefreshDatagridView();
         }

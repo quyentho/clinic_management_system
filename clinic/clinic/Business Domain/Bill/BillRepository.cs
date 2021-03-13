@@ -142,15 +142,15 @@ namespace clinic.Models.Repositories
             {
                 throw new ArgumentOutOfRangeException("billId", "Bill Khong Ton Tai");
             }
-            var item = _clinicEntities.Entry(bill);
-            item.State = EntityState.Modified;
 
-            item.Collection(i => i.clinic_service).Load();
+            var serviceToAdd  = _clinicEntities.clinic_service.Find(service.id);
 
-            //bill.clinic_service.Clear();
+            if (serviceToAdd.Medicine_Id != null)
+            {
+                serviceToAdd.medicine.quantity_in_sale_unit -= 1;
+            }
 
-            var serviceForAdd  = _clinicEntities.clinic_service.Find(service.id);
-            bill.clinic_service.Add(serviceForAdd);
+            bill.clinic_service.Add(serviceToAdd);
             Save();
         }
         public bill GetUnpaidBillById(int billId)
@@ -204,12 +204,29 @@ namespace clinic.Models.Repositories
 
         public void ClearPresciptionInBill(bill bill)
         {
+            foreach (var item in bill.prescriptions)
+            {
+                var medicine = _clinicEntities.medicines.Find(item.medicine_id);
+
+                // return back the quantity has been taken.
+                medicine.quantity_in_sale_unit += item.quantity_indicated;
+            }
             bill.prescriptions.Clear();
             Save();
         }
 
         public void ClearServicesInBill(bill bill)
         {
+            foreach (var service in bill.clinic_service)
+            {
+                int? medicine_Id = service.Medicine_Id;
+                if (medicine_Id != null)
+                {
+                    var medicine = _clinicEntities.medicines.Find(medicine_Id);
+                    medicine.quantity_in_sale_unit += 1;
+                }
+            }
+
             bill.clinic_service.Clear();
             Save();
         }

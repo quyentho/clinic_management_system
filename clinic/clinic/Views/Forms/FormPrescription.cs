@@ -16,7 +16,7 @@ namespace clinic.Views.Forms
         public object DgvMedicineDataSource { get => dgvMedicine.DataSource; set => dgvMedicine.DataSource = value; }
         public int PatientId { get; set; }
         public int MedicineSelectedId { get; set; }
-        public int IndexRemove { get; set; }
+        public int RemoveIndex { get; set; }
         public object DgvMedicinesSelectedDatasource { get => dgvMedicinesSelected.DataSource; set => dgvMedicinesSelected.DataSource = value; }
         public string ErrMessage { get; set; }
         public string Descriptions { get; set; }
@@ -75,7 +75,7 @@ namespace clinic.Views.Forms
 
         private void dgvMedicinesSelected_CellEnter(object sender, DataGridViewCellEventArgs e)
         {
-            IndexRemove = int.Parse(dgvMedicinesSelected.Rows[e.RowIndex].Index.ToString());
+            RemoveIndex = int.Parse(dgvMedicinesSelected.Rows[e.RowIndex].Index.ToString());
         }
 
         private void dgvMedicinesSelected_RowsAdded(object sender, DataGridViewRowsAddedEventArgs e)
