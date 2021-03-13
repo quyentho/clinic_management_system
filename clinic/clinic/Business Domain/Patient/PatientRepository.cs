@@ -66,10 +66,12 @@ namespace clinic.Models.Repositories
              _clinicEntities.SaveChanges();
         }
 
-        public void UpdatePatient(patient patient)
+        public void Update(patient patientUpdated)
         {
-            if (_clinicEntities.patients.Find(patient.id) != null)
+            patient patientFromDb = _clinicEntities.patients.Find(patientUpdated.id);
+            if (patientFromDb != null)
             {
+                _clinicEntities.Entry(patientFromDb).CurrentValues.SetValues(patientUpdated);
                 Save();
             }
         }

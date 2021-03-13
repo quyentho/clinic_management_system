@@ -55,13 +55,13 @@ namespace clinic.Presenters
         {
             return _staffRepository.GetStaffList();
         }
-        private List<MedicineVM> GetMedicinesToDisplay()
+        private List<AdminMedicineVM> GetMedicinesToDisplay()
         {
             var medicines = _medicineRepository.GetAll();
-            List<MedicineVM> medicineVMs = new List<MedicineVM>();
+            List<AdminMedicineVM> medicineVMs = new List<AdminMedicineVM>();
             foreach (var medicine in medicines)
             {
-                medicineVMs.Add(Transform.MedicineTransform(medicine));
+                medicineVMs.Add(Transform.AdminMedicineTransform(medicine));
             }
 
             return medicineVMs;

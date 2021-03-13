@@ -34,12 +34,12 @@ namespace clinic.Presenters
             _view.DgvMedicineDataSource = medicineVMs;
         }
 
-        private List<MedicineVM> GetMedicineVMs()
+        private List<ReceptionMedicineVM> GetMedicineVMs()
         {
-            List<MedicineVM> medicineVMs = new List<MedicineVM>();
+            List<ReceptionMedicineVM> medicineVMs = new List<ReceptionMedicineVM>();
             foreach (var medicine in _medicineRepository.GetAll())
             {
-               medicineVMs.Add(Transform.MedicineTransform(medicine));
+               medicineVMs.Add(Transform.ReceptionMedicineTransform(medicine));
             }
             return medicineVMs;
         }

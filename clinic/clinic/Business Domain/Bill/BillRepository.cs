@@ -148,6 +148,12 @@ namespace clinic.Models.Repositories
             if (serviceToAdd.Medicine_Id != null)
             {
                 serviceToAdd.medicine.quantity_in_sale_unit -= 1;
+                
+                var serviceStatistic = _clinicEntities.ServiceStatistics
+                    .Where(s => s.ServiceId == service.id && s.IsActive == true)
+                    .FirstOrDefault();
+
+                serviceStatistic.Count++;
             }
 
             bill.clinic_service.Add(serviceToAdd);
@@ -224,6 +230,12 @@ namespace clinic.Models.Repositories
                 {
                     var medicine = _clinicEntities.medicines.Find(medicine_Id);
                     medicine.quantity_in_sale_unit += 1;
+
+                    var serviceStatistic = _clinicEntities.ServiceStatistics
+                    .Where(s => s.ServiceId == service.id && s.IsActive == true)
+                    .FirstOrDefault();
+
+                    serviceStatistic.Count--;
                 }
             }
 

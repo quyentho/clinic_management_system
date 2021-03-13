@@ -74,7 +74,8 @@
   <ItemGroup>
     <Compile Include="Business Domain\Account\account.cs" />
     <Compile Include="Business Domain\Bill\bill.cs" />
-    <Compile Include="Business Domain\Medicine\MedicineVM.cs" />
+    <Compile Include="Business Domain\Medicine\AdminMedicineVM.cs" />
+    <Compile Include="Business Domain\Medicine\ReceptionMedicineVM.cs" />
     <Compile Include="Business Domain\Medicine\MedicineAssignedVM.cs" />
     <Compile Include="Business Domain\Patient\PatientVM.cs" />
     <Compile Include="Business Domain\Service\clinic_service.cs" />
@@ -108,6 +109,10 @@
     <Compile Include="Migrations\202103121738549_UpdateMedicineForeignKeyInClinic_service.cs" />
     <Compile Include="Migrations\202103121738549_UpdateMedicineForeignKeyInClinic_service.Designer.cs">
       <DependentUpon>202103121738549_UpdateMedicineForeignKeyInClinic_service.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202103130917289_UpdateServiceStatisticModel.cs" />
+    <Compile Include="Migrations\202103130917289_UpdateServiceStatisticModel.Designer.cs">
+      <DependentUpon>202103130917289_UpdateServiceStatisticModel.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="OperationEnum.cs" />
@@ -253,6 +258,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202103121738549_UpdateMedicineForeignKeyInClinic_service.resx">
       <DependentUpon>202103121738549_UpdateMedicineForeignKeyInClinic_service.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202103130917289_UpdateServiceStatisticModel.resx">
+      <DependentUpon>202103130917289_UpdateServiceStatisticModel.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="OperationForm.resx">
       <DependentUpon>OperationForm.cs</DependentUpon>

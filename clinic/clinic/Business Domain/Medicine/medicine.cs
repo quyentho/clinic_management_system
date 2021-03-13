@@ -8,7 +8,6 @@ namespace clinic
 
     public partial class medicine
     {
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public medicine()
         {
             prescriptions = new HashSet<prescription>();
@@ -43,7 +42,6 @@ namespace clinic
 
         public int? quantity_in_entry_unit { get; set; }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<prescription> prescriptions { get; set; }
     }
 }

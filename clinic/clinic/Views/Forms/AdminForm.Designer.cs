@@ -32,7 +32,6 @@
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle5 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle6 = new System.Windows.Forms.DataGridViewCellStyle();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
-            this.btnLogout = new System.Windows.Forms.Button();
             this.btnMedicine = new System.Windows.Forms.Button();
             this.btnService = new System.Windows.Forms.Button();
             this.btnRevenue = new System.Windows.Forms.Button();
@@ -49,6 +48,8 @@
             this.rbYear = new System.Windows.Forms.RadioButton();
             this.rbMonth = new System.Windows.Forms.RadioButton();
             this.rbDate = new System.Windows.Forms.RadioButton();
+            this.btnLogout = new System.Windows.Forms.Button();
+            this.btnServiceStatistic = new System.Windows.Forms.Button();
             this.tableLayoutPanel1.SuspendLayout();
             this.tableLayoutPanel2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvAdmin)).BeginInit();
@@ -57,36 +58,25 @@
             // 
             // tableLayoutPanel1
             // 
-            this.tableLayoutPanel1.ColumnCount = 5;
+            this.tableLayoutPanel1.ColumnCount = 6;
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 20F));
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 20F));
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 20F));
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 20F));
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 20F));
-            this.tableLayoutPanel1.Controls.Add(this.btnLogout, 4, 0);
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 149F));
             this.tableLayoutPanel1.Controls.Add(this.btnMedicine, 3, 0);
             this.tableLayoutPanel1.Controls.Add(this.btnService, 2, 0);
             this.tableLayoutPanel1.Controls.Add(this.btnRevenue, 1, 0);
             this.tableLayoutPanel1.Controls.Add(this.btnStaff, 0, 0);
+            this.tableLayoutPanel1.Controls.Add(this.btnLogout, 5, 0);
+            this.tableLayoutPanel1.Controls.Add(this.btnServiceStatistic, 4, 0);
             this.tableLayoutPanel1.Location = new System.Drawing.Point(12, 12);
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
             this.tableLayoutPanel1.RowCount = 1;
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(925, 46);
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(1078, 46);
             this.tableLayoutPanel1.TabIndex = 1;
-            // 
-            // btnLogout
-            // 
-            this.btnLogout.BackColor = System.Drawing.Color.LightGreen;
-            this.btnLogout.Font = new System.Drawing.Font("Tahoma", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnLogout.ForeColor = System.Drawing.Color.DarkBlue;
-            this.btnLogout.Location = new System.Drawing.Point(743, 3);
-            this.btnLogout.Name = "btnLogout";
-            this.btnLogout.Size = new System.Drawing.Size(179, 40);
-            this.btnLogout.TabIndex = 4;
-            this.btnLogout.Text = "ĐĂNG XUẤT";
-            this.btnLogout.UseVisualStyleBackColor = false;
-            this.btnLogout.Click += new System.EventHandler(this.btnLogout_Click);
             // 
             // btnMedicine
             // 
@@ -149,7 +139,7 @@
             this.tableLayoutPanel2.Controls.Add(this.btnDelete, 2, 0);
             this.tableLayoutPanel2.Controls.Add(this.btnEdit, 1, 0);
             this.tableLayoutPanel2.Controls.Add(this.btnAdd, 0, 0);
-            this.tableLayoutPanel2.Location = new System.Drawing.Point(222, 497);
+            this.tableLayoutPanel2.Location = new System.Drawing.Point(300, 497);
             this.tableLayoutPanel2.Name = "tableLayoutPanel2";
             this.tableLayoutPanel2.RightToLeft = System.Windows.Forms.RightToLeft.No;
             this.tableLayoutPanel2.RowCount = 1;
@@ -215,7 +205,7 @@
             dataGridViewCellStyle6.SelectionForeColor = System.Drawing.Color.White;
             this.dgvAdmin.RowsDefaultCellStyle = dataGridViewCellStyle6;
             this.dgvAdmin.RowTemplate.Height = 25;
-            this.dgvAdmin.Size = new System.Drawing.Size(922, 369);
+            this.dgvAdmin.Size = new System.Drawing.Size(1072, 369);
             this.dgvAdmin.TabIndex = 5;
             this.dgvAdmin.CellEnter += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvAdmin_CellEnter);
             this.dgvAdmin.RowsAdded += new System.Windows.Forms.DataGridViewRowsAddedEventHandler(this.dgvAdmin_RowsAdded);
@@ -224,7 +214,7 @@
             // btnSearch
             // 
             this.btnSearch.DialogResult = System.Windows.Forms.DialogResult.OK;
-            this.btnSearch.Location = new System.Drawing.Point(597, 449);
+            this.btnSearch.Location = new System.Drawing.Point(684, 449);
             this.btnSearch.Name = "btnSearch";
             this.btnSearch.Size = new System.Drawing.Size(93, 23);
             this.btnSearch.TabIndex = 9;
@@ -234,7 +224,7 @@
             // 
             // txtSearch
             // 
-            this.txtSearch.Location = new System.Drawing.Point(350, 451);
+            this.txtSearch.Location = new System.Drawing.Point(437, 451);
             this.txtSearch.Name = "txtSearch";
             this.txtSearch.Size = new System.Drawing.Size(232, 20);
             this.txtSearch.TabIndex = 8;
@@ -293,11 +283,37 @@
             this.rbDate.UseVisualStyleBackColor = true;
             this.rbDate.CheckedChanged += new System.EventHandler(this.rbDate_CheckedChanged);
             // 
+            // btnLogout
+            // 
+            this.btnLogout.BackColor = System.Drawing.Color.LightGreen;
+            this.btnLogout.Font = new System.Drawing.Font("Tahoma", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnLogout.ForeColor = System.Drawing.Color.DarkBlue;
+            this.btnLogout.Location = new System.Drawing.Point(928, 3);
+            this.btnLogout.Name = "btnLogout";
+            this.btnLogout.Size = new System.Drawing.Size(147, 40);
+            this.btnLogout.TabIndex = 4;
+            this.btnLogout.Text = "ĐĂNG XUẤT";
+            this.btnLogout.UseVisualStyleBackColor = false;
+            this.btnLogout.Click += new System.EventHandler(this.btnLogout_Click);
+            // 
+            // btnServiceStatistic
+            // 
+            this.btnServiceStatistic.BackColor = System.Drawing.Color.LightGreen;
+            this.btnServiceStatistic.Font = new System.Drawing.Font("Tahoma", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnServiceStatistic.ForeColor = System.Drawing.Color.DarkBlue;
+            this.btnServiceStatistic.Location = new System.Drawing.Point(743, 3);
+            this.btnServiceStatistic.Name = "btnServiceStatistic";
+            this.btnServiceStatistic.Size = new System.Drawing.Size(179, 40);
+            this.btnServiceStatistic.TabIndex = 11;
+            this.btnServiceStatistic.Text = "Xét nghiệm";
+            this.btnServiceStatistic.UseVisualStyleBackColor = false;
+            this.btnServiceStatistic.Click += new System.EventHandler(this.btnServiceStatistic_Click);
+            // 
             // AdminForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(945, 553);
+            this.ClientSize = new System.Drawing.Size(1102, 553);
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.btnSearch);
             this.Controls.Add(this.txtSearch);
@@ -323,7 +339,6 @@
         #endregion
 
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
-        private System.Windows.Forms.Button btnLogout;
         private System.Windows.Forms.Button btnMedicine;
         private System.Windows.Forms.Button btnService;
         private System.Windows.Forms.Button btnRevenue;
@@ -340,6 +355,8 @@
         private System.Windows.Forms.RadioButton rbMonth;
         private System.Windows.Forms.RadioButton rbDate;
         private System.Windows.Forms.DateTimePicker dtpRevenue;
+        private System.Windows.Forms.Button btnLogout;
+        private System.Windows.Forms.Button btnServiceStatistic;
     }
 }
 

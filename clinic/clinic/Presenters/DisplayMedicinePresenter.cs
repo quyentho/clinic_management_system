@@ -21,7 +21,7 @@ namespace clinic.Presenters
         {
             var medicines = _repository.GetAll();
 
-            List<MedicineVM> medicineVMs = new List<MedicineVM>();
+            List<ReceptionMedicineVM> medicineVMs = new List<ReceptionMedicineVM>();
 
             foreach (var medicine in medicines)
             {
@@ -31,9 +31,9 @@ namespace clinic.Presenters
             _view.DgvDisplayDataSource = medicineVMs;
         }
 
-        private MedicineVM GetViewModel(medicine medicine)
+        private ReceptionMedicineVM GetViewModel(medicine medicine)
         {
-            return new MedicineVM
+            return new ReceptionMedicineVM
             {
                 Id = medicine.id,
                 Name = medicine.medicine_name,

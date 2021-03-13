@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace clinic.BusinessDomain.Statistic
 {
@@ -14,9 +10,12 @@ namespace clinic.BusinessDomain.Statistic
         [ForeignKey("clinic_service")]
         public int ServiceId { get; set; }
         public int MedicineId { get; set; }
-        public int Count { get; set; }
+        public int Count { get; set; } = 0;
         public DateTime StartDate { get; set; }
-        public DateTime EndDate { get; set; }
+        public DateTime? EndDate { get; set; }
+
+        public bool IsActive { get; set; } = true;
+
         public clinic_service clinic_service { get; set; }
         public medicine medicine { get; set; }
     }

@@ -12,6 +12,6 @@ namespace clinic.Models
         List<patient> GetPatientsByPhone(string phone);
         patient GetPatientById(int id);
         void InsertPatient(patient patient);
-        void UpdatePatient(patient patient);
+        void Update(patient patient);
     }
 }

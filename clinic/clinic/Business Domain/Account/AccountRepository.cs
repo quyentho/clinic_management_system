@@ -39,6 +39,7 @@ namespace clinic.Models.Repositories
             var accountFromDb = _clinicEntities.accounts.Find(account.id);
             if (accountFromDb != null)
             {
+                _clinicEntities.Entry(accountFromDb).CurrentValues.SetValues(account);
                 Save();
             }
         }

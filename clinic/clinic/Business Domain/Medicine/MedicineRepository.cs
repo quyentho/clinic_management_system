@@ -16,9 +16,9 @@ namespace clinic.Models.Repositories
             _medicineList = GetMedicinesFromDatabase();
         }
         public void Delete(int id)
-        {   
+        {
             var medicineFromDb = _clinicEntities.medicines.Find(id);
-            if(medicineFromDb !=null)
+            if (medicineFromDb != null)
             {
                 _medicineList.Remove(GetMedicineById(id));
                 _clinicEntities.medicines.Remove(medicineFromDb);
@@ -60,16 +60,23 @@ namespace clinic.Models.Repositories
 
         public void Update(medicine medicineChanged)
         {
-            int indexToReplace = (_medicineList ).FindIndex(m => m.id == medicineChanged.id);
+
+            int indexToReplace = (_medicineList).FindIndex(m => m.id == medicineChanged.id);
 
             _medicineList[indexToReplace] = medicineChanged;//replace this way for refresh list immediately
 
             var medicineFromDb = _clinicEntities.medicines.Find(medicineChanged.id);
             if (medicineFromDb != null)
             {
+                medicineChanged.entry_day = medicineFromDb.entry_day;
+                medicineChanged.quantity_in_sale_unit = medicineFromDb.quantity_in_sale_unit;
+                _clinicEntities.Entry(medicineFromDb).CurrentValues.SetValues(medicineChanged);
                 Save();
             }
         }
+
+        
+
         public void DecreaseQuantity(int medicineId, int quantity)
         {
             var medicine = GetMedicineById(medicineId);

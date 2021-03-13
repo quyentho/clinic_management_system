@@ -70,10 +70,10 @@ namespace clinic.Presenters
         }
         public  void Edit(int idSelected)
         {
-            var medicineForUpdate = GetMedicineFromView();
-            medicineForUpdate.id = idSelected;
+            var medicineUpdated = GetMedicineFromView();
+            medicineUpdated.id = idSelected;
 
-            _repository.Update(medicineForUpdate);
+            _repository.Update(medicineUpdated);
         }
 
     }

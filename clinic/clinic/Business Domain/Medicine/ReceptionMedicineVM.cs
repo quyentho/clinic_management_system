@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace clinic.BusinessDomain.Medicine
 {
-    public class MedicineVM
+    public class ReceptionMedicineVM
     {
         public int Id { get; set; }
 
@@ -17,10 +17,11 @@ namespace clinic.BusinessDomain.Medicine
         [DisplayName("Giá bán")]
         public string SalePrice { get; set; }
 
-        [DisplayName("Số lượng")]
+        [DisplayName("Số lượng tồn kho")]
         public string Quantity { get; set; }
 
         [DisplayName("Đơn vị")]
         public string Unit { get; set; }
+
     }
 }

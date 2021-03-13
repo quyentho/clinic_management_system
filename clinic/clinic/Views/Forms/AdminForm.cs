@@ -197,6 +197,11 @@ namespace clinic
         {
             this.Close();
         }
+
+        private void btnServiceStatistic_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }
 

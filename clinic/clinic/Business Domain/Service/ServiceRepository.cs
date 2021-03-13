@@ -1,10 +1,8 @@
-﻿using System;
+﻿using clinic.BusinessDomain.Statistic;
+using System;
 using System.Collections.Generic;
 using System.Data.Entity;
-using System.Data.Entity.Migrations;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace clinic.Models.Repositories
 {
@@ -12,7 +10,7 @@ namespace clinic.Models.Repositories
     {
         private readonly clinicEntities _clinicEntities;
         private List<clinic_service> _serviceList;
-        
+
         public ServiceRepository(clinicEntities entities)
         {
             _clinicEntities = entities;
@@ -34,7 +32,7 @@ namespace clinic.Models.Repositories
         private List<clinic_service> GetServicesFromDatabase()
         {
             return _clinicEntities.clinic_service.Where(m => m.is_active == true)
-                .Include(s=>s.medicine)
+                .Include(s => s.medicine)
                 .ToList();
         }
         public List<clinic_service> GetAll()
@@ -46,6 +44,17 @@ namespace clinic.Models.Repositories
         {
             _serviceList.Add(clinic_service);
             _clinicEntities.clinic_service.Add(clinic_service);
+
+            if (clinic_service.Medicine_Id != null)
+            {
+                _clinicEntities.ServiceStatistics.Add(new ServiceStatistic()
+                {
+                    ServiceId = clinic_service.id,
+                    MedicineId = Convert.ToInt32(clinic_service.Medicine_Id),
+                    Count = 1,
+                    StartDate = DateTime.Now,
+                });
+            }
             Save();
         }
         public void Delete(int id)
@@ -55,8 +64,8 @@ namespace clinic.Models.Repositories
             {
                 _serviceList.Remove(GetServiceById(id));
                 _clinicEntities.clinic_service.Remove(serviceFromDb);
-               
-              
+
+
                 Save();
             }
 
@@ -71,8 +80,7 @@ namespace clinic.Models.Repositories
             var serviceFromDb = _clinicEntities.clinic_service.Find(serviceChanged.id);
             if (serviceFromDb != null)
             {
-                _clinicEntities.clinic_service.Remove(serviceFromDb);
-                _clinicEntities.clinic_service.Add(serviceChanged);
+                _clinicEntities.Entry(serviceFromDb).CurrentValues.SetValues(serviceChanged);
                 Save();
             }
         }
